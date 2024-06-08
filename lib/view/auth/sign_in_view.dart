@@ -1,6 +1,8 @@
 import 'package:flutter/material.dart';
 import 'package:get/get.dart';
+import 'package:prayer_app/test.dart';
 import 'package:prayer_app/view/auth/sign_up_view.dart';
+import 'package:prayer_app/view/home/home_view.dart';
 import 'package:prayer_app/widgets/custom_text.dart';
 import 'package:prayer_app/widgets/custom_text_form_field.dart';
 
@@ -70,21 +72,27 @@ class _SignUpViewState extends State<SignInView> {
                   alignment: Alignment.topRight,
                 ),
 
-                Container(
-                  alignment: Alignment.center,
-                  child: Text(
-                    ' تسجيل الدخول',
-                    style: TextStyle(
-                        fontSize: 20,
-                        fontWeight: FontWeight.bold,
-                        color: Colors.white),
+                GestureDetector(
+                  onTap: (){
+                    Navigator.push(
+                        context, MaterialPageRoute(builder: (context)=>HomeView()));
+                  },
+                  child: Container(
+                    alignment: Alignment.center,
+                    child: Text(
+                      ' تسجيل الدخول',
+                      style: TextStyle(
+                          fontSize: 20,
+                          fontWeight: FontWeight.bold,
+                          color: Colors.white),
+                    ),
+                    decoration: BoxDecoration(
+                        color:buttonColor,
+                        borderRadius: BorderRadius.circular(10)),
+                    margin: EdgeInsets.only(left: 15, right: 15, top: 20),
+                    width: MediaQuery.of(context).size.width,
+                    height: 60,
                   ),
-                  decoration: BoxDecoration(
-                      color:buttonColor,
-                      borderRadius: BorderRadius.circular(10)),
-                  margin: EdgeInsets.only(left: 15, right: 15, top: 20),
-                  width: MediaQuery.of(context).size.width,
-                  height: 60,
                 ),
                 SizedBox(height: Get.height*.016),
 

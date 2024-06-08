@@ -1,3 +1,3 @@
 import 'package:flutter/material.dart';
 
-Color buttonColor=Colors.blue.shade600;
+Color buttonColor=Colors.blue.shade800;
