@@ -1,7 +1,10 @@
 import 'package:flutter/material.dart';
 import 'package:get/get.dart';
 import 'package:prayer_app/constants.dart';
+import 'package:prayer_app/view/azkar/azkar_view.dart';
 import 'package:prayer_app/widgets/custom_text.dart';
+
+import '../sibha/sibha_view.dart';
 
 class HomeView extends StatelessWidget {
   const HomeView({super.key});
@@ -9,6 +12,44 @@ class HomeView extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     return Scaffold(
+      bottomNavigationBar: BottomNavigationBar(
+        elevation: 5,
+        selectedLabelStyle: TextStyle(fontSize: 14,fontWeight: FontWeight.bold),
+        unselectedLabelStyle: TextStyle(fontSize: 14,fontWeight: FontWeight.bold),
+        type : BottomNavigationBarType.fixed,
+
+        currentIndex: 2,
+        iconSize: 10,
+
+        items: [
+          BottomNavigationBarItem(
+              icon: GestureDetector(
+                  onTap: (){
+                    Get.to(Azkar());
+                  },
+                  child: Icon(Icons.ac_unit)),
+          label: 'الاذكار'
+          ),
+          BottomNavigationBarItem(
+              icon: Icon(Icons.ac_unit),
+          label: 'القران'
+          ),BottomNavigationBarItem(
+              icon: Icon(Icons.ac_unit),
+          label: 'الصلاه'),
+
+          BottomNavigationBarItem(
+              icon: Icon(Icons.ac_unit),
+          label: 'الصيام'),
+          BottomNavigationBarItem(
+              icon: Icon(Icons.ac_unit),
+          label: 'رئيسيه')
+          // ),BottomNavigationBarItem(
+          //     icon: Icon(Icons.ac_unit),
+          // label: 'الصيام'
+          // ),
+
+        ],
+      ),
       appBar: PreferredSize(
           preferredSize: Size.fromHeight(Get.height*.27 ), // here the desired height
           child: Stack(
@@ -27,7 +68,7 @@ class HomeView extends StatelessWidget {
               ),
               Image.asset('images/Rectangle 1.png'),
               Padding(
-                padding: const EdgeInsets.symmetric(vertical: 35,horizontal: 10),
+                padding: const EdgeInsets.symmetric(vertical: 35,horizontal: 5),
                 child: Column(
                   mainAxisAlignment: MainAxisAlignment.spaceAround  ,
                   children: [
@@ -66,7 +107,7 @@ class HomeView extends StatelessWidget {
                       child: Text(
                         'الاذان القادم صلاة العشاء'
                             ,style: TextStyle(
-                          fontSize: 25,fontWeight: FontWeight.w800,color: Colors.white),
+                          fontSize: 23,fontWeight: FontWeight.w800,color: Colors.white),
                       ),
                     ),
 
@@ -75,7 +116,7 @@ class HomeView extends StatelessWidget {
                       child: Text(
                         'بصوت فضيلة الشيخ محمد رفعت'
                         ,style: TextStyle(
-                          fontSize: 21,color: Colors.white),
+                          fontSize: 19,color: Colors.white),
                       ),
                     ),
                     Row(
@@ -87,7 +128,7 @@ class HomeView extends StatelessWidget {
                             'تغيير المؤذن'
                             ,style: TextStyle(
                               decoration:TextDecoration.underline,
-                              fontSize: 18,fontWeight: FontWeight.bold,color: Colors.white),
+                              fontSize: 15,fontWeight: FontWeight.bold,color: Colors.white),
                           ),
                         ), Container(
                           alignment: Alignment.topRight,
@@ -95,7 +136,7 @@ class HomeView extends StatelessWidget {
                             '01 :15 :05'
                             ,style: TextStyle(
                               decoration:TextDecoration.underline,
-                              fontSize: 18,fontWeight: FontWeight.bold,color: Colors.white),
+                              fontSize: 16,fontWeight: FontWeight.bold,color: Colors.white),
                           ),
                         ),
                       ],
@@ -107,123 +148,197 @@ class HomeView extends StatelessWidget {
             ],
           )
       ),
-      body: Column(
-        children: [
-          Container(
-            margin: EdgeInsets.symmetric(horizontal: 10),
-            alignment: Alignment.topRight,
-            child: Text(
-              'الصلوات اليومية'
-              ,style: TextStyle(
-              letterSpacing: .6,
-              fontWeight: FontWeight.bold,
-                fontSize: 21,color: Colors.black),
+      body: SingleChildScrollView(
+        child: Column(
+          children: [
+            Container(
+              margin: EdgeInsets.symmetric(horizontal: 10),
+              alignment: Alignment.topRight,
+              child: Text(
+                'الصلوات اليومية'
+                ,style: TextStyle(
+                letterSpacing: .6,
+                fontWeight: FontWeight.bold,
+                  fontSize: 20,color: Colors.black),
+              ),
             ),
-          ),
-          SlahBox('الفجر','5.00 ص',false,(){} ),
-          SlahBox('الظهر','1.00 ص',true,(){} ),
-          SlahBox('العصر','4.00 ص',true,(){} ),
-          SlahBox('المغرب','7.00 ص',false,(){} ),
-          SlahBox('العشاء','9.00 ص',true,(){} ),
-          Text(
-            textDirection: TextDirection.rtl,
-            'عرض باقي اهداف اليوم',style: TextStyle(fontSize: 22,fontWeight: FontWeight.bold,
-            color: buttonColor,
-            decoration: TextDecoration.underline,
-
-
-          ),), Container(
-            margin: EdgeInsets.all(15),
-            alignment: Alignment.topRight,
-            child: Text(
+//           Container(
+//             child:Row(
+//               mainAxisAlignment: MainAxisAlignment.spaceAround,
+//           children: [
+//             Container(
+//
+//               child: Text('اعادة التشغيل',style: TextStyle(
+//                 color: buttonColor,
+//                 fontSize: 12,
+//                 fontWeight: FontWeight.bold
+//               ),),
+//               alignment: Alignment.center,
+//               width: Get.width*.23,
+//               height: Get.height*.043,
+//               decoration: BoxDecoration(
+//                   color: Colors.white,
+//                   borderRadius: BorderRadius.circular(3),
+//                   boxShadow: [
+//                     BoxShadow(
+//                         color: buttonColor,
+//                         blurRadius: 1,
+//                         spreadRadius: .5
+//                     )
+//                   ]
+//               ),
+//             ),
+//             Column(
+// mainAxisAlignment: MainAxisAlignment.center,
+//               children: [
+//                 Container(
+//                   alignment: Alignment.topRight,
+//                   child: Text(
+//                     'تم تفعيل وضع ايقاف الصلاه والصيام'
+//                     ,style: TextStyle(
+//                       letterSpacing: .6,
+//                       fontWeight: FontWeight.bold,
+//                       fontSize: 16,color: Colors.black),
+//                   ),
+//                 ),
+//                 Container(
+//                   alignment: Alignment.topRight,
+//                   child: Text(
+//                     'سيتم التذكير باعادة التشغيل بعد 5 ايام'
+//                     ,style: TextStyle(
+//                       letterSpacing: .6,
+//                       fontWeight: FontWeight.bold,
+//                       fontSize: 14,color: Colors.grey),
+//                   ),
+//                 ),
+//               ],
+//             )
+//           ],
+//           ),
+//             width: Get.width*.95,
+//             height: Get.height*.14,
+//             decoration: BoxDecoration(
+//                 color: Colors.white,
+//                 borderRadius: BorderRadius.circular(5),
+//                 boxShadow: [
+//                   BoxShadow(
+//                       color: Colors.grey,
+//                       blurRadius: 2,
+//                       spreadRadius: .5
+//                   )
+//                 ]
+//             ),
+//           ),
+            SlahBox('الفجر','5.00 ص',false,(){} ),
+            SlahBox('الظهر','1.00 ص',true,(){} ),
+            SlahBox('العصر','4.00 ص',true,(){} ),
+            SlahBox('المغرب','7.00 ص',false,(){} ),
+            SlahBox('العشاء','9.00 ص',true,(){} ),
+            Text(
               textDirection: TextDirection.rtl,
-              'يمكنك ايضا تصفح باقي المزايا',style: TextStyle(fontSize: 18,
-              color: Colors.black,
+              'عرض باقي اهداف اليوم',style: TextStyle(fontSize: 20,fontWeight: FontWeight.bold,
+              color: buttonColor,
+              decoration: TextDecoration.underline,
 
 
-            ),),
-          ),
-          Row(
-            mainAxisAlignment: MainAxisAlignment.spaceAround,
-            children: [
-              Container(
-                child: Column(
+            ),), Container(
+              margin: EdgeInsets.all(15),
+              alignment: Alignment.topRight,
+              child: Text(
+                textDirection: TextDirection.rtl,
+                'يمكنك ايضا تصفح باقي المزايا',style: TextStyle(fontSize: 17,
+                color: Colors.black,
 
-                  children: [
-                    Icon(Icons.directions),
-                    Text('الرقيه الشرعيه',style: TextStyle(fontSize: 16,fontWeight: FontWeight.bold),)
-                  ],
-                  mainAxisAlignment: MainAxisAlignment.spaceAround,
-                ),
-                width: Get.width*.28,
-                height: Get.height*.09,
-                decoration: BoxDecoration(
-                    color: Colors.white,
-                    borderRadius: BorderRadius.circular(5),
-                    boxShadow: [
-                      BoxShadow(
-                          color: Colors.grey,
-                          blurRadius: 2,
-                          spreadRadius: .5
-                      )
-                    ]
-                ),
-              ),
-              Container(
-                child: Column(
 
-                  children: [
-                    Icon(Icons.directions),
-                    Text('القبلة',style: TextStyle(fontSize: 16,fontWeight: FontWeight.bold),)
-                  ],
-                  mainAxisAlignment: MainAxisAlignment.spaceAround,
-                ),
-                width: Get.width*.28,
-                height: Get.height*.09,
-                decoration: BoxDecoration(
-                    color: Colors.white,
-                    borderRadius: BorderRadius.circular(5),
-                    boxShadow: [
-                      BoxShadow(
-                          color: Colors.grey,
-                          blurRadius: 2,
-                          spreadRadius: .5
-                      )
-                    ]
-                ),
-              ),
-              Container(
-                child: Column(
+              ),),
+            ),
+            Row(
+              mainAxisAlignment: MainAxisAlignment.spaceAround,
+              children: [
+                Container(
+                  child: Column(
 
-                  children: [
-                    Icon(Icons.directions),
-                    Text('السبحة',style: TextStyle(fontSize: 16,fontWeight: FontWeight.bold),)
-                  ],
-                  mainAxisAlignment: MainAxisAlignment.spaceAround,
+                    children: [
+                      Icon(Icons.directions),
+                      Text('الرقيه الشرعيه',style: TextStyle(fontSize: 16,fontWeight: FontWeight.bold),)
+                    ],
+                    mainAxisAlignment: MainAxisAlignment.spaceAround,
+                  ),
+                  width: Get.width*.28,
+                  height: Get.height*.08,
+                  decoration: BoxDecoration(
+                      color: Colors.white,
+                      borderRadius: BorderRadius.circular(5),
+                      boxShadow: [
+                        BoxShadow(
+                            color: Colors.grey,
+                            blurRadius: 2,
+                            spreadRadius: .5
+                        )
+                      ]
+                  ),
                 ),
-                width: Get.width*.28,
-                height: Get.height*.09,
-                decoration: BoxDecoration(
-                    color: Colors.white,
-                    borderRadius: BorderRadius.circular(5),
-                    boxShadow: [
-                      BoxShadow(
-                          color: Colors.grey,
-                          blurRadius: 2,
-                          spreadRadius: .5
-                      )
-                    ]
+                Container(
+                  child: Column(
+
+                    children: [
+                      Icon(Icons.directions),
+                      Text('القبلة',style: TextStyle(fontSize: 16,fontWeight: FontWeight.bold),)
+                    ],
+                    mainAxisAlignment: MainAxisAlignment.spaceAround,
+                  ),
+                  width: Get.width*.28,
+                  height: Get.height*.08,
+                  decoration: BoxDecoration(
+                      color: Colors.white,
+                      borderRadius: BorderRadius.circular(5),
+                      boxShadow: [
+                        BoxShadow(
+                            color: Colors.grey,
+                            blurRadius: 2,
+                            spreadRadius: .5
+                        )
+                      ]
+                  ),
                 ),
-              ),
-            ],
-          )
-        ],
+                GestureDetector(
+                  onTap: (){
+                    Get.to(SibhaView());
+                  },
+                  child: Container(
+                    child: Column(
+
+                      children: [
+                        Icon(Icons.directions),
+                        Text('السبحة',style: TextStyle(fontSize: 16,fontWeight: FontWeight.bold),)
+                      ],
+                      mainAxisAlignment: MainAxisAlignment.spaceAround,
+                    ),
+                    width: Get.width*.28,
+                    height: Get.height*.08,
+                    decoration: BoxDecoration(
+                        color: Colors.white,
+                        borderRadius: BorderRadius.circular(5),
+                        boxShadow: [
+                          BoxShadow(
+                              color: Colors.grey,
+                              blurRadius: 2,
+                              spreadRadius: .5
+                          )
+                        ]
+                    ),
+                  ),
+                ),
+              ],
+            )
+          ],
+        ),
       ),
     );
   }
   Widget SlahBox(text,time,val,onChanged()){
     return  Container(
-      margin: EdgeInsets.only(bottom: 15),
+      margin: EdgeInsets.only(bottom: 12),
       padding: EdgeInsets.symmetric(horizontal: 10),
       child: Row(
         mainAxisAlignment: MainAxisAlignment.spaceBetween,
@@ -262,7 +377,7 @@ class HomeView extends StatelessWidget {
           boxShadow: [
             BoxShadow(
                 color: Colors.grey,
-                blurRadius: 2,
+                blurRadius: 1,
                 spreadRadius: .5
             )
           ]
