@@ -24,16 +24,7 @@ class DatabaseHelper {
       version: 2, // Increment the database version
       onCreate: (db, version) async {
         await db.execute(
-          '''
-          CREATE TABLE prayers(
-            day TEXT PRIMARY KEY,
-            prayer1 INTEGER,
-            prayer2 INTEGER,
-            prayer3 INTEGER,
-            prayer4 INTEGER,
-            prayer5 INTEGER,
-          )
-          ''',
+          'CREATE TABLE prayers(day TEXT PRIMARY KEY, prayer1 INTEGER, prayer2 INTEGER, prayer3 INTEGER, prayer4 INTEGER, prayer5 INTEGER)',
         );
         await db.execute(
           '''
