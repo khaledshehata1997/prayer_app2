@@ -204,11 +204,11 @@ class StartUp extends StatelessWidget {
             //                 ]
             //             ),
             //           ),
-            SlahBox('الفجر', intl.DateFormat.jm().format(getPrayerTime().fajr), false, () {}),
-            SlahBox('الظهر', intl.DateFormat.jm().format(getPrayerTime().dhuhr), true, () {}),
-            SlahBox('العصر', intl.DateFormat.jm().format(getPrayerTime().asr), true, () {}),
-            SlahBox('المغرب', intl.DateFormat.jm().format(getPrayerTime().maghrib), false, () {}),
-            SlahBox('العشاء', intl.DateFormat.jm().format(getPrayerTime().isha), true, () {}),
+            SlahBox('الفجر', intl.DateFormat.jm().format(getPrayerTime().fajr)),
+            SlahBox('الظهر', intl.DateFormat.jm().format(getPrayerTime().dhuhr)),
+            SlahBox('العصر', intl.DateFormat.jm().format(getPrayerTime().asr)),
+            SlahBox('المغرب', intl.DateFormat.jm().format(getPrayerTime().maghrib)),
+            SlahBox('العشاء', intl.DateFormat.jm().format(getPrayerTime().isha)),
             Text(
               textDirection: TextDirection.rtl,
               'عرض باقي اهداف اليوم',
@@ -321,21 +321,13 @@ class StartUp extends StatelessWidget {
       ),
     );
   }
-  Widget SlahBox(text,time,val,onChanged()){
+  Widget SlahBox(text,time){
     return  Container(
       margin: EdgeInsets.only(bottom: 12),
       padding: EdgeInsets.symmetric(horizontal: 10),
       child: Row(
-        mainAxisAlignment: MainAxisAlignment.spaceBetween,
+        mainAxisAlignment: MainAxisAlignment.spaceAround,
         children: [
-          Checkbox(
-              activeColor: buttonColor,
-              checkColor: Colors.white,
-              value: val,
-              onChanged: (value){
-                onChanged();
-              }),
-
           Text(
             textDirection: TextDirection.rtl,
             '$time',style: TextStyle(fontSize: 16,fontWeight: FontWeight.bold,
@@ -348,7 +340,7 @@ class StartUp extends StatelessWidget {
                 '$text',style: TextStyle(fontSize: 20,fontWeight: FontWeight.bold,
 
               ),),
-              Icon(Icons.sunny_snowing)
+              Icon(Icons.sunny_snowing,color: Colors.blue[900],)
             ],
           )
 
@@ -371,28 +363,7 @@ class StartUp extends StatelessWidget {
   }
   PrayerTimes getPrayerTime(){
     final myCoordinates = Coordinates(30.033333, 31.233334);
-
-    var param;
-    switch (num) {
-      case 1:
-        param = CalculationMethod.egyptian.getParameters();
-        break;
-      case 2:
-        param = CalculationMethod.umm_al_qura.getParameters();
-        break;
-      case 3:
-        param = CalculationMethod.qatar.getParameters();
-        break;
-      case 4:
-        param = CalculationMethod.dubai.getParameters();
-        break;
-      case 5:
-        param = CalculationMethod.kuwait.getParameters();
-        break;
-      default:
-        param = CalculationMethod.egyptian.getParameters();
-    }
-    final params = param;
+    final params = CalculationMethod.egyptian.getParameters();
     params.madhab = Madhab.shafi;
     final prayerTimes = PrayerTimes.today(myCoordinates, params);
     return prayerTimes;

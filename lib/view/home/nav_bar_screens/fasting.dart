@@ -19,115 +19,170 @@ class _FastingState extends State<Fasting> {
     return DefaultTabController(
       length: _tabs.length,
       child: Scaffold(
-          appBar: PreferredSize(
-            preferredSize: Size(Get.width,Get.height*.33), // here the desired height
-            child: Stack(
-              alignment: Alignment.center,
-              children: [
-                AppBar(
-                  elevation: 0,
-                  automaticallyImplyLeading: false,
-                  bottom: TabBar(
-                      tabs: [
-                        Tab(text: "الكفارة والقضاء"),
-                        Tab(text: "النوافل",)
-                      ]),
-                  backgroundColor: Colors.white,
-                  shape: RoundedRectangleBorder(
-                    borderRadius: BorderRadius.vertical(
-                      bottom: Radius.circular(30),
+          body: Stack(
+            alignment: Alignment.topCenter,
+            children: [
+              Container(
+                padding: EdgeInsets.only(top: 5),
+                height: MediaQuery
+                    .of(context)
+                    .size
+                    .height,
+                width: MediaQuery
+                    .of(context)
+                    .size
+                    .width,
+                //  margin: EdgeInsets.only(left: 2, top: 5, bottom: 5, right: 2),
+                decoration: BoxDecoration(
+                  image: DecorationImage(
+                      image: AssetImage('images/back ground.jpeg'),
+                      fit: BoxFit.cover),
+                  borderRadius: BorderRadius.circular(1),
+                  color: Colors.white,
+                ),
+              ),
+              Column(
+                children: [
+                  SizedBox(
+                    height: Get.height * .06,
+                  ),
+                  Padding(
+                    padding: EdgeInsets.symmetric(horizontal: 20),
+                    child: Row(
+                      mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                      children: [
+                        Row(
+                          children: [
+                            CircleAvatar(
+                              radius: 20,
+                              backgroundColor: Colors.grey.shade400,
+                              child: Image.asset(
+                                'icons/img_1.png',
+                                width: 20,
+                                height: 20,
+                              ),
+                            ),
+                          ],
+                        ),
+                        Row(
+                          children: [
+                            CircleAvatar(
+                              child: Icon(Icons.notifications_none),
+                              backgroundColor: Colors.grey.shade400,
+                              radius: 20,
+                            ),
+                            SizedBox(
+                              width: 15,
+                            ),
+                            CircleAvatar(
+                              radius: 20,
+                              child: Image.asset(
+                                'icons/img.png',
+                                width: 20,
+                                height: 20,
+                              ),
+                              backgroundColor: Colors.grey.shade400,
+                            ),
+                          ],
+                        )
+                      ],
                     ),
                   ),
-
-                ),
-                Image.asset('images/Rectangle 1.png',fit: BoxFit.fitWidth,
-                  width: Get.width,),
-                Padding(
-                  padding: const EdgeInsets.symmetric(vertical: 35,horizontal: 10),
-                  child: Column(
-                    mainAxisAlignment: MainAxisAlignment.spaceAround  ,
+                  SizedBox(
+                    height: Get.height * .03,
+                  ),
+                  Stack(
+                    alignment: Alignment.center,
                     children: [
-                      Row(
-                        mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                      Image.asset(
+                        'images/back ground2.jpeg',
+                      ),
+                      Column(
+                        mainAxisAlignment: MainAxisAlignment.start,
                         children: [
-                          Row(
-                            children: [
-                              CircleAvatar(
-                                radius: 15,
-                                backgroundColor: Colors.white,
-                                child: Image.asset('icons/img_1.png',width: 20,height: 20,),
-                              ),
-                            ],
+                          Text(
+                            'رسول الله صلي الله عليه وسلم قال:',
+                            textDirection: TextDirection.rtl,
+                            style: TextStyle(fontSize: 16, color: Colors.white),
                           ),
-                          Row(
-                            children: [
-                              CircleAvatar(
-                                child: Icon(Icons.notifications_none),
-                                backgroundColor: Colors.white,
-                                radius: 15,
-                              ),
-                              SizedBox(width: 15,),
-                              CircleAvatar(
-                                radius: 15,
-                                child: Image.asset('icons/img.png',width: 20,height: 20,),
-                                backgroundColor: Colors.white,
-                              ),
-                            ],
-                          )
+                          Padding(
+                            padding: const EdgeInsets.all(8.0),
+                            child: Text(
+                              textDirection: TextDirection.rtl,
+                              '"قال الله عز وجل: كل عمل ابن ادم له الا الصيام\n فانه لي وانا اجزي به"',
+                              style: TextStyle(
+                                  fontSize: 19,
+                                  color: Colors.white,
+                                  fontWeight: FontWeight.bold),
+                            ),
+                          ),
                         ],
                       ),
-                      SizedBox(height: 5,),
-                      Expanded(
-                        child: Container(
-                          alignment: Alignment.topRight,
-                          child: Text(
-                            'قال رسول الله صلي الله عليه وسلم:'
-                            ,textDirection: TextDirection.rtl
-                            ,style: TextStyle(
-                              fontSize: 25,fontWeight: FontWeight.w800,color: Colors.white),
-                          ),
-                        ),
-                      ),
-
-                      Expanded(
-                        child: Container(
-                          alignment: Alignment.topRight,
-                          child: Text(
-                            'قال الله عز وجل: "كل عمل ابن ادم له الا الصيام;فأنه لي وانا اجزي به"'
-                            ,textDirection: TextDirection.rtl
-                            ,style: TextStyle(
-                              fontSize: 21,color: Colors.white),
-                          ),
-                        ),
-                      ),
-
                     ],
                   ),
-                ),
-              ],
-            ),
-
-          ),
-
-          body: TabBarView(children: _tabs)
+                  Container(
+                    child: const TabBar(
+                      //controller: _controller,
+                      tabs: [
+                        Tab(
+                          text: 'الكفارة والقضاء',
+                        ),
+                        Tab(
+                          text: 'النوافل',
+                        ),
+                      ],
+                    ),
+                  ),
+                  Expanded(child: TabBarView(children: _tabs))
+                ],
+              )
+            ],
+          )
       ),
+    );
+  }
+  Widget customSalah(text,text2){
+    return Container(
+      margin: const EdgeInsets.only(bottom: 12),
+      padding: const EdgeInsets.symmetric(horizontal: 10),
+      child: Row(
+            children: [
+              Text(
+                text,
+                textDirection: TextDirection.rtl,
+                style: TextStyle(
+                  fontSize: 20,
+                  fontWeight: FontWeight.bold,
+                ),
+              ),
+              Text(
+                textDirection: TextDirection.rtl,
+                text2,
+                style: TextStyle(
+                  fontSize: 20,
+                  fontWeight: FontWeight.bold,
+                ),
+              ),
+              IconButton(onPressed: (){}, icon: Icon(Icons.keyboard_arrow_down_outlined))
+            ],
+          ),
+      width: Get.width * .95,
+      height: Get.height * .06,
+      decoration: BoxDecoration(
+          color: Colors.white,
+          borderRadius: BorderRadius.circular(5),
+          boxShadow: [
+            BoxShadow(
+                color: Colors.grey,
+                blurRadius: 1,
+                spreadRadius: .5)
+          ]),
     );
   }
 }
 Widget Kaffara(){
   return Column(
     children: [
-      SizedBox(
-        height: Get.height * 0.07,
-        width: double.infinity,
-        child: Card(
-          child: ListTile(
-            title: Center(child: Text("رمضان 2024",textDirection: TextDirection.rtl,)),
-            leading: IconButton(onPressed: (){}, icon: Icon(Icons.keyboard_arrow_down_outlined)),
-            trailing: Text("ايام 5",textDirection: TextDirection.rtl,),
-          ),
-        ),
-      ),
       SizedBox(
         height: Get.height * 0.07,
         width: double.infinity,
@@ -168,4 +223,5 @@ Widget Nwafil(){
       ),
     ],
   );
+
 }

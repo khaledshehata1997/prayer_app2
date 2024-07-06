@@ -2,6 +2,7 @@ import 'package:flutter/material.dart';
 import 'package:get/get.dart';
 import 'package:get/get_core/src/get_main.dart';
 import 'package:prayer_app/view/home/nav_bar_screens/quran/features/main_screen.dart';
+
 class Quran extends StatefulWidget {
   const Quran({super.key});
 
@@ -13,126 +14,202 @@ class _QuranState extends State<Quran> {
   @override
   Widget build(BuildContext context) {
     return Scaffold(
-      appBar: PreferredSize(
-        preferredSize: Size(double.infinity,Get.height*.30), // here the desired height
-        child: Stack(
-          alignment: Alignment.center,
-          children: [
-            AppBar(
-              elevation: 0,
-              automaticallyImplyLeading: false,
-              backgroundColor: Colors.white,
-              shape: RoundedRectangleBorder(
-                borderRadius: BorderRadius.vertical(
-                  bottom: Radius.circular(30),
+      body: Stack(
+        alignment: Alignment.topCenter,
+        children: [
+          Container(
+            padding: EdgeInsets.only(top: 5),
+            height: MediaQuery.of(context).size.height,
+            width: MediaQuery.of(context).size.width,
+            //  margin: EdgeInsets.only(left: 2, top: 5, bottom: 5, right: 2),
+            decoration: BoxDecoration(
+              image: DecorationImage(
+                  image: AssetImage('images/back ground.jpeg'),
+                  fit: BoxFit.cover),
+              borderRadius: BorderRadius.circular(1),
+              color: Colors.white,
+            ),
+          ),
+          Column(
+            children: [
+              SizedBox(
+                height: Get.height * .06,
+              ),
+              Padding(
+                padding: EdgeInsets.symmetric(horizontal: 20),
+                child: Row(
+                  mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                  children: [
+                    Row(
+                      children: [
+                        CircleAvatar(
+                          radius: 20,
+                          backgroundColor: Colors.grey.shade400,
+                          child: Image.asset(
+                            'icons/img_1.png',
+                            width: 20,
+                            height: 20,
+                          ),
+                        ),
+                      ],
+                    ),
+                    Row(
+                      children: [
+                        CircleAvatar(
+                          child: Icon(Icons.notifications_none),
+                          backgroundColor: Colors.grey.shade400,
+                          radius: 20,
+                        ),
+                        SizedBox(
+                          width: 15,
+                        ),
+                        CircleAvatar(
+                          radius: 20,
+                          child: Image.asset(
+                            'icons/img.png',
+                            width: 20,
+                            height: 20,
+                          ),
+                          backgroundColor: Colors.grey.shade400,
+                        ),
+                      ],
+                    )
+                  ],
                 ),
               ),
-
-            ),
-            Image.asset('images/Rectangle 1.png',fit: BoxFit.fitWidth,
-              width: Get.width,),
-            Padding(
-              padding: const EdgeInsets.symmetric(vertical: 35,horizontal: 10),
-              child: Column(
-                mainAxisAlignment: MainAxisAlignment.spaceAround  ,
+              SizedBox(
+                height: Get.height * .03,
+              ),
+              Stack(
+                alignment: Alignment.center,
                 children: [
-                  Row(
-                    mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                  Image.asset(
+                    'images/back ground2.jpeg',
+                  ),
+                  Column(
+                    mainAxisAlignment: MainAxisAlignment.start,
                     children: [
-                      Row(
-                        children: [
-                          CircleAvatar(
-                            radius: 15,
-                            backgroundColor: Colors.white,
-                            child: Image.asset('icons/img_1.png',width: 20,height: 20,),
-                          ),
-                        ],
+                      Text(
+                        'رسول الله صلي الله عليه وسلم قال:',
+                        textDirection: TextDirection.rtl,
+                        style: TextStyle(fontSize: 16, color: Colors.white),
                       ),
-                      Row(
-                        children: [
-                          CircleAvatar(
-                            child: Icon(Icons.notifications_none),
-                            backgroundColor: Colors.white,
-                            radius: 15,
-                          ),
-                          SizedBox(width: 15,),
-                          CircleAvatar(
-                            radius: 15,
-                            child: Image.asset('icons/img.png',width: 20,height: 20,),
-                            backgroundColor: Colors.white,
-                          ),
-                        ],
-                      )
+                      Padding(
+                        padding: const EdgeInsets.all(8.0),
+                        child: Text(
+                          textDirection: TextDirection.rtl,
+                          "اقرؤوا القران\n فأنه يأتي يوم القيامه شفيعا لأصحابه",
+                          style: TextStyle(
+                              fontSize: 19,
+                              color: Colors.white,
+                              fontWeight: FontWeight.bold),
+                        ),
+                      ),
                     ],
                   ),
-                  SizedBox(height: 5,),
-                  Expanded(
-                    child: Container(
-                      alignment: Alignment.topRight,
-                      child: Text(
-                        'قال رسول الله صلي الله عليه وسلم:'
-                        ,textDirection: TextDirection.rtl
-                        ,style: TextStyle(
-                          fontSize: 25,fontWeight: FontWeight.w800,color: Colors.white),
-                      ),
-                    ),
-                  ),
-
-                  Expanded(
-                    child: Container(
-                      alignment: Alignment.topRight,
-                      child: Text(
-                        '"اقرؤوا القران فأنه يأتي يوم القيامه شفيعا لأصحابه"'
-                        ,textDirection: TextDirection.rtl
-                        ,style: TextStyle(
-                          fontSize: 21,color: Colors.white),
-                      ),
-                    ),
-                  ),
-
                 ],
               ),
-            ),
-          ],
-        ),
-
+              SizedBox(
+                height: Get.height * .03,
+              ),
+              Container(
+                margin: const EdgeInsets.only(bottom: 12),
+                padding: const EdgeInsets.symmetric(horizontal: 10),
+                child: Row(
+                  mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                  children: [
+                    IconButton(
+                        onPressed: () {
+                          Navigator.push(
+                              context,
+                              MaterialPageRoute(
+                                  builder: (context) => const MainScreen()));
+                        },
+                        icon: Icon(Icons.arrow_back_ios)),
+                    Text(
+                      style: TextStyle(fontSize: 18),
+                      "قراءه القران الكريم",
+                      textDirection: TextDirection.rtl,
+                    ),
+                    IconButton(
+                        onPressed: () {}, icon: Icon(Icons.menu_book_outlined))
+                  ],
+                ),
+                width: Get.width * .95,
+                height: Get.height * .06,
+                decoration: BoxDecoration(
+                    color: Colors.white,
+                    borderRadius: BorderRadius.circular(5),
+                    boxShadow: [
+                      BoxShadow(
+                          color: Colors.grey, blurRadius: 1, spreadRadius: .5)
+                    ]),
+              ),
+              SizedBox(
+                height: Get.height * .03,
+              ),
+              Container(
+                margin: const EdgeInsets.only(bottom: 12),
+                padding: const EdgeInsets.symmetric(horizontal: 10),
+                child: Row(
+                  mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                  children: [
+                    Checkbox(value: false, onChanged: (_){}),
+                    Center(
+                      child: Text(
+                        style: TextStyle(fontSize: 18),
+                        "الورد اليومي",
+                        textDirection: TextDirection.rtl,
+                      ),
+                    ),
+                  ],
+                ),
+                width: Get.width * .95,
+                height: Get.height * .06,
+                decoration: BoxDecoration(
+                    color: Colors.white,
+                    borderRadius: BorderRadius.circular(5),
+                    boxShadow: [
+                      BoxShadow(
+                          color: Colors.grey, blurRadius: 1, spreadRadius: .5)
+                    ]),
+              ),
+              SizedBox(
+                height: Get.height * .03,
+              ),
+              Container(
+                margin: const EdgeInsets.only(bottom: 12),
+                padding: const EdgeInsets.symmetric(horizontal: 10),
+                child: Row(
+                  mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                  children: [
+                    IconButton(
+                        onPressed: () {
+                        },
+                        icon: Icon(Icons.arrow_back_ios)),
+                    Text(
+                      style: TextStyle(fontSize: 18),
+                      "الرقية الشرعية",
+                      textDirection: TextDirection.rtl,
+                    ),
+                    IconButton(
+                        onPressed: () {}, icon: Icon(Icons.menu_book_outlined))
+                  ],
+                ),
+                width: Get.width * .95,
+                height: Get.height * .06,
+                decoration: BoxDecoration(
+                    color: Colors.white,
+                    borderRadius: BorderRadius.circular(5),
+                    boxShadow: [
+                      BoxShadow(
+                          color: Colors.grey, blurRadius: 1, spreadRadius: .5)
+                    ]),
+              ),
+            ],
+          ),
+        ],
       ),
-      body: Column(children: [
-        SizedBox(
-          height: Get.height * 0.07,
-          width: double.infinity,
-          child: Card(
-            child: ListTile(
-              title: Center(child: Text("قراءه القران الكريم",textDirection: TextDirection.rtl,)),
-              leading: IconButton(onPressed: (){
-                Navigator.push(context, MaterialPageRoute(builder: (context)=>const MainScreen()));
-              }, icon: Icon(Icons.arrow_back_ios)),
-              trailing: IconButton(onPressed: (){}, icon: Icon(Icons.menu_book_outlined)),
-            ),
-          ),
-        ),
-        SizedBox(
-          height: Get.height * 0.07,
-          width: double.infinity,
-          child: Card(
-            child: ListTile(
-              title: Center(child: Text("الورد اليومي",textDirection: TextDirection.rtl,)),
-              leading: Checkbox(value: false, onChanged: (_){}),
-            ),
-          ),
-        ),
-        SizedBox(
-          height: Get.height * 0.07,
-          width: double.infinity,
-          child: Card(
-            child: ListTile(
-              title: Center(child: Text("الرقية الشرعيه",textDirection: TextDirection.rtl,)),
-              leading: IconButton(onPressed: (){}, icon: Icon(Icons.arrow_back_ios)),
-              trailing: IconButton(onPressed: (){}, icon: Icon(Icons.menu_book_outlined)),
-            ),
-          ),
-        ),
-      ],),
     );
   }
 }

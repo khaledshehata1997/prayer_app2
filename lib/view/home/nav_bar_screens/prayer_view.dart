@@ -1,3 +1,6 @@
+import 'dart:async';
+
+import 'package:adhan/adhan.dart';
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter/widgets.dart';
@@ -5,6 +8,10 @@ import 'package:get/get.dart';
 import 'package:get/get_core/src/get_main.dart';
 import 'package:intl/intl.dart' hide TextDirection;
 import 'package:linear_progress_bar/linear_progress_bar.dart';
+import 'package:prayer_app/view/home/nav_bar_screens/prayer_model/PrayerTimeCalculator.dart';
+import 'package:prayer_app/view/home/nav_bar_screens/prayer_model/prayerModel.dart';
+import 'package:prayer_app/view/home/nav_bar_screens/prayer_model/prayerModelCurrent.dart';
+import 'package:prayer_app/view/home/nav_bar_screens/prayer_model/sqlite/database_helper.dart';
 import '../../../constants.dart';
 
 class Prayer extends StatefulWidget {
@@ -14,26 +21,156 @@ class Prayer extends StatefulWidget {
   State<Prayer> createState() => _PrayerState();
 }
 
-var now = DateTime.now();
-var formatter = DateFormat.yMMMEd();
-String formatted = formatter.format(now);
-int currentFrood = 0;
-bool fajrMainValue = false;
-bool fajrSecValue = false;
-bool dohaValue = false;
-bool dohrMainValue = false;
-bool dohrSecValue = false;
-bool asrValue = false;
-bool maghrbMainValue = false;
-bool maghrbSecValue = false;
-bool ishaMainValue = false;
-bool ishaSecValue = false;
-bool qeamValue = false;
-
+late PrayerTimeCalculator _prayerTimeCalculator;
+late DateTime _nextPrayerTime;
+late Timer _timer;
 class _PrayerState extends State<Prayer> with TickerProviderStateMixin {
+
+  final DatabaseHelper dbHelper = DatabaseHelper();
+  PrayerModel? prayerData;
+  DateTime selectedDate = DateTime.now();
+  String formattedDate = DateFormat('yyyy-MM-dd').format(DateTime.now());
+   List<int> salahHours = [];
+   List<int> salahMin = [];
+   List<String> salahName= ["الفجر","الضهر", "العصر","المغرب","العشاء"];
+  int salahCalc = 3;
+  PrayerCurrent? prayerCurrent;
+  static int _index = 0;
+  late TabController _controller;
+  @override
+  void initState(){
+    super.initState();
+    _salah();
+    _getPrayerData();
+    _getPrayerDataCurrent();
+    _prayerTimeCalculator = PrayerTimeCalculator();
+    _nextPrayerTime = DateTime(
+      _prayerTimeCalculator.currentTime.year,
+      _prayerTimeCalculator.currentTime.month,
+      _prayerTimeCalculator.currentTime.day,
+      salahHours[salahCalc],
+      salahMin[salahCalc],
+    );
+    print(DateFormat.jm().format(getPrayerTime().isha).substring(2,4));// Set your next prayer time here
+    _startTimer();
+    _controller = TabController(
+        initialIndex: _PrayerState._index, length: 2, vsync: this);
+  }
+  @override
+  void dispose() {
+    _controller.dispose();
+    _timer.cancel();
+    super.dispose();
+  }
+  PrayerTimes getPrayerTime(){
+    final myCoordinates = Coordinates(30.033333, 31.233334);
+    final params = CalculationMethod.egyptian.getParameters();
+    params.madhab = Madhab.shafi;
+    final prayerTimes = PrayerTimes.today(myCoordinates, params);
+    return prayerTimes;
+  }
+  void _startTimer() {
+    _timer = Timer.periodic(Duration(seconds: 1), (timer) {
+      setState(() {
+        _prayerTimeCalculator.updateCurrentTime();
+      });
+      Duration difference = _nextPrayerTime.difference(DateTime.now());
+      if (difference.isNegative || difference.inSeconds == 0) {
+        _timer.cancel();
+        if(salahCalc == 4){
+          setState(() {
+            salahCalc = 0;
+          });
+
+        }else{
+          setState(() {
+            salahCalc++;
+          });
+
+        }
+      }
+    });
+  }
+  void _salah(){
+    salahHours.add(int.parse(DateFormat.jm().format(getPrayerTime().fajr)[0]));
+    salahHours.add(int.parse(DateFormat.jm().format(getPrayerTime().dhuhr)[0]) + 12);
+    salahHours.add(int.parse(DateFormat.jm().format(getPrayerTime().asr)[0]) + 12);
+    salahHours.add(int.parse(DateFormat.jm().format(getPrayerTime().maghrib)[0]) + 12);
+    salahHours.add(int.parse(DateFormat.jm().format(getPrayerTime().isha)[0]) + 12);
+    salahMin.add(int.parse(DateFormat.jm().format(getPrayerTime().fajr).substring(2,4)));
+    salahMin.add(int.parse(DateFormat.jm().format(getPrayerTime().dhuhr).substring(2,4)));
+    salahMin.add(int.parse(DateFormat.jm().format(getPrayerTime().asr).substring(2,4)));
+    salahMin.add(int.parse(DateFormat.jm().format(getPrayerTime().maghrib).substring(2,4)));
+    salahMin.add(int.parse(DateFormat.jm().format(getPrayerTime().isha).substring(2,4)));
+  }
+  void _getPrayerData() async {
+    prayerData = await dbHelper.getPrayer(_formatDate(selectedDate));
+    if (prayerData == null) {
+      prayerData = PrayerModel(
+        day: _formatDate(selectedDate),
+        prayer1: false,
+        prayer2: false,
+        prayer3: false,
+        prayer4: false,
+        prayer5: false,
+      );
+    }
+    setState(() {});
+  }
+  void _getPrayerDataCurrent() async {
+    prayerCurrent = await dbHelper.getPrayerCurrent(_formatDate(selectedDate));
+    if (prayerCurrent == null) {
+      print("get");
+    prayerCurrent = PrayerCurrent(
+      day: formattedDate,
+      prayer1: false,
+      prayer2: false,
+      prayer3: false,
+      prayer4: false,
+      prayer5: false,
+      prayer6: false,
+      prayer7: false,
+      prayer8: false,
+      prayer9: false,
+      prayer10: false,
+      prayer11: false,
+      calculation: 0,
+    );
+  }
+    setState(() {});
+  }
+  void _savePrayerDataCurrent() async {
+    if (prayerCurrent != null) {
+      await dbHelper.insertPrayerCurrent(prayerCurrent!);
+    }
+  }
+  void _savePrayerData() async {
+    if (prayerData != null) {
+      await dbHelper.insertPrayer(prayerData!);
+    }
+  }
+  String _formatDate(DateTime date) {
+    return "${date.year}-${date.month.toString().padLeft(2, '0')}-${date.day.toString().padLeft(2, '0')}";
+  }
+  Future<void> _selectDate(BuildContext context) async {
+    final DateTime? picked = await showDatePicker(
+      context: context,
+      initialDate: selectedDate,
+      firstDate: DateTime(2000),
+      lastDate: DateTime(2101),
+    );
+    if (picked != null && picked != selectedDate) {
+      setState(() {
+        selectedDate = picked;
+      });
+      _getPrayerData();
+    }
+  }
   @override
   Widget build(BuildContext context) {
-    TabController controller = TabController(length: 2, vsync: this);
+    Duration timeLeft = _prayerTimeCalculator.timeLeftForNextPrayer(_nextPrayerTime);
+
+
     return Scaffold(
         body: Stack(
           alignment: Alignment.topCenter,
@@ -117,11 +254,11 @@ class _PrayerState extends State<Prayer> with TickerProviderStateMixin {
                       mainAxisAlignment: MainAxisAlignment.start,
                       children: [
                         Text(
-                          'الأذان القادم صلاه العشاء',
+                           'الأذان القادم صلاه ${salahName[salahCalc]}',
                           style: TextStyle(fontSize: 25, color: Colors.white),
                         ),
                         Text(
-                          '01:15:05',
+                          '${_prayerTimeCalculator.formatDuration(timeLeft)}',
                           style: TextStyle(
                               fontSize: 30,
                               color: Colors.white,
@@ -134,8 +271,8 @@ class _PrayerState extends State<Prayer> with TickerProviderStateMixin {
 
                 Container(
                   child: TabBar(
-                    controller: controller,
-                    tabs: [
+                    controller: _controller,
+                    tabs: const [
                       Tab(
                         text: 'الصلوات الفائته',
                       ),
@@ -149,9 +286,9 @@ class _PrayerState extends State<Prayer> with TickerProviderStateMixin {
                   child: SizedBox(
                     height: Get.height,
                     child: TabBarView(
-                      controller: controller,
+                      controller: _controller,
                       children: <Widget>[
-                        Column(
+                         Column(
                           children: [
                             Padding(
                               padding: const EdgeInsets.all(8.0),
@@ -173,17 +310,63 @@ class _PrayerState extends State<Prayer> with TickerProviderStateMixin {
                                 children: [
                                   IconButton(
                                     icon: const Icon(Icons.date_range_outlined),
-                                    color: Colors.blue[900], onPressed: () { },
+                                    color: Colors.blue[900], onPressed: () => _selectDate(context),
                                   ),
                                   const Text("حدد يوم",style: TextStyle(fontSize: 17,fontWeight: FontWeight.bold),)
                                 ],
                               ),
                             ),
-                            customSalah("الفجر"),
-                            customSalah("الضهر"),
-                            customSalah("العصر"),
-                            customSalah("المغرب"),
-                            customSalah("العشاء"),
+                            prayerData == null
+                                ? const Center(child: CircularProgressIndicator())
+                                : customSalah("الفجر",Checkbox(
+                              //tristate: true,
+                              activeColor: Colors.blue[900],
+                                value: prayerData == null ? false : prayerData!.prayer1,
+                                onChanged: (value){
+                                  setState(() {
+                                    prayerData!.prayer1 = value!;
+                                  });
+                                  _savePrayerData();
+                            })),
+                            customSalah("الضهر",Checkbox(
+                              //tristate: true,
+                                activeColor: Colors.blue[900],
+                                value: prayerData == null ? false : prayerData!.prayer2,
+                                onChanged: (value){
+                              setState(() {
+                                prayerData!.prayer2 = value!;
+                              });
+                              _savePrayerData();
+                            })),
+                            customSalah("العصر",Checkbox(
+                              //tristate: true,
+                                activeColor: Colors.blue[900],
+                                value: prayerData == null ? false : prayerData!.prayer3,
+                                onChanged: (value){
+                              setState(() {
+                                prayerData!.prayer3 = value!;
+                              });
+                              _savePrayerData();
+                            })),
+                            customSalah("المغرب",Checkbox(
+                              //tristate: true,
+                                activeColor: Colors.blue[900],
+                                value: prayerData == null ? false : prayerData!.prayer4, onChanged: (value){
+                              setState(() {
+                                prayerData!.prayer4 = value!;
+                              });
+                              _savePrayerData();
+                            })),
+                            customSalah("العشاء",Checkbox(
+                              //tristate: true,
+                                activeColor: Colors.blue[900],
+                                value: prayerData == null ? false : prayerData!.prayer5,
+                                onChanged: (value){
+                              setState(() {
+                                prayerData!.prayer5 = value!;
+                              });
+                              _savePrayerData();
+                            })),
                           ],
                         ),
                         Column(
@@ -199,7 +382,7 @@ class _PrayerState extends State<Prayer> with TickerProviderStateMixin {
                                     color: Colors.blue[900],
                                   ),
                                   Text(
-                                    formatted,
+                                    formattedDate,
                                   ),
                                   Text(
                                     "اليوم",
@@ -237,7 +420,7 @@ class _PrayerState extends State<Prayer> with TickerProviderStateMixin {
                                         progressType:
                                         LinearProgressBar.progressTypeLinear,
                                         // Use Linear progress
-                                        currentStep: currentFrood,
+                                        currentStep: prayerCurrent == null ? 0: prayerCurrent!.calculation,
                                         progressColor: Colors.blue[900],
                                         backgroundColor: Colors.grey,
                                       ),
@@ -257,6 +440,17 @@ class _PrayerState extends State<Prayer> with TickerProviderStateMixin {
                             Container(
                               margin: const EdgeInsets.only(bottom: 12),
                               padding: const EdgeInsets.symmetric(horizontal: 10),
+                              width: Get.width * .95,
+                              height: Get.height * .06,
+                              decoration: BoxDecoration(
+                                  color: Colors.white,
+                                  borderRadius: BorderRadius.circular(5),
+                                  boxShadow: [
+                                    BoxShadow(
+                                        color: Colors.grey,
+                                        blurRadius: 1,
+                                        spreadRadius: .5)
+                                  ]),
                               child: Row(
                                 mainAxisAlignment: MainAxisAlignment
                                     .spaceBetween,
@@ -265,12 +459,12 @@ class _PrayerState extends State<Prayer> with TickerProviderStateMixin {
                                     Checkbox(
                                         activeColor: buttonColor,
                                         checkColor: Colors.white,
-                                        value: fajrMainValue,
+                                        value: prayerCurrent == null ? false : prayerCurrent!.prayer1,
                                         onChanged: (value) {
                                           setState(() {
-                                            fajrMainValue = value!;
-
+                                            prayerCurrent!.prayer1 = value ?? false;
                                           });
+                                          _savePrayerDataCurrent();
                                         }),
                                     Text(
                                       'النافله',
@@ -284,16 +478,19 @@ class _PrayerState extends State<Prayer> with TickerProviderStateMixin {
                                     Checkbox(
                                         activeColor: buttonColor,
                                         checkColor: Colors.white,
-                                        value: fajrSecValue,
+                                        value: prayerCurrent == null ? false :prayerCurrent!.prayer2,
                                         onChanged: (value) {
                                           setState(() {
-                                            fajrSecValue = value!;
+                                            prayerCurrent!.prayer2 = value!;
                                             if (value) {
-                                              currentFrood++;
+                                              prayerCurrent!.calculation++;
+                                              _savePrayerDataCurrent();
                                             } else {
-                                              currentFrood--;
+                                              prayerCurrent!.calculation--;
+                                              _savePrayerDataCurrent();
                                             }
                                           });
+                                          _savePrayerDataCurrent();
                                         }),
                                     Text(
                                       'الفرض',
@@ -317,17 +514,6 @@ class _PrayerState extends State<Prayer> with TickerProviderStateMixin {
                                   ),
                                 ],
                               ),
-                              width: Get.width * .95,
-                              height: Get.height * .06,
-                              decoration: BoxDecoration(
-                                  color: Colors.white,
-                                  borderRadius: BorderRadius.circular(5),
-                                  boxShadow: [
-                                    BoxShadow(
-                                        color: Colors.grey,
-                                        blurRadius: 1,
-                                        spreadRadius: .5)
-                                  ]),
                             ),
                             Container(
                               margin: EdgeInsets.only(bottom: 12),
@@ -340,11 +526,12 @@ class _PrayerState extends State<Prayer> with TickerProviderStateMixin {
                                     Checkbox(
                                         activeColor: buttonColor,
                                         checkColor: Colors.white,
-                                        value: dohaValue,
+                                        value: prayerCurrent == null ? false :prayerCurrent!.prayer3,
                                         onChanged: (value) {
                                           setState(() {
-                                            dohaValue = value!;
+                                            prayerCurrent!.prayer3 = value!;
                                           });
+                                          _savePrayerDataCurrent();
                                         }),
                                   ]),
                                   Row(
@@ -384,12 +571,13 @@ class _PrayerState extends State<Prayer> with TickerProviderStateMixin {
                                     Checkbox(
                                         activeColor: buttonColor,
                                         checkColor: Colors.white,
-                                        value: dohrMainValue,
+                                        value: prayerCurrent == null ? false :prayerCurrent!.prayer4,
                                         onChanged: (value) {
                                           setState(() {
-                                            dohrMainValue = value!;
+                                            prayerCurrent!.prayer4 = value!;
 
                                           });
+                                          _savePrayerDataCurrent();
                                         }),
                                     Text(
                                       'النافلة',
@@ -403,16 +591,19 @@ class _PrayerState extends State<Prayer> with TickerProviderStateMixin {
                                     Checkbox(
                                         activeColor: buttonColor,
                                         checkColor: Colors.white,
-                                        value: dohrSecValue,
+                                        value: prayerCurrent == null ? false :prayerCurrent!.prayer5,
                                         onChanged: (value) {
                                           setState(() {
-                                            dohrSecValue = value!;
+                                            prayerCurrent!.prayer5 = value!;
                                             if (value) {
-                                              currentFrood++;
+                                              prayerCurrent!.calculation++;
+                                              _savePrayerDataCurrent();
                                             } else {
-                                              currentFrood--;
+                                              prayerCurrent!.calculation--;
+                                              _savePrayerDataCurrent();
                                             }
                                           });
+                                          _savePrayerDataCurrent();
                                         }),
                                     Text(
                                       'الفرض',
@@ -458,16 +649,19 @@ class _PrayerState extends State<Prayer> with TickerProviderStateMixin {
                                     Checkbox(
                                         activeColor: buttonColor,
                                         checkColor: Colors.white,
-                                        value: asrValue,
+                                        value: prayerCurrent == null ? false :prayerCurrent!.prayer6,
                                         onChanged: (value) {
                                           setState(() {
-                                            asrValue = value!;
+                                            prayerCurrent!.prayer6 = value!;
                                             if (value) {
-                                              currentFrood++;
+                                              prayerCurrent!.calculation++;
+                                              _savePrayerDataCurrent();
                                             } else {
-                                              currentFrood--;
+                                              prayerCurrent!.calculation--;
+                                              _savePrayerDataCurrent();
                                             }
                                           });
+                                          _savePrayerDataCurrent();
                                         }),
                                     Text(
                                       'الفرض',
@@ -514,12 +708,13 @@ class _PrayerState extends State<Prayer> with TickerProviderStateMixin {
                                     Checkbox(
                                         activeColor: buttonColor,
                                         checkColor: Colors.white,
-                                        value: maghrbMainValue,
+                                        value: prayerCurrent == null ? false :prayerCurrent!.prayer7,
                                         onChanged: (value) {
                                           setState(() {
-                                            maghrbMainValue = value!;
+                                            prayerCurrent!.prayer7 = value!;
 
                                           });
+                                          _savePrayerDataCurrent();
                                         }),
                                     Text(
                                       'النافلة',
@@ -533,16 +728,19 @@ class _PrayerState extends State<Prayer> with TickerProviderStateMixin {
                                     Checkbox(
                                         activeColor: buttonColor,
                                         checkColor: Colors.white,
-                                        value: maghrbSecValue,
+                                        value: prayerCurrent == null ? false :prayerCurrent!.prayer8,
                                         onChanged: (value) {
                                           setState(() {
-                                            maghrbSecValue = value!;
+                                            prayerCurrent!.prayer8 = value!;
                                             if (value) {
-                                              currentFrood++;
+                                              prayerCurrent!.calculation++;
+                                              _savePrayerDataCurrent();
                                             } else {
-                                              currentFrood--;
+                                              prayerCurrent!.calculation--;
+                                              _savePrayerDataCurrent();
                                             }
                                           });
+                                          _savePrayerDataCurrent();
                                         }),
                                     Text(
                                       'الفرض',
@@ -588,12 +786,13 @@ class _PrayerState extends State<Prayer> with TickerProviderStateMixin {
                                     Checkbox(
                                         activeColor: buttonColor,
                                         checkColor: Colors.white,
-                                        value: ishaMainValue,
+                                        value: prayerCurrent == null ? false :prayerCurrent!.prayer9,
                                         onChanged: (value) {
                                           setState(() {
-                                            ishaMainValue = value!;
+                                            prayerCurrent!.prayer9 = value!;
 
                                           });
+                                          _savePrayerDataCurrent();
                                         }),
                                     Text(
                                       'النافلة',
@@ -607,16 +806,19 @@ class _PrayerState extends State<Prayer> with TickerProviderStateMixin {
                                     Checkbox(
                                         activeColor: buttonColor,
                                         checkColor: Colors.white,
-                                        value: ishaSecValue,
+                                        value: prayerCurrent == null ? false :prayerCurrent!.prayer10,
                                         onChanged: (value) {
                                           setState(() {
-                                            ishaSecValue = value!;
+                                            prayerCurrent!.prayer10 = value!;
                                             if (value) {
-                                              currentFrood++;
+                                              prayerCurrent!.calculation++;
+                                              _savePrayerDataCurrent();
                                             } else {
-                                              currentFrood--;
+                                              prayerCurrent!.calculation--;
+                                              _savePrayerDataCurrent();
                                             }
                                           });
+                                          _savePrayerDataCurrent();
                                         }),
                                     Text(
                                       'الفرض',
@@ -662,11 +864,12 @@ class _PrayerState extends State<Prayer> with TickerProviderStateMixin {
                                     Checkbox(
                                         activeColor: buttonColor,
                                         checkColor: Colors.white,
-                                        value: qeamValue,
+                                        value: prayerCurrent == null ? false :prayerCurrent!.prayer11,
                                         onChanged: (value) {
                                           setState(() {
-                                            qeamValue = value!;
+                                            prayerCurrent!.prayer11 = value!;
                                           });
+                                          _savePrayerDataCurrent();
                                         }),
                                   ]),
                                   Row(
@@ -725,7 +928,7 @@ class _PrayerState extends State<Prayer> with TickerProviderStateMixin {
       ),
     );
   }
-  Widget customSalah(text){
+  Widget customSalah(text,Checkbox chkBox){
     return Container(
       margin: const EdgeInsets.only(bottom: 12),
       padding: const EdgeInsets.symmetric(horizontal: 10),
@@ -733,14 +936,9 @@ class _PrayerState extends State<Prayer> with TickerProviderStateMixin {
         mainAxisAlignment: MainAxisAlignment
             .spaceBetween,
         children: [
-          Checkbox(
-              activeColor: buttonColor,
-              checkColor: Colors.white,
-              value: false,
-              onChanged: (_) {
-              }),
+          chkBox,
           Text(
-            formatted,
+            '${_formatDate(selectedDate)}',
             style: TextStyle(
               fontSize: 20,
               fontWeight: FontWeight.bold,
