@@ -1,3 +1,4 @@
+import 'package:firebase_auth/firebase_auth.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
@@ -19,8 +20,9 @@ import 'package:prayer_app/view/home/nav_bar_screens/quran/fehres/data/bloc/sura
 import 'package:prayer_app/view/home/nav_bar_screens/quran/fehres/data/bloc/surah_detail/surah_detail_cubit.dart';
 import 'package:prayer_app/view/home/nav_bar_screens/quran/observer.dart';
 import 'package:firebase_core/firebase_core.dart';
-
+bool isLogin = false;
 void main()async{
+
   WidgetsFlutterBinding.ensureInitialized();
   await  Firebase.initializeApp(
     options: DefaultFirebaseOptions.currentPlatform
@@ -35,6 +37,13 @@ void main()async{
       [DeviceOrientation.portraitUp, DeviceOrientation.portraitDown]);
 
   Bloc.observer = MyBlocObserver();
+  var user = FirebaseAuth.instance.currentUser;
+  if (user == null) {
+    isLogin = false;
+
+  } else {
+    isLogin = true;
+  }
   runApp(const MyApp());
 }
 
@@ -55,7 +64,7 @@ class MyApp extends StatelessWidget {
       child: ScreenUtilInit(
         child: GetMaterialApp(
         debugShowCheckedModeBanner: false,
-        home: SplashView(),
+        home: isLogin == false ? SplashView() : const HomeView(),
             ),
       )
     );

@@ -50,7 +50,7 @@ class _PrayerState extends State<Prayer> with TickerProviderStateMixin {
       salahHours[_prayerTimeCalculator.salahCalc],
       salahMin[_prayerTimeCalculator.salahCalc],
     );
-    if (_prayerTimeCalculator.currentTime.isAfter(_nextPrayerTime)) {
+    if (_prayerTimeCalculator.currentTime.isAfter(_nextPrayerTime)&& _nextPrayerTime.difference(DateTime.now()).isNegative) {
       _nextPrayerTime = _nextPrayerTime.add(Duration(days: 1));
     }
     _startTimer();
@@ -76,7 +76,7 @@ class _PrayerState extends State<Prayer> with TickerProviderStateMixin {
         _prayerTimeCalculator.updateCurrentTime();
       });
       Duration difference = _nextPrayerTime.difference(DateTime.now());
-      if (difference.isNegative || difference.inSeconds == 0) {
+      if (difference.isNegative || difference.inSeconds == 0 || difference.inHours >= 9) {
         _timer.cancel();
         print("cancel");
         if(_prayerTimeCalculator.salahCalc == 4){
@@ -88,7 +88,7 @@ class _PrayerState extends State<Prayer> with TickerProviderStateMixin {
         }else{
           setState(() {
             _prayerTimeCalculator.salahCalc++;
-            print(_prayerTimeCalculator.salahCalc);
+            print(_prayerTimeCalculator.salahCalc.toString());
           });
 
         }
