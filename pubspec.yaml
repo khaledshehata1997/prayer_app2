@@ -68,6 +68,9 @@ dependencies:
   flutter_rounded_progress_bar: ^0.3.2
   sqflite: ^2.3.3+1
   flutter_islamic_icons: ^1.0.2
+  firebase_auth: ^5.1.1
+  awesome_dialog: ^3.2.1
+  firebase_core: ^3.1.1
 
 
 dev_dependencies:

@@ -2,7 +2,7 @@ import 'package:intl/intl.dart';
 
 class PrayerTimeCalculator {
   late DateTime _currentTime;
-
+  int salahCalc = 3;
   PrayerTimeCalculator() {
     _currentTime = DateTime.now();
   }

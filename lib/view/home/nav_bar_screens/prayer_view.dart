@@ -32,8 +32,7 @@ class _PrayerState extends State<Prayer> with TickerProviderStateMixin {
   String formattedDate = DateFormat('yyyy-MM-dd').format(DateTime.now());
    List<int> salahHours = [];
    List<int> salahMin = [];
-   List<String> salahName= ["الفجر","الضهر", "العصر","المغرب","العشاء"];
-  int salahCalc = 3;
+   List<String> salahName = ["الفجر","الضهر", "العصر","المغرب","العشاء"];
   PrayerCurrent? prayerCurrent;
   static int _index = 0;
   late TabController _controller;
@@ -48,10 +47,12 @@ class _PrayerState extends State<Prayer> with TickerProviderStateMixin {
       _prayerTimeCalculator.currentTime.year,
       _prayerTimeCalculator.currentTime.month,
       _prayerTimeCalculator.currentTime.day,
-      salahHours[salahCalc],
-      salahMin[salahCalc],
+      salahHours[_prayerTimeCalculator.salahCalc],
+      salahMin[_prayerTimeCalculator.salahCalc],
     );
-    print(DateFormat.jm().format(getPrayerTime().isha).substring(2,4));// Set your next prayer time here
+    if (_prayerTimeCalculator.currentTime.isAfter(_nextPrayerTime)) {
+      _nextPrayerTime = _nextPrayerTime.add(Duration(days: 1));
+    }
     _startTimer();
     _controller = TabController(
         initialIndex: _PrayerState._index, length: 2, vsync: this);
@@ -77,18 +78,30 @@ class _PrayerState extends State<Prayer> with TickerProviderStateMixin {
       Duration difference = _nextPrayerTime.difference(DateTime.now());
       if (difference.isNegative || difference.inSeconds == 0) {
         _timer.cancel();
-        if(salahCalc == 4){
+        print("cancel");
+        if(_prayerTimeCalculator.salahCalc == 4){
           setState(() {
-            salahCalc = 0;
+            _prayerTimeCalculator.salahCalc = 0;
+            print(_prayerTimeCalculator.salahCalc.toString());
           });
 
         }else{
           setState(() {
-            salahCalc++;
+            _prayerTimeCalculator.salahCalc++;
+            print(_prayerTimeCalculator.salahCalc);
           });
 
         }
+        _nextPrayerTime = DateTime(
+          _prayerTimeCalculator.currentTime.year,
+          _prayerTimeCalculator.currentTime.month,
+          _prayerTimeCalculator.currentTime.day,
+          salahHours[_prayerTimeCalculator.salahCalc],
+          salahMin[_prayerTimeCalculator.salahCalc],
+        );
+        _startTimer();
       }
+
     });
   }
   void _salah(){
@@ -169,8 +182,6 @@ class _PrayerState extends State<Prayer> with TickerProviderStateMixin {
   @override
   Widget build(BuildContext context) {
     Duration timeLeft = _prayerTimeCalculator.timeLeftForNextPrayer(_nextPrayerTime);
-
-
     return Scaffold(
         body: Stack(
           alignment: Alignment.topCenter,
@@ -254,7 +265,7 @@ class _PrayerState extends State<Prayer> with TickerProviderStateMixin {
                       mainAxisAlignment: MainAxisAlignment.start,
                       children: [
                         Text(
-                           'الأذان القادم صلاه ${salahName[salahCalc]}',
+                           'الأذان القادم صلاه ${salahName[_prayerTimeCalculator.salahCalc]}',
                           style: TextStyle(fontSize: 25, color: Colors.white),
                         ),
                         Text(

@@ -3,6 +3,8 @@ import 'package:flutter/services.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:flutter_screenutil/flutter_screenutil.dart';
 import 'package:get/get.dart';
+import 'package:prayer_app/firebase_options.dart';
+import 'package:prayer_app/view/auth/splash_view.dart';
 import 'package:prayer_app/view/home/home_view.dart';
 import 'package:prayer_app/view/home/nav_bar_screens/quran.dart';
 import 'package:prayer_app/view/home/nav_bar_screens/quran/core/local/cache_helper.dart';
@@ -16,12 +18,14 @@ import 'package:prayer_app/view/home/nav_bar_screens/quran/features/quran_audio/
 import 'package:prayer_app/view/home/nav_bar_screens/quran/fehres/data/bloc/surah/surah_cubit.dart';
 import 'package:prayer_app/view/home/nav_bar_screens/quran/fehres/data/bloc/surah_detail/surah_detail_cubit.dart';
 import 'package:prayer_app/view/home/nav_bar_screens/quran/observer.dart';
+import 'package:firebase_core/firebase_core.dart';
 
 void main()async{
   WidgetsFlutterBinding.ensureInitialized();
-
+  await  Firebase.initializeApp(
+    options: DefaultFirebaseOptions.currentPlatform
+  );
   //  Wakelock.enable();
-
   await di.init();
   await CacheHelper.init();
 
@@ -51,7 +55,7 @@ class MyApp extends StatelessWidget {
       child: ScreenUtilInit(
         child: GetMaterialApp(
         debugShowCheckedModeBanner: false,
-        home: HomeView(),
+        home: SplashView(),
             ),
       )
     );
