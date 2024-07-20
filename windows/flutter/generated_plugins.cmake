@@ -3,6 +3,12 @@
 #
 
 list(APPEND FLUTTER_PLUGIN_LIST
+  audioplayers_windows
+  firebase_auth
+  firebase_core
+  geolocator_windows
+  pdfx
+  rive_common
 )
 
 list(APPEND FLUTTER_FFI_PLUGIN_LIST

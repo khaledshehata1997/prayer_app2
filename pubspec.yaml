@@ -36,6 +36,42 @@ dependencies:
   # Use with the CupertinoIcons class for iOS style icons.
   cupertino_icons: ^1.0.2
   get: ^4.6.6
+  flutter_qiblah: ^3.0.3
+  flutter_svg: ^2.0.10+1
+  google_maps_flutter: ^2.6.1
+  quran: ^1.2.4
+  google_fonts: ^6.2.1
+  dio: ^5.4.3+1
+  arabic_numbers: ^1.0.0
+  animate_do: ^3.3.4
+  flutter_bloc: ^8.1.6
+  flutter_screenutil: ^5.9.3
+  pdfx: ^2.6.0
+  shared_preferences: ^2.2.3
+  fluttertoast: ^8.2.6
+  equatable: ^2.0.5
+  get_it: ^7.7.0
+  internet_connection_checker: ^1.0.0+1
+  dartz: ^0.10.1
+  cached_network_image: ^3.3.1
+  shimmer: ^3.0.0
+  percent_indicator: ^4.2.3
+  lottie: ^3.1.2
+  audioplayers: ^6.0.0
+  audio_video_progress_bar: ^2.0.3
+  just_audio: ^0.9.38
+  just_audio_background: ^0.0.1-beta.12
+  convex_bottom_bar: ^3.2.0
+  adhan: ^2.0.0+1
+  intl: ^0.19.0
+  linear_progress_bar: ^1.1.1
+  flutter_rounded_progress_bar: ^0.3.2
+  sqflite: ^2.3.3+1
+  flutter_islamic_icons: ^1.0.2
+  firebase_auth: ^5.1.1
+  awesome_dialog: ^3.2.1
+  firebase_core: ^3.1.1
+  provider: ^6.1.2
 
 
 dev_dependencies:
@@ -62,8 +98,13 @@ flutter:
 
   # To add assets to your application, add an assets section, like this:
   assets:
+    - data/data.json
     - images/
     - icons/
+    - assets/pdf/
+    - assets/sounds/
+    - assets/json/
+    - assets/
   #   - images/a_dot_ham.jpeg
 
   # An image asset can refer to one or more resolution-specific "variants", see
