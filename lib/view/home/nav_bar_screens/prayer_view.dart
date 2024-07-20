@@ -24,6 +24,7 @@ class Prayer extends StatefulWidget {
 late PrayerTimeCalculator _prayerTimeCalculator;
 late DateTime _nextPrayerTime;
 late Timer _timer;
+ int nxtDay = 0;
 class _PrayerState extends State<Prayer> with TickerProviderStateMixin {
 
   final DatabaseHelper dbHelper = DatabaseHelper();
@@ -46,12 +47,12 @@ class _PrayerState extends State<Prayer> with TickerProviderStateMixin {
     _nextPrayerTime = DateTime(
       _prayerTimeCalculator.currentTime.year,
       _prayerTimeCalculator.currentTime.month,
-      _prayerTimeCalculator.currentTime.day,
+      _prayerTimeCalculator.currentTime.day + nxtDay,
       salahHours[_prayerTimeCalculator.salahCalc],
       salahMin[_prayerTimeCalculator.salahCalc],
     );
     if (_prayerTimeCalculator.currentTime.isAfter(_nextPrayerTime)&& _nextPrayerTime.difference(DateTime.now()).isNegative) {
-      _nextPrayerTime = _nextPrayerTime.add(Duration(days: 1));
+     nxtDay++;
     }
     _startTimer();
     _controller = TabController(

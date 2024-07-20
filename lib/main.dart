@@ -5,8 +5,10 @@ import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:flutter_screenutil/flutter_screenutil.dart';
 import 'package:get/get.dart';
 import 'package:prayer_app/firebase_options.dart';
+import 'package:prayer_app/provider/boolNotifier.dart';
 import 'package:prayer_app/view/auth/splash_view.dart';
 import 'package:prayer_app/view/home/home_view.dart';
+import 'package:provider/provider.dart';
 import 'package:prayer_app/view/home/nav_bar_screens/quran.dart';
 import 'package:prayer_app/view/home/nav_bar_screens/quran/core/local/cache_helper.dart';
 import 'package:prayer_app/view/home/nav_bar_screens/quran/di/di.dart' as di ;
@@ -44,7 +46,14 @@ void main()async{
   } else {
     isLogin = true;
   }
-  runApp(const MyApp());
+  runApp(
+      ChangeNotifierProvider(
+          create: (context) => BoolNotifier(),
+          child: Builder(
+            builder: (context) {
+              return MyApp();
+            }
+          )));
 }
 
 class MyApp extends StatelessWidget {

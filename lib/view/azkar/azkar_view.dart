@@ -8,142 +8,150 @@ class Azkar extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     return Scaffold(
-     floatingActionButton: FloatingActionButton(
-       onPressed: (){
-         Get.defaultDialog(
-           title: 'إضافة ذكر',
-           content:  Container(
-             alignment: Alignment.center,
-             height: Get.height*.3,
-             width: Get.width*1,
-             color: Colors.white,
-             child: TextFormField(
-               maxLines: 6,
-               decoration: InputDecoration(
-
-                 enabledBorder: OutlineInputBorder(
-                   borderRadius: BorderRadius.circular(10)
-                 )
-               ),
-             ),
-           )
-         );
-
-       },
-       backgroundColor: buttonColor,
-       child: Icon(Icons.add),
-     ),
+        floatingActionButton: FloatingActionButton(
+          onPressed: () {
+            Get.defaultDialog(
+                title: 'إضافة ذكر',
+                content: Container(
+                  alignment: Alignment.center,
+                  height: Get.height * .3,
+                  width: Get.width * 1,
+                  color: Colors.white,
+                  child: TextFormField(
+                    maxLines: 6,
+                    decoration: InputDecoration(
+                        enabledBorder: OutlineInputBorder(
+                            borderRadius: BorderRadius.circular(10))),
+                  ),
+                ));
+          },
+          backgroundColor: buttonColor,
+          child: Icon(Icons.add),
+        ),
         body: Stack(
           children: [
             Container(
-              height: MediaQuery.of(context).size.height ,
-              width: MediaQuery.of(context).size.width ,
+              height: MediaQuery.of(context).size.height,
+              width: MediaQuery.of(context).size.width,
               //  margin: EdgeInsets.only(left: 2, top: 5, bottom: 5, right: 2),
               decoration: BoxDecoration(
                 image: DecorationImage(
                     image: AssetImage('images/back ground.jpeg'),
-                    fit:BoxFit.cover
-                ),
-                borderRadius: BorderRadius.circular(1), color: Colors.white,),
-
+                    fit: BoxFit.cover),
+                borderRadius: BorderRadius.circular(1),
+                color: Colors.white,
+              ),
             ),
             ListView(
               children: <Widget>[
-            Padding(
-              padding: const EdgeInsets.all(15.0),
-              child: Row(
-              mainAxisAlignment: MainAxisAlignment.spaceBetween,
-              children: [
-              Row(
-              children: [
-              CircleAvatar(
-              radius: 20,
-              backgroundColor: Colors.grey.shade400,
-              child: Image.asset('icons/img_1.png',width: 20,height: 20,),
-              ),
-              ],
-              ),
-              Row(
-              children: [
-              CircleAvatar(
-              child: Icon(Icons.notifications_none),
-              backgroundColor: Colors.grey.shade400,
-              radius: 20,
-              ),
-              SizedBox(width: 15,),
-    CircleAvatar(
-    radius: 20,
-    child: Image.asset('icons/img.png',width: 20,height: 20,),
-    backgroundColor: Colors.grey.shade400,
-    ),
-    ],
-    )
-    ],
-    ),
-            ),
-    SizedBox(height: Get.height*.04,),
-
-    Stack(
-    alignment: Alignment.center,
-    children: [
-    Image.asset('images/back ground2.jpeg',
-    ),
-      Padding(
-        padding: const EdgeInsets.symmetric(horizontal: 15),
-        child: Column(
-          children: [
-            Container(
-              alignment: Alignment.topRight,
-              child: Text(': ذكر اليوم',style: TextStyle(
-                fontSize: 20,fontWeight: FontWeight.bold,
-                color: Colors.white
-              ),),
-            ) ,Container(
-              alignment: Alignment.topRight,
-              child: Text('لا اله الا انت سبحانك اني كنت من الظالمين',style: TextStyle(
-
-                fontSize: 19,fontWeight: FontWeight.bold,
-                color: Colors.white
-              ),
-              textDirection: TextDirection.rtl,
-              ),
-            )
-          ],
-        ),
-      )
-
-    ],
-    ),
+                Padding(
+                  padding: const EdgeInsets.all(15.0),
+                  child: Row(
+                    mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                    children: [
+                      Row(
+                        children: [
+                          CircleAvatar(
+                            radius: 20,
+                            backgroundColor: Colors.grey.shade400,
+                            child: Image.asset(
+                              'icons/img_1.png',
+                              width: 20,
+                              height: 20,
+                            ),
+                          ),
+                        ],
+                      ),
+                      Row(
+                        children: [
+                          CircleAvatar(
+                            child: Icon(Icons.notifications_none),
+                            backgroundColor: Colors.grey.shade400,
+                            radius: 20,
+                          ),
+                          SizedBox(
+                            width: 15,
+                          ),
+                          CircleAvatar(
+                            radius: 20,
+                            child: Image.asset(
+                              'icons/img.png',
+                              width: 20,
+                              height: 20,
+                            ),
+                            backgroundColor: Colors.grey.shade400,
+                          ),
+                        ],
+                      )
+                    ],
+                  ),
+                ),
+                SizedBox(
+                  height: Get.height * .04,
+                ),
+                Stack(
+                  alignment: Alignment.center,
+                  children: [
+                    Image.asset(
+                      'images/back ground2.jpeg',
+                    ),
+                    Padding(
+                      padding: const EdgeInsets.symmetric(horizontal: 15),
+                      child: Column(
+                        children: [
+                          Container(
+                            alignment: Alignment.center,
+                            child: Text(
+                              ': ذكر اليوم',
+                              style: TextStyle(
+                                  fontSize: 20,
+                                  fontWeight: FontWeight.bold,
+                                  color: Colors.white),
+                            ),
+                          ),
+                          Container(
+                            alignment: Alignment.center,
+                            child: Text(
+                              'لا اله الا انت سبحانك اني كنت من الظالمين',
+                              style: TextStyle(
+                                  fontSize: 19,
+                                  fontWeight: FontWeight.bold,
+                                  color: Colors.white),
+                              textDirection: TextDirection.rtl,
+                            ),
+                          )
+                        ],
+                      ),
+                    )
+                  ],
+                ),
                 Container(
-                  margin: EdgeInsets.all(15),
+                    margin: EdgeInsets.all(15),
                     width: MediaQuery.of(context).size.width * 0.95,
-                    height: Get.height*.8,
+                    height: Get.height * .8,
                     child: Directionality(
                       textDirection: TextDirection.rtl,
                       child: GridView(
-
                         gridDelegate: SliverGridDelegateWithFixedCrossAxisCount(
-                             mainAxisSpacing: 5,
+                            mainAxisSpacing: 5,
                             childAspectRatio: 1.25,
                             crossAxisSpacing: 15,
                             crossAxisCount: 2),
                         children: <Widget>[
                           Container(
                             decoration: BoxDecoration(
-                              borderRadius: BorderRadius.circular(20)
-                            ),
+                                borderRadius: BorderRadius.circular(20)),
                             margin: EdgeInsets.only(top: 10, bottom: 10),
-
-                            height: Get.height*.04,
+                            height: Get.height * .04,
                             child: ElevatedButton(
                               style: ElevatedButton.styleFrom(
-                                backgroundColor: Colors.white
-                              ),
+                                  backgroundColor: Colors.white),
                               child: Text(
                                 'اذكار الصباح',
                                 style: TextStyle(
-                                  color: Colors.black,
-                                    fontSize: 20, fontWeight: FontWeight.bold),
+                                    color: Colors.black,
+                                    fontSize: 20,
+                                    fontWeight: FontWeight.bold),
                               ),
                               onPressed: () {
                                 Get.to(Sabah());
@@ -152,21 +160,18 @@ class Azkar extends StatelessWidget {
                           ),
                           Container(
                             decoration: BoxDecoration(
-                                borderRadius: BorderRadius.circular(20)
-                            ),
+                                borderRadius: BorderRadius.circular(20)),
                             margin: EdgeInsets.only(top: 10, bottom: 10),
-                            height: Get.height*.04,
-
+                            height: Get.height * .04,
                             child: ElevatedButton(
                               style: ElevatedButton.styleFrom(
-                                  backgroundColor: Colors.white
-                              ),
+                                  backgroundColor: Colors.white),
                               child: Text(
                                 'اذكار المساء',
                                 style: TextStyle(
-                                    fontSize: 20, fontWeight: FontWeight.bold,
-                                color: Colors.black
-                                ),
+                                    fontSize: 20,
+                                    fontWeight: FontWeight.bold,
+                                    color: Colors.black),
                               ),
                               onPressed: () {
                                 Get.to(Masaa());
@@ -175,20 +180,18 @@ class Azkar extends StatelessWidget {
                           ),
                           Container(
                             decoration: BoxDecoration(
-                                borderRadius: BorderRadius.circular(20)
-                            ),
+                                borderRadius: BorderRadius.circular(20)),
                             margin: EdgeInsets.only(top: 10, bottom: 10),
-                            height: Get.height*.04,
-
+                            height: Get.height * .04,
                             child: ElevatedButton(
                               style: ElevatedButton.styleFrom(
-                                  backgroundColor: Colors.white
-                              ),
+                                  backgroundColor: Colors.white),
                               child: Text(
                                 'اذكار المسجد',
                                 style: TextStyle(
-                                  color: Colors.black,
-                                    fontSize: 20, fontWeight: FontWeight.bold),
+                                    color: Colors.black,
+                                    fontSize: 20,
+                                    fontWeight: FontWeight.bold),
                               ),
                               onPressed: () {
                                 Get.to(Masjed());
@@ -197,20 +200,18 @@ class Azkar extends StatelessWidget {
                           ),
                           Container(
                             decoration: BoxDecoration(
-                                borderRadius: BorderRadius.circular(20)
-                            ),
+                                borderRadius: BorderRadius.circular(20)),
                             margin: EdgeInsets.only(top: 10, bottom: 10),
-                            height: Get.height*.04,
-
+                            height: Get.height * .04,
                             child: ElevatedButton(
                               style: ElevatedButton.styleFrom(
-                                  backgroundColor: Colors.white
-                              ),
+                                  backgroundColor: Colors.white),
                               child: Text(
                                 'اذكار الصلاه',
                                 style: TextStyle(
-                                  color: Colors.black,
-                                    fontSize: 20, fontWeight: FontWeight.bold),
+                                    color: Colors.black,
+                                    fontSize: 20,
+                                    fontWeight: FontWeight.bold),
                               ),
                               onPressed: () {
                                 Get.to(Alsalah());
@@ -219,20 +220,18 @@ class Azkar extends StatelessWidget {
                           ),
                           Container(
                             decoration: BoxDecoration(
-                                borderRadius: BorderRadius.circular(20)
-                            ),
+                                borderRadius: BorderRadius.circular(20)),
                             margin: EdgeInsets.only(top: 10, bottom: 10),
-                            height: Get.height*.04,
-
+                            height: Get.height * .04,
                             child: ElevatedButton(
                               style: ElevatedButton.styleFrom(
-                                  backgroundColor: Colors.white
-                              ),
+                                  backgroundColor: Colors.white),
                               child: Text(
                                 'اذكار النوم',
                                 style: TextStyle(
-                                  color: Colors.black,
-                                    fontSize: 20, fontWeight: FontWeight.bold),
+                                    color: Colors.black,
+                                    fontSize: 20,
+                                    fontWeight: FontWeight.bold),
                               ),
                               onPressed: () {
                                 Get.to(Alnawm());
@@ -241,20 +240,18 @@ class Azkar extends StatelessWidget {
                           ),
                           Container(
                             decoration: BoxDecoration(
-                                borderRadius: BorderRadius.circular(20)
-                            ),
+                                borderRadius: BorderRadius.circular(20)),
                             margin: EdgeInsets.only(top: 10, bottom: 10),
-                            height: Get.height*.04,
-
+                            height: Get.height * .04,
                             child: ElevatedButton(
                               style: ElevatedButton.styleFrom(
-                                  backgroundColor: Colors.white
-                              ),
+                                  backgroundColor: Colors.white),
                               child: Text(
                                 'اذكاري ',
                                 style: TextStyle(
                                     color: Colors.black,
-                                    fontSize: 20, fontWeight: FontWeight.bold),
+                                    fontSize: 20,
+                                    fontWeight: FontWeight.bold),
                               ),
                               onPressed: () {
                                 Navigator.pushNamed(context, 'Alsalah');
@@ -276,7 +273,7 @@ class Sabah extends StatelessWidget {
   Widget build(BuildContext context) {
     return Scaffold(
       appBar: AppBar(
-        backgroundColor:buttonColor,
+        backgroundColor: buttonColor,
         title: Text(
           'اذكار الصباح',
           style: TextStyle(fontSize: 20, fontWeight: FontWeight.bold),
@@ -291,8 +288,8 @@ class Sabah extends StatelessWidget {
                 Container(
                   child: Text(
                     ''
-                        'اللّهُ لاَ إِلَـهَ إِلاَّ هُوَ الْحَيُّ الْقَيُّومُ لاَ تَأْخُذُهُ سِنَةٌ وَلاَ نَوْمٌ لَّهُ مَا فِي السَّمَاوَاتِ وَمَا فِي الأَرْضِ مَن ذَا الَّذِي يَشْفَعُ عِنْدَهُ إِلاَّ بِإِذْنِهِ يَعْلَمُ مَا بَيْنَ أَيْدِيهِمْ وَمَا خَلْفَهُمْ وَلاَ يُحِيطُونَ بِشَيْءٍ مِنْ عِلْمِهِ إِلاَّ بِمَا شَاءَ وَسِعَ كُرْسِيُّهُ السَّمَاوَاتِ وَالأَرْضَ وَلاَ يَؤُودُهُ حِفْظُهُمَا وَهُوَ الْعَلِيُّ الْعَظِيمُ.        /////مره واحده'
-                        '',
+                    'اللّهُ لاَ إِلَـهَ إِلاَّ هُوَ الْحَيُّ الْقَيُّومُ لاَ تَأْخُذُهُ سِنَةٌ وَلاَ نَوْمٌ لَّهُ مَا فِي السَّمَاوَاتِ وَمَا فِي الأَرْضِ مَن ذَا الَّذِي يَشْفَعُ عِنْدَهُ إِلاَّ بِإِذْنِهِ يَعْلَمُ مَا بَيْنَ أَيْدِيهِمْ وَمَا خَلْفَهُمْ وَلاَ يُحِيطُونَ بِشَيْءٍ مِنْ عِلْمِهِ إِلاَّ بِمَا شَاءَ وَسِعَ كُرْسِيُّهُ السَّمَاوَاتِ وَالأَرْضَ وَلاَ يَؤُودُهُ حِفْظُهُمَا وَهُوَ الْعَلِيُّ الْعَظِيمُ.        /////مره واحده'
+                    '',
                     style: TextStyle(
                       fontSize: 20,
                       fontWeight: FontWeight.bold,
@@ -300,11 +297,10 @@ class Sabah extends StatelessWidget {
                     textDirection: prefix0.TextDirection.rtl,
                   ),
                   color: Colors.white,
-                  margin: EdgeInsets.only(
-                    bottom: 10,right: 10,left: 10,top: 10
-                  ),
+                  margin:
+                      EdgeInsets.only(bottom: 10, right: 10, left: 10, top: 10),
                   padding:
-                  EdgeInsets.only(top: 5, bottom: 5, left: 5, right: 8),
+                      EdgeInsets.only(top: 5, bottom: 5, left: 5, right: 8),
                 ),
                 Divider(
                   height: 20,
@@ -315,7 +311,7 @@ class Sabah extends StatelessWidget {
                       Container(
                         child: Text(
                           ''
-                              'قُلْ هُوَ اللَّهُ أَحَدٌ، اللَّهُ الصَّمَدُ، لَمْ يَلِدْ وَلَمْ يُولَدْ، وَلَمْ يَكُن لَّهُ كُفُوًا أَحَدٌ    /////ثلاث مرات',
+                          'قُلْ هُوَ اللَّهُ أَحَدٌ، اللَّهُ الصَّمَدُ، لَمْ يَلِدْ وَلَمْ يُولَدْ، وَلَمْ يَكُن لَّهُ كُفُوًا أَحَدٌ    /////ثلاث مرات',
                           style: TextStyle(
                             fontSize: 20,
                             fontWeight: FontWeight.bold,
@@ -326,8 +322,8 @@ class Sabah extends StatelessWidget {
                         margin: EdgeInsets.only(
                           bottom: 10,
                         ),
-                        padding:
-                        EdgeInsets.only(top: 5, bottom: 5, left: 5, right: 8),
+                        padding: EdgeInsets.only(
+                            top: 5, bottom: 5, left: 5, right: 8),
                       ),
                     ],
                   ),
@@ -338,7 +334,7 @@ class Sabah extends StatelessWidget {
                 Container(
                   child: Text(
                     ''
-                        'قُلْ أَعُوذُ بِرَبِّ الْفَلَقِ، مِن شَرِّ مَا خَلَقَ، وَمِن شَرِّ غَاسِقٍ إِذَا وَقَبَ، وَمِن شَرِّالنَّفَّاثَاتِ فِي الْعُقَدِ، وَمِن شَرِّ حَاسِدٍ إِذَا حَسَدٌَ    /////ثلاث مرات',
+                    'قُلْ أَعُوذُ بِرَبِّ الْفَلَقِ، مِن شَرِّ مَا خَلَقَ، وَمِن شَرِّ غَاسِقٍ إِذَا وَقَبَ، وَمِن شَرِّالنَّفَّاثَاتِ فِي الْعُقَدِ، وَمِن شَرِّ حَاسِدٍ إِذَا حَسَدٌَ    /////ثلاث مرات',
                     style: TextStyle(
                       fontSize: 20,
                       fontWeight: FontWeight.bold,
@@ -350,7 +346,7 @@ class Sabah extends StatelessWidget {
                     bottom: 10,
                   ),
                   padding:
-                  EdgeInsets.only(top: 5, bottom: 5, left: 5, right: 8),
+                      EdgeInsets.only(top: 5, bottom: 5, left: 5, right: 8),
                 ),
                 Divider(
                   height: 12,
@@ -358,7 +354,7 @@ class Sabah extends StatelessWidget {
                 Container(
                   child: Text(
                     ''
-                        'قُلْ أَعُوذُ بِرَبِّ النَّاسِ، مَلِكِ النَّاسِ، إِلَهِ النَّاسِ، مِن شَرِّ الْوَسْوَاسِ الْخَنَّاسِ، الَّذِي يُوَسْوِسُ فِي صُدُورِ النَّاسِ، مِنَ الْجِنَّةِ وَ النَّاسِ',
+                    'قُلْ أَعُوذُ بِرَبِّ النَّاسِ، مَلِكِ النَّاسِ، إِلَهِ النَّاسِ، مِن شَرِّ الْوَسْوَاسِ الْخَنَّاسِ، الَّذِي يُوَسْوِسُ فِي صُدُورِ النَّاسِ، مِنَ الْجِنَّةِ وَ النَّاسِ',
                     style: TextStyle(
                       fontSize: 20,
                       fontWeight: FontWeight.bold,
@@ -370,7 +366,7 @@ class Sabah extends StatelessWidget {
                     bottom: 10,
                   ),
                   padding:
-                  EdgeInsets.only(top: 5, bottom: 5, left: 5, right: 8),
+                      EdgeInsets.only(top: 5, bottom: 5, left: 5, right: 8),
                 ),
                 Divider(
                   height: 12,
@@ -378,7 +374,7 @@ class Sabah extends StatelessWidget {
                 Container(
                   child: Text(
                     ''
-                        'أَصْـبَحْنا وَأَصْـبَحَ المُـلْكُ لله وَالحَمدُ لله ، لا إلهَ إلاّ اللّهُ وَحدَهُ لا شَريكَ لهُ، لهُ المُـلكُ ولهُ الحَمْـد، وهُوَ على كلّ شَيءٍ قدير ، رَبِّ أسْـأَلُـكَ خَـيرَ ما في هـذا اليوم وَخَـيرَ ما بَعْـدَه ، وَأَعـوذُ بِكَ مِنْ شَـرِّ ما في هـذا اليوم وَشَرِّ ما بَعْـدَه، رَبِّ أَعـوذُ بِكَ مِنَ الْكَسَـلِ وَسـوءِ الْكِـبَر ، رَبِّ أَعـوذُ بِكَ مِنْ عَـذابٍ في النّـارِ وَعَـذابٍ في القَـبْر   ////مره واحده.ِ',
+                    'أَصْـبَحْنا وَأَصْـبَحَ المُـلْكُ لله وَالحَمدُ لله ، لا إلهَ إلاّ اللّهُ وَحدَهُ لا شَريكَ لهُ، لهُ المُـلكُ ولهُ الحَمْـد، وهُوَ على كلّ شَيءٍ قدير ، رَبِّ أسْـأَلُـكَ خَـيرَ ما في هـذا اليوم وَخَـيرَ ما بَعْـدَه ، وَأَعـوذُ بِكَ مِنْ شَـرِّ ما في هـذا اليوم وَشَرِّ ما بَعْـدَه، رَبِّ أَعـوذُ بِكَ مِنَ الْكَسَـلِ وَسـوءِ الْكِـبَر ، رَبِّ أَعـوذُ بِكَ مِنْ عَـذابٍ في النّـارِ وَعَـذابٍ في القَـبْر   ////مره واحده.ِ',
                     style: TextStyle(
                       fontSize: 20,
                       fontWeight: FontWeight.bold,
@@ -390,7 +386,7 @@ class Sabah extends StatelessWidget {
                     bottom: 10,
                   ),
                   padding:
-                  EdgeInsets.only(top: 5, bottom: 5, left: 5, right: 8),
+                      EdgeInsets.only(top: 5, bottom: 5, left: 5, right: 8),
                 ),
                 Divider(
                   height: 12,
@@ -398,7 +394,7 @@ class Sabah extends StatelessWidget {
                 Container(
                   child: Text(
                     ''
-                        'أاللّهـمَّ أَنْتَ رَبِّـي لا إلهَ إلاّ أَنْتَ ، خَلَقْتَنـي وَأَنا عَبْـدُك ، وَأَنا عَلـى عَهْـدِكَ وَوَعْـدِكَ ما اسْتَـطَعْـت ، أَعـوذُ بِكَ مِنْ شَـرِّ ما صَنَـعْت ، أَبـوءُ لَـكَ بِنِعْـمَتِـكَ عَلَـيَّ وَأَبـوءُ بِذَنْـبي فَاغْفـِرْ لي فَإِنَّـهُ لا يَغْـفِرُ الذُّنـوبَ إِلاّ أَنْت   ////مره واحدهَ .ِ',
+                    'أاللّهـمَّ أَنْتَ رَبِّـي لا إلهَ إلاّ أَنْتَ ، خَلَقْتَنـي وَأَنا عَبْـدُك ، وَأَنا عَلـى عَهْـدِكَ وَوَعْـدِكَ ما اسْتَـطَعْـت ، أَعـوذُ بِكَ مِنْ شَـرِّ ما صَنَـعْت ، أَبـوءُ لَـكَ بِنِعْـمَتِـكَ عَلَـيَّ وَأَبـوءُ بِذَنْـبي فَاغْفـِرْ لي فَإِنَّـهُ لا يَغْـفِرُ الذُّنـوبَ إِلاّ أَنْت   ////مره واحدهَ .ِ',
                     style: TextStyle(
                       fontSize: 20,
                       fontWeight: FontWeight.bold,
@@ -410,7 +406,7 @@ class Sabah extends StatelessWidget {
                     bottom: 10,
                   ),
                   padding:
-                  EdgeInsets.only(top: 5, bottom: 5, left: 5, right: 8),
+                      EdgeInsets.only(top: 5, bottom: 5, left: 5, right: 8),
                 ),
                 Divider(
                   height: 12,
@@ -418,7 +414,7 @@ class Sabah extends StatelessWidget {
                 Container(
                   child: Text(
                     ''
-                        'رَضيـتُ بِاللهِ رَبَّـاً وَبِالإسْلامِ ديـناً وَبِمُحَـمَّدٍ صلى الله عليه وسلم نَبِيّـاً ////ثلاث مراتَ .ِ',
+                    'رَضيـتُ بِاللهِ رَبَّـاً وَبِالإسْلامِ ديـناً وَبِمُحَـمَّدٍ صلى الله عليه وسلم نَبِيّـاً ////ثلاث مراتَ .ِ',
                     style: TextStyle(
                       fontSize: 20,
                       fontWeight: FontWeight.bold,
@@ -430,7 +426,7 @@ class Sabah extends StatelessWidget {
                     bottom: 10,
                   ),
                   padding:
-                  EdgeInsets.only(top: 5, bottom: 5, left: 5, right: 8),
+                      EdgeInsets.only(top: 5, bottom: 5, left: 5, right: 8),
                 ),
                 Divider(
                   height: 12,
@@ -438,7 +434,7 @@ class Sabah extends StatelessWidget {
                 Container(
                   child: Text(
                     ''
-                        'اللّهُـمَّ إِنِّـي أَصْبَـحْتُ أُشْـهِدُك ، وَأُشْـهِدُ حَمَلَـةَ عَـرْشِـك ، وَمَلائِكَتِك ، وَجَمـيعَ خَلْـقِك ، أَنَّـكَ أَنْـتَ اللهُ لا إلهَ إلاّ أَنْـتَ وَحْـدَكَ لا شَريكَ لَـك ، وَأَنَّ مُحَمّـداً عَبْـدُكَ وَرَسـولُـك. .ِ',
+                    'اللّهُـمَّ إِنِّـي أَصْبَـحْتُ أُشْـهِدُك ، وَأُشْـهِدُ حَمَلَـةَ عَـرْشِـك ، وَمَلائِكَتِك ، وَجَمـيعَ خَلْـقِك ، أَنَّـكَ أَنْـتَ اللهُ لا إلهَ إلاّ أَنْـتَ وَحْـدَكَ لا شَريكَ لَـك ، وَأَنَّ مُحَمّـداً عَبْـدُكَ وَرَسـولُـك. .ِ',
                     style: TextStyle(
                       fontSize: 20,
                       fontWeight: FontWeight.bold,
@@ -450,7 +446,7 @@ class Sabah extends StatelessWidget {
                     bottom: 10,
                   ),
                   padding:
-                  EdgeInsets.only(top: 5, bottom: 5, left: 5, right: 8),
+                      EdgeInsets.only(top: 5, bottom: 5, left: 5, right: 8),
                 ),
                 Divider(
                   height: 12,
@@ -458,7 +454,7 @@ class Sabah extends StatelessWidget {
                 Container(
                   child: Text(
                     ''
-                        'اللّهُـمَّ ما أَصْبَـَحَ بي مِـنْ نِعْـمَةٍ أَو بِأَحَـدٍ مِـنْ خَلْـقِك ، فَمِـنْكَ وَحْـدَكَ لا شريكَ لَـك ، فَلَـكَ الْحَمْـدُ وَلَـكَ الشُّكْـر   ////مره واحده .ِ',
+                    'اللّهُـمَّ ما أَصْبَـَحَ بي مِـنْ نِعْـمَةٍ أَو بِأَحَـدٍ مِـنْ خَلْـقِك ، فَمِـنْكَ وَحْـدَكَ لا شريكَ لَـك ، فَلَـكَ الْحَمْـدُ وَلَـكَ الشُّكْـر   ////مره واحده .ِ',
                     style: TextStyle(
                       fontSize: 20,
                       fontWeight: FontWeight.bold,
@@ -470,7 +466,7 @@ class Sabah extends StatelessWidget {
                     bottom: 10,
                   ),
                   padding:
-                  EdgeInsets.only(top: 5, bottom: 5, left: 5, right: 8),
+                      EdgeInsets.only(top: 5, bottom: 5, left: 5, right: 8),
                 ),
                 Divider(
                   height: 12,
@@ -478,7 +474,7 @@ class Sabah extends StatelessWidget {
                 Container(
                   child: Text(
                     ''
-                        'حَسْبِـيَ اللّهُ لا إلهَ إلاّ هُوَ عَلَـيهِ تَوَكَّـلتُ وَهُوَ رَبُّ العَرْشِ العَظـيم.   ////سبع مرات .ِ',
+                    'حَسْبِـيَ اللّهُ لا إلهَ إلاّ هُوَ عَلَـيهِ تَوَكَّـلتُ وَهُوَ رَبُّ العَرْشِ العَظـيم.   ////سبع مرات .ِ',
                     style: TextStyle(
                       fontSize: 20,
                       fontWeight: FontWeight.bold,
@@ -490,7 +486,7 @@ class Sabah extends StatelessWidget {
                     bottom: 10,
                   ),
                   padding:
-                  EdgeInsets.only(top: 5, bottom: 5, left: 5, right: 8),
+                      EdgeInsets.only(top: 5, bottom: 5, left: 5, right: 8),
                 ),
                 Divider(
                   height: 12,
@@ -498,7 +494,7 @@ class Sabah extends StatelessWidget {
                 Container(
                   child: Text(
                     ''
-                        'بِسـمِ اللهِ الذي لا يَضُـرُّ مَعَ اسمِـهِ شَيءٌ في الأرْضِ وَلا في السّمـاءِ وَهـوَ السّمـيعُ العَلـيم.  ////ثلاث مراتِ',
+                    'بِسـمِ اللهِ الذي لا يَضُـرُّ مَعَ اسمِـهِ شَيءٌ في الأرْضِ وَلا في السّمـاءِ وَهـوَ السّمـيعُ العَلـيم.  ////ثلاث مراتِ',
                     style: TextStyle(
                       fontSize: 20,
                       fontWeight: FontWeight.bold,
@@ -510,7 +506,7 @@ class Sabah extends StatelessWidget {
                     bottom: 10,
                   ),
                   padding:
-                  EdgeInsets.only(top: 5, bottom: 5, left: 5, right: 8),
+                      EdgeInsets.only(top: 5, bottom: 5, left: 5, right: 8),
                 ),
                 Divider(
                   height: 12,
@@ -518,7 +514,7 @@ class Sabah extends StatelessWidget {
                 Container(
                   child: Text(
                     ''
-                        'اللّهُـمَّ بِكَ أَصْـبَحْنا وَبِكَ أَمْسَـينا ، وَبِكَ نَحْـيا وَبِكَ نَمُـوتُ وَإِلَـيْكَ النُّـشُور.  ////مره واحدهِ',
+                    'اللّهُـمَّ بِكَ أَصْـبَحْنا وَبِكَ أَمْسَـينا ، وَبِكَ نَحْـيا وَبِكَ نَمُـوتُ وَإِلَـيْكَ النُّـشُور.  ////مره واحدهِ',
                     style: TextStyle(
                       fontSize: 20,
                       fontWeight: FontWeight.bold,
@@ -530,7 +526,7 @@ class Sabah extends StatelessWidget {
                     bottom: 10,
                   ),
                   padding:
-                  EdgeInsets.only(top: 5, bottom: 5, left: 5, right: 8),
+                      EdgeInsets.only(top: 5, bottom: 5, left: 5, right: 8),
                 ),
                 Divider(
                   height: 12,
@@ -538,7 +534,7 @@ class Sabah extends StatelessWidget {
                 Container(
                   child: Text(
                     ''
-                        'سُبْحـانَ اللهِ وَبِحَمْـدِهِ عَدَدَ خَلْـقِه ، وَرِضـا نَفْسِـه ، وَزِنَـةَ عَـرْشِـه ، وَمِـدادَ كَلِمـاتِـه.   ////ثلاث مراتِ',
+                    'سُبْحـانَ اللهِ وَبِحَمْـدِهِ عَدَدَ خَلْـقِه ، وَرِضـا نَفْسِـه ، وَزِنَـةَ عَـرْشِـه ، وَمِـدادَ كَلِمـاتِـه.   ////ثلاث مراتِ',
                     style: TextStyle(
                       fontSize: 20,
                       fontWeight: FontWeight.bold,
@@ -550,7 +546,7 @@ class Sabah extends StatelessWidget {
                     bottom: 10,
                   ),
                   padding:
-                  EdgeInsets.only(top: 5, bottom: 5, left: 5, right: 8),
+                      EdgeInsets.only(top: 5, bottom: 5, left: 5, right: 8),
                 ),
                 Divider(
                   height: 12,
@@ -558,7 +554,7 @@ class Sabah extends StatelessWidget {
                 Container(
                   child: Text(
                     ''
-                        'اللّهُـمَّ عافِـني في بَدَنـي ، اللّهُـمَّ عافِـني في سَمْـعي ، اللّهُـمَّ عافِـني في بَصَـري ، لا إلهَ إلاّ أَنْـتَ.  ////ثلاث مراتِ',
+                    'اللّهُـمَّ عافِـني في بَدَنـي ، اللّهُـمَّ عافِـني في سَمْـعي ، اللّهُـمَّ عافِـني في بَصَـري ، لا إلهَ إلاّ أَنْـتَ.  ////ثلاث مراتِ',
                     style: TextStyle(
                       fontSize: 20,
                       fontWeight: FontWeight.bold,
@@ -570,7 +566,7 @@ class Sabah extends StatelessWidget {
                     bottom: 10,
                   ),
                   padding:
-                  EdgeInsets.only(top: 5, bottom: 5, left: 5, right: 8),
+                      EdgeInsets.only(top: 5, bottom: 5, left: 5, right: 8),
                 ),
                 Divider(
                   height: 12,
@@ -578,7 +574,7 @@ class Sabah extends StatelessWidget {
                 Container(
                   child: Text(
                     ''
-                        'اللّهُـمَّ إِنّـي أَعـوذُ بِكَ مِنَ الْكُـفر ، وَالفَـقْر ، وَأَعـوذُ بِكَ مِنْ عَذابِ القَـبْر ، لا إلهَ إلاّ أَنْـتَ.   ////ثلاث مراتِ',
+                    'اللّهُـمَّ إِنّـي أَعـوذُ بِكَ مِنَ الْكُـفر ، وَالفَـقْر ، وَأَعـوذُ بِكَ مِنْ عَذابِ القَـبْر ، لا إلهَ إلاّ أَنْـتَ.   ////ثلاث مراتِ',
                     style: TextStyle(
                       fontSize: 20,
                       fontWeight: FontWeight.bold,
@@ -590,7 +586,7 @@ class Sabah extends StatelessWidget {
                     bottom: 10,
                   ),
                   padding:
-                  EdgeInsets.only(top: 5, bottom: 5, left: 5, right: 8),
+                      EdgeInsets.only(top: 5, bottom: 5, left: 5, right: 8),
                 ),
                 Divider(
                   height: 12,
@@ -598,7 +594,7 @@ class Sabah extends StatelessWidget {
                 Container(
                   child: Text(
                     ''
-                        'اللّهُـمَّ إِنِّـي أسْـأَلُـكَ العَـفْوَ وَالعـافِـيةَ في الدُّنْـيا وَالآخِـرَة ، اللّهُـمَّ إِنِّـي أسْـأَلُـكَ العَـفْوَ وَالعـافِـيةَ في ديني وَدُنْـيايَ وَأهْـلي وَمالـي ، اللّهُـمَّ اسْتُـرْ عـوْراتي وَآمِـنْ رَوْعاتـي ، اللّهُـمَّ احْفَظْـني مِن بَـينِ يَدَيَّ وَمِن خَلْفـي وَعَن يَمـيني وَعَن شِمـالي ، وَمِن فَوْقـي ، وَأَعـوذُ بِعَظَمَـتِكَ أَن أُغْـتالَ مِن تَحْتـي.   ////مره واحدهِ',
+                    'اللّهُـمَّ إِنِّـي أسْـأَلُـكَ العَـفْوَ وَالعـافِـيةَ في الدُّنْـيا وَالآخِـرَة ، اللّهُـمَّ إِنِّـي أسْـأَلُـكَ العَـفْوَ وَالعـافِـيةَ في ديني وَدُنْـيايَ وَأهْـلي وَمالـي ، اللّهُـمَّ اسْتُـرْ عـوْراتي وَآمِـنْ رَوْعاتـي ، اللّهُـمَّ احْفَظْـني مِن بَـينِ يَدَيَّ وَمِن خَلْفـي وَعَن يَمـيني وَعَن شِمـالي ، وَمِن فَوْقـي ، وَأَعـوذُ بِعَظَمَـتِكَ أَن أُغْـتالَ مِن تَحْتـي.   ////مره واحدهِ',
                     style: TextStyle(
                       fontSize: 20,
                       fontWeight: FontWeight.bold,
@@ -610,7 +606,7 @@ class Sabah extends StatelessWidget {
                     bottom: 10,
                   ),
                   padding:
-                  EdgeInsets.only(top: 5, bottom: 5, left: 5, right: 8),
+                      EdgeInsets.only(top: 5, bottom: 5, left: 5, right: 8),
                 ),
                 Divider(
                   height: 12,
@@ -618,7 +614,7 @@ class Sabah extends StatelessWidget {
                 Container(
                   child: Text(
                     ''
-                        'يا حَـيُّ يا قَيّـومُ بِـرَحْمَـتِكَ أَسْتَـغـيث ، أَصْلِـحْ لي شَـأْنـي كُلَّـه ، وَلا تَكِلـني إِلى نَفْـسي طَـرْفَةَ عَـين.   ///ثلاث مراتِ',
+                    'يا حَـيُّ يا قَيّـومُ بِـرَحْمَـتِكَ أَسْتَـغـيث ، أَصْلِـحْ لي شَـأْنـي كُلَّـه ، وَلا تَكِلـني إِلى نَفْـسي طَـرْفَةَ عَـين.   ///ثلاث مراتِ',
                     style: TextStyle(
                       fontSize: 20,
                       fontWeight: FontWeight.bold,
@@ -630,7 +626,7 @@ class Sabah extends StatelessWidget {
                     bottom: 10,
                   ),
                   padding:
-                  EdgeInsets.only(top: 5, bottom: 5, left: 5, right: 8),
+                      EdgeInsets.only(top: 5, bottom: 5, left: 5, right: 8),
                 ),
                 Divider(
                   height: 12,
@@ -638,7 +634,7 @@ class Sabah extends StatelessWidget {
                 Container(
                   child: Text(
                     ''
-                        'أَصْبَـحْـنا وَأَصْبَـحْ المُـلكُ للهِ رَبِّ العـالَمـين ، اللّهُـمَّ إِنِّـي أسْـأَلُـكَ خَـيْرَ هـذا الـيَوْم ، فَـتْحَهُ ، وَنَصْـرَهُ ، وَنـورَهُ وَبَـرَكَتَـهُ ، وَهُـداهُ ، وَأَعـوذُ بِـكَ مِـنْ شَـرِّ ما فـيهِ وَشَـرِّ ما بَعْـدَه.ِ',
+                    'أَصْبَـحْـنا وَأَصْبَـحْ المُـلكُ للهِ رَبِّ العـالَمـين ، اللّهُـمَّ إِنِّـي أسْـأَلُـكَ خَـيْرَ هـذا الـيَوْم ، فَـتْحَهُ ، وَنَصْـرَهُ ، وَنـورَهُ وَبَـرَكَتَـهُ ، وَهُـداهُ ، وَأَعـوذُ بِـكَ مِـنْ شَـرِّ ما فـيهِ وَشَـرِّ ما بَعْـدَه.ِ',
                     style: TextStyle(
                       fontSize: 20,
                       fontWeight: FontWeight.bold,
@@ -650,7 +646,7 @@ class Sabah extends StatelessWidget {
                     bottom: 10,
                   ),
                   padding:
-                  EdgeInsets.only(top: 5, bottom: 5, left: 5, right: 8),
+                      EdgeInsets.only(top: 5, bottom: 5, left: 5, right: 8),
                 ),
                 Divider(
                   height: 12,
@@ -658,7 +654,7 @@ class Sabah extends StatelessWidget {
                 Container(
                   child: Text(
                     ''
-                        'اللّهُـمَّ عالِـمَ الغَـيْبِ وَالشّـهادَةِ فاطِـرَ السّماواتِ وَالأرْضِ رَبَّ كـلِّ شَـيءٍ وَمَليـكَه ، أَشْهَـدُ أَنْ لا إِلـهَ إِلاّ أَنْت ، أَعـوذُ بِكَ مِن شَـرِّ نَفْسـي وَمِن شَـرِّ الشَّيْـطانِ وَشِـرْكِه ، وَأَنْ أَقْتَـرِفَ عَلـى نَفْسـي سوءاً أَوْ أَجُـرَّهُ إِلـى مُسْـلِم.  ////مره واحدهِ',
+                    'اللّهُـمَّ عالِـمَ الغَـيْبِ وَالشّـهادَةِ فاطِـرَ السّماواتِ وَالأرْضِ رَبَّ كـلِّ شَـيءٍ وَمَليـكَه ، أَشْهَـدُ أَنْ لا إِلـهَ إِلاّ أَنْت ، أَعـوذُ بِكَ مِن شَـرِّ نَفْسـي وَمِن شَـرِّ الشَّيْـطانِ وَشِـرْكِه ، وَأَنْ أَقْتَـرِفَ عَلـى نَفْسـي سوءاً أَوْ أَجُـرَّهُ إِلـى مُسْـلِم.  ////مره واحدهِ',
                     style: TextStyle(
                       fontSize: 20,
                       fontWeight: FontWeight.bold,
@@ -670,7 +666,7 @@ class Sabah extends StatelessWidget {
                     bottom: 10,
                   ),
                   padding:
-                  EdgeInsets.only(top: 5, bottom: 5, left: 5, right: 8),
+                      EdgeInsets.only(top: 5, bottom: 5, left: 5, right: 8),
                 ),
                 Divider(
                   height: 12,
@@ -678,7 +674,7 @@ class Sabah extends StatelessWidget {
                 Container(
                   child: Text(
                     ''
-                        'عـوذُ بِكَلِمـاتِ اللّهِ التّـامّـاتِ مِنْ شَـرِّ ما خَلَـق.   ////ثلاث مراتِ',
+                    'عـوذُ بِكَلِمـاتِ اللّهِ التّـامّـاتِ مِنْ شَـرِّ ما خَلَـق.   ////ثلاث مراتِ',
                     style: TextStyle(
                       fontSize: 20,
                       fontWeight: FontWeight.bold,
@@ -690,7 +686,7 @@ class Sabah extends StatelessWidget {
                     bottom: 10,
                   ),
                   padding:
-                  EdgeInsets.only(top: 5, bottom: 5, left: 5, right: 8),
+                      EdgeInsets.only(top: 5, bottom: 5, left: 5, right: 8),
                 ),
                 Divider(
                   height: 12,
@@ -698,7 +694,7 @@ class Sabah extends StatelessWidget {
                 Container(
                   child: Text(
                     ''
-                        'اللَّهُمَّ صَلِّ وَسَلِّمْ وَبَارِكْ على نَبِيِّنَا مُحمَّد   ////عشر مراتِ',
+                    'اللَّهُمَّ صَلِّ وَسَلِّمْ وَبَارِكْ على نَبِيِّنَا مُحمَّد   ////عشر مراتِ',
                     style: TextStyle(
                       fontSize: 20,
                       fontWeight: FontWeight.bold,
@@ -710,7 +706,7 @@ class Sabah extends StatelessWidget {
                     bottom: 10,
                   ),
                   padding:
-                  EdgeInsets.only(top: 5, bottom: 5, left: 5, right: 8),
+                      EdgeInsets.only(top: 5, bottom: 5, left: 5, right: 8),
                 ),
                 Divider(
                   height: 12,
@@ -718,7 +714,7 @@ class Sabah extends StatelessWidget {
                 Container(
                   child: Text(
                     ''
-                        'اللَّهُمَّ إِنَّا نَعُوذُ بِكَ مِنْ أَنْ نُشْرِكَ بِكَ شَيْئاً نَعْلَمُهُ ، وَنَسْتَغْفِرُكَ لِمَا لَا نَعْلَمُه  ////ثلاث مراتُ.ِ',
+                    'اللَّهُمَّ إِنَّا نَعُوذُ بِكَ مِنْ أَنْ نُشْرِكَ بِكَ شَيْئاً نَعْلَمُهُ ، وَنَسْتَغْفِرُكَ لِمَا لَا نَعْلَمُه  ////ثلاث مراتُ.ِ',
                     style: TextStyle(
                       fontSize: 20,
                       fontWeight: FontWeight.bold,
@@ -730,7 +726,7 @@ class Sabah extends StatelessWidget {
                     bottom: 10,
                   ),
                   padding:
-                  EdgeInsets.only(top: 5, bottom: 5, left: 5, right: 8),
+                      EdgeInsets.only(top: 5, bottom: 5, left: 5, right: 8),
                 ),
                 Divider(
                   height: 12,
@@ -738,7 +734,7 @@ class Sabah extends StatelessWidget {
                 Container(
                   child: Text(
                     ''
-                        'اللَّهُمَّ إِنِّي أَعُوذُ بِكَ مِنْ الْهَمِّ وَالْحَزَنِ، وَأَعُوذُ بِكَ مِنْ الْعَجْزِ وَالْكَسَلِ، وَأَعُوذُ بِكَ مِنْ الْجُبْنِ وَالْبُخْلِ، وَأَعُوذُ بِكَ مِنْ غَلَبَةِ الدَّيْنِ، وَقَهْرِ الرِّجَالِ.   ////ثلاث مراتِ',
+                    'اللَّهُمَّ إِنِّي أَعُوذُ بِكَ مِنْ الْهَمِّ وَالْحَزَنِ، وَأَعُوذُ بِكَ مِنْ الْعَجْزِ وَالْكَسَلِ، وَأَعُوذُ بِكَ مِنْ الْجُبْنِ وَالْبُخْلِ، وَأَعُوذُ بِكَ مِنْ غَلَبَةِ الدَّيْنِ، وَقَهْرِ الرِّجَالِ.   ////ثلاث مراتِ',
                     style: TextStyle(
                       fontSize: 20,
                       fontWeight: FontWeight.bold,
@@ -750,7 +746,7 @@ class Sabah extends StatelessWidget {
                     bottom: 10,
                   ),
                   padding:
-                  EdgeInsets.only(top: 5, bottom: 5, left: 5, right: 8),
+                      EdgeInsets.only(top: 5, bottom: 5, left: 5, right: 8),
                 ),
                 Divider(
                   height: 12,
@@ -758,7 +754,7 @@ class Sabah extends StatelessWidget {
                 Container(
                   child: Text(
                     ''
-                        'أسْتَغْفِرُ اللهَ العَظِيمَ الَّذِي لاَ إلَهَ إلاَّ هُوَ، الحَيُّ القَيُّومُ، وَأتُوبُ إلَيهِ.   ////ثلا مراتِ',
+                    'أسْتَغْفِرُ اللهَ العَظِيمَ الَّذِي لاَ إلَهَ إلاَّ هُوَ، الحَيُّ القَيُّومُ، وَأتُوبُ إلَيهِ.   ////ثلا مراتِ',
                     style: TextStyle(
                       fontSize: 20,
                       fontWeight: FontWeight.bold,
@@ -770,7 +766,7 @@ class Sabah extends StatelessWidget {
                     bottom: 10,
                   ),
                   padding:
-                  EdgeInsets.only(top: 5, bottom: 5, left: 5, right: 8),
+                      EdgeInsets.only(top: 5, bottom: 5, left: 5, right: 8),
                 ),
                 Divider(
                   height: 12,
@@ -778,7 +774,7 @@ class Sabah extends StatelessWidget {
                 Container(
                   child: Text(
                     ''
-                        'يَا رَبِّ , لَكَ الْحَمْدُ كَمَا يَنْبَغِي لِجَلَالِ وَجْهِكَ , وَلِعَظِيمِ سُلْطَانِكَ.   ////ثلاث مراتِ',
+                    'يَا رَبِّ , لَكَ الْحَمْدُ كَمَا يَنْبَغِي لِجَلَالِ وَجْهِكَ , وَلِعَظِيمِ سُلْطَانِكَ.   ////ثلاث مراتِ',
                     style: TextStyle(
                       fontSize: 20,
                       fontWeight: FontWeight.bold,
@@ -790,7 +786,7 @@ class Sabah extends StatelessWidget {
                     bottom: 10,
                   ),
                   padding:
-                  EdgeInsets.only(top: 5, bottom: 5, left: 5, right: 8),
+                      EdgeInsets.only(top: 5, bottom: 5, left: 5, right: 8),
                 ),
                 Divider(
                   height: 12,
@@ -798,7 +794,7 @@ class Sabah extends StatelessWidget {
                 Container(
                   child: Text(
                     ''
-                        'لا إلهَ إلاّ اللّهُ وَحَدُّهُ لَا شَرِيكَ لَهُ، لَهُ الْمُلْكُ وَلَهُ الْحَمْدُ وَهُوَ عَلَى كُلِّ شَيْءِ قَدِيرِ.   ////عشر مراتِ',
+                    'لا إلهَ إلاّ اللّهُ وَحَدُّهُ لَا شَرِيكَ لَهُ، لَهُ الْمُلْكُ وَلَهُ الْحَمْدُ وَهُوَ عَلَى كُلِّ شَيْءِ قَدِيرِ.   ////عشر مراتِ',
                     style: TextStyle(
                       fontSize: 20,
                       fontWeight: FontWeight.bold,
@@ -810,7 +806,7 @@ class Sabah extends StatelessWidget {
                     bottom: 10,
                   ),
                   padding:
-                  EdgeInsets.only(top: 5, bottom: 5, left: 5, right: 8),
+                      EdgeInsets.only(top: 5, bottom: 5, left: 5, right: 8),
                 ),
                 Divider(
                   height: 12,
@@ -818,7 +814,7 @@ class Sabah extends StatelessWidget {
                 Container(
                   child: Text(
                     ''
-                        'اللَّهُمَّ أَنْتَ رَبِّي لا إِلَهَ إِلا أَنْتَ ، عَلَيْكَ تَوَكَّلْتُ ، وَأَنْتَ رَبُّ الْعَرْشِ الْكَرِيمِ , مَا شَاءَ اللَّهُ كَانَ ، وَمَا لَمْ يَشَأْ لَمْ يَكُنْ ، وَلا حَوْلَ وَلا قُوَّةَ إِلا بِاللَّهِ الْعَلِيِّ الْعَظِيمِ , أَعْلَمُ أَنَّ اللَّهَ عَلَى كُلِّ شَيْءٍ قَدِيرٌ ، وَأَنَّ اللَّهَ قَدْ أَحَاطَ بِكُلِّ شَيْءٍ عِلْمًا , اللَّهُمَّ إِنِّي أَعُوذُ بِكَ مِنْ شَرِّ نَفْسِي ، وَمِنْ شَرِّ كُلِّ دَابَّةٍ أَنْتَ آخِذٌ بِنَاصِيَتِهَا ، إِنَّ رَبِّي عَلَى صِرَاطٍ مُسْتَقِيمٍ.   ////مره واحدهِ',
+                    'اللَّهُمَّ أَنْتَ رَبِّي لا إِلَهَ إِلا أَنْتَ ، عَلَيْكَ تَوَكَّلْتُ ، وَأَنْتَ رَبُّ الْعَرْشِ الْكَرِيمِ , مَا شَاءَ اللَّهُ كَانَ ، وَمَا لَمْ يَشَأْ لَمْ يَكُنْ ، وَلا حَوْلَ وَلا قُوَّةَ إِلا بِاللَّهِ الْعَلِيِّ الْعَظِيمِ , أَعْلَمُ أَنَّ اللَّهَ عَلَى كُلِّ شَيْءٍ قَدِيرٌ ، وَأَنَّ اللَّهَ قَدْ أَحَاطَ بِكُلِّ شَيْءٍ عِلْمًا , اللَّهُمَّ إِنِّي أَعُوذُ بِكَ مِنْ شَرِّ نَفْسِي ، وَمِنْ شَرِّ كُلِّ دَابَّةٍ أَنْتَ آخِذٌ بِنَاصِيَتِهَا ، إِنَّ رَبِّي عَلَى صِرَاطٍ مُسْتَقِيمٍ.   ////مره واحدهِ',
                     style: TextStyle(
                       fontSize: 20,
                       fontWeight: FontWeight.bold,
@@ -830,7 +826,7 @@ class Sabah extends StatelessWidget {
                     bottom: 10,
                   ),
                   padding:
-                  EdgeInsets.only(top: 5, bottom: 5, left: 5, right: 8),
+                      EdgeInsets.only(top: 5, bottom: 5, left: 5, right: 8),
                 ),
                 Divider(
                   height: 12,
@@ -838,7 +834,7 @@ class Sabah extends StatelessWidget {
                 Container(
                   child: Text(
                     ''
-                        'سُبْحَانَ اللَّهِ وَبِحَمْدِهِ   ////مائة مرهِ',
+                    'سُبْحَانَ اللَّهِ وَبِحَمْدِهِ   ////مائة مرهِ',
                     style: TextStyle(
                       fontSize: 20,
                       fontWeight: FontWeight.bold,
@@ -850,21 +846,20 @@ class Sabah extends StatelessWidget {
                     bottom: 10,
                   ),
                   padding:
-                  EdgeInsets.only(top: 5, bottom: 5, left: 5, right: 8),
+                      EdgeInsets.only(top: 5, bottom: 5, left: 5, right: 8),
                 ),
                 Divider(
                   height: 12,
                 ),
-
               ],
             ),
           ),
-
         ],
       ),
     );
   }
 }
+
 class Masaa extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
@@ -875,7 +870,8 @@ class Masaa extends StatelessWidget {
             style: TextStyle(fontSize: 30, fontWeight: FontWeight.bold),
           ),
           centerTitle: true,
-backgroundColor: buttonColor,        ),
+          backgroundColor: buttonColor,
+        ),
         body: ListView(
           children: <Widget>[
             Container(
@@ -884,8 +880,8 @@ backgroundColor: buttonColor,        ),
                   Container(
                     child: Text(
                       ''
-                          'اللّهُ لاَ إِلَـهَ إِلاَّ هُوَ الْحَيُّ الْقَيُّومُ لاَ تَأْخُذُهُ سِنَةٌ وَلاَ نَوْمٌ لَّهُ مَا فِي السَّمَاوَاتِ وَمَا فِي الأَرْضِ مَن ذَا الَّذِي يَشْفَعُ عِنْدَهُ إِلاَّ بِإِذْنِهِ يَعْلَمُ مَا بَيْنَ أَيْدِيهِمْ وَمَا خَلْفَهُمْ وَلاَ يُحِيطُونَ بِشَيْءٍ مِنْ عِلْمِهِ إِلاَّ بِمَا شَاءَ وَسِعَ كُرْسِيُّهُ السَّمَاوَاتِ وَالأَرْضَ وَلاَ يَؤُودُهُ حِفْظُهُمَا وَهُوَ الْعَلِيُّ الْعَظِيمُ.        /////مره واحده'
-                          '',
+                      'اللّهُ لاَ إِلَـهَ إِلاَّ هُوَ الْحَيُّ الْقَيُّومُ لاَ تَأْخُذُهُ سِنَةٌ وَلاَ نَوْمٌ لَّهُ مَا فِي السَّمَاوَاتِ وَمَا فِي الأَرْضِ مَن ذَا الَّذِي يَشْفَعُ عِنْدَهُ إِلاَّ بِإِذْنِهِ يَعْلَمُ مَا بَيْنَ أَيْدِيهِمْ وَمَا خَلْفَهُمْ وَلاَ يُحِيطُونَ بِشَيْءٍ مِنْ عِلْمِهِ إِلاَّ بِمَا شَاءَ وَسِعَ كُرْسِيُّهُ السَّمَاوَاتِ وَالأَرْضَ وَلاَ يَؤُودُهُ حِفْظُهُمَا وَهُوَ الْعَلِيُّ الْعَظِيمُ.        /////مره واحده'
+                      '',
                       style: TextStyle(
                         fontSize: 20,
                         fontWeight: FontWeight.bold,
@@ -894,11 +890,11 @@ backgroundColor: buttonColor,        ),
                     ),
                     color: Colors.white,
                     margin: EdgeInsets.only(
-                      bottom: 10,left: 10,right: 10,top: 10
-                    ),
+                        bottom: 10, left: 10, right: 10, top: 10),
                     padding:
-                    EdgeInsets.only(top: 5, bottom: 5, left: 5, right: 8),
-                  ),Divider(
+                        EdgeInsets.only(top: 5, bottom: 5, left: 5, right: 8),
+                  ),
+                  Divider(
                     height: 12,
                   ),
                   Container(
@@ -907,7 +903,7 @@ backgroundColor: buttonColor,        ),
                         Container(
                           child: Text(
                             ''
-                                'آمَنَ الرَّسُولُ بِمَا أُنْزِلَ إِلَيْهِ مِنْ رَبِّهِ وَالْمُؤْمِنُونَ ۚ كُلٌّ آمَنَ بِاللَّهِ وَمَلَائِكَتِهِ وَكُتُبِهِ وَرُسُلِهِ لَا نُفَرِّقُ بَيْنَ أَحَدٍ مِنْ رُسُلِهِ ۚ وَقَالُوا سَمِعْنَا وَأَطَعْنَا ۖ غُفْرَانَكَ رَبَّنَا وَإِلَيْكَ الْمَصِيرُ. لَا يُكَلِّفُ اللَّهُ نَفْسًا إِلَّا وُسْعَهَا لَهَا مَا كَسَبَتْ وَعَلَيْهَا مَا اكْتَسَبَتْ رَبَّنَا لَا تُؤَاخِذْنَا إِنْ نَسِينَا أَوْ أَخْطَأْنَا رَبَّنَا وَلَا تَحْمِلْ عَلَيْنَا إِصْرًا كَمَا حَمَلْتَهُ عَلَى الَّذِينَ مِنْ قَبْلِنَا رَبَّنَا وَلَا تُحَمِّلْنَا مَا لَا طَاقَةَ لَنَا بِهِ وَاعْفُ عَنَّا وَاغْفِرْ لَنَا وَارْحَمْنَا أَنْتَ مَوْلَانَا فَانْصُرْنَا عَلَى الْقَوْمِ الْكَافِرِينَ.   ////مره واحده',
+                            'آمَنَ الرَّسُولُ بِمَا أُنْزِلَ إِلَيْهِ مِنْ رَبِّهِ وَالْمُؤْمِنُونَ ۚ كُلٌّ آمَنَ بِاللَّهِ وَمَلَائِكَتِهِ وَكُتُبِهِ وَرُسُلِهِ لَا نُفَرِّقُ بَيْنَ أَحَدٍ مِنْ رُسُلِهِ ۚ وَقَالُوا سَمِعْنَا وَأَطَعْنَا ۖ غُفْرَانَكَ رَبَّنَا وَإِلَيْكَ الْمَصِيرُ. لَا يُكَلِّفُ اللَّهُ نَفْسًا إِلَّا وُسْعَهَا لَهَا مَا كَسَبَتْ وَعَلَيْهَا مَا اكْتَسَبَتْ رَبَّنَا لَا تُؤَاخِذْنَا إِنْ نَسِينَا أَوْ أَخْطَأْنَا رَبَّنَا وَلَا تَحْمِلْ عَلَيْنَا إِصْرًا كَمَا حَمَلْتَهُ عَلَى الَّذِينَ مِنْ قَبْلِنَا رَبَّنَا وَلَا تُحَمِّلْنَا مَا لَا طَاقَةَ لَنَا بِهِ وَاعْفُ عَنَّا وَاغْفِرْ لَنَا وَارْحَمْنَا أَنْتَ مَوْلَانَا فَانْصُرْنَا عَلَى الْقَوْمِ الْكَافِرِينَ.   ////مره واحده',
                             style: TextStyle(
                               fontSize: 20,
                               fontWeight: FontWeight.bold,
@@ -918,12 +914,13 @@ backgroundColor: buttonColor,        ),
                           margin: EdgeInsets.only(
                             bottom: 10,
                           ),
-                          padding:
-                          EdgeInsets.only(top: 5, bottom: 5, left: 5, right: 8),
+                          padding: EdgeInsets.only(
+                              top: 5, bottom: 5, left: 5, right: 8),
                         ),
                       ],
                     ),
-                  ),Divider(
+                  ),
+                  Divider(
                     height: 12,
                   ),
                   Container(
@@ -932,7 +929,7 @@ backgroundColor: buttonColor,        ),
                         Container(
                           child: Text(
                             ''
-                                'قُلْ هُوَ اللَّهُ أَحَدٌ، اللَّهُ الصَّمَدُ، لَمْ يَلِدْ وَلَمْ يُولَدْ، وَلَمْ يَكُن لَّهُ كُفُوًا أَحَدٌ    /////ثلاث مرات',
+                            'قُلْ هُوَ اللَّهُ أَحَدٌ، اللَّهُ الصَّمَدُ، لَمْ يَلِدْ وَلَمْ يُولَدْ، وَلَمْ يَكُن لَّهُ كُفُوًا أَحَدٌ    /////ثلاث مرات',
                             style: TextStyle(
                               fontSize: 20,
                               fontWeight: FontWeight.bold,
@@ -943,18 +940,19 @@ backgroundColor: buttonColor,        ),
                           margin: EdgeInsets.only(
                             bottom: 10,
                           ),
-                          padding:
-                          EdgeInsets.only(top: 5, bottom: 5, left: 5, right: 8),
+                          padding: EdgeInsets.only(
+                              top: 5, bottom: 5, left: 5, right: 8),
                         ),
                       ],
                     ),
-                  ),Divider(
+                  ),
+                  Divider(
                     height: 12,
                   ),
                   Container(
                     child: Text(
                       ''
-                          'قُلْ أَعُوذُ بِرَبِّ الْفَلَقِ، مِن شَرِّ مَا خَلَقَ، وَمِن شَرِّ غَاسِقٍ إِذَا وَقَبَ، وَمِن شَرِّالنَّفَّاثَاتِ فِي الْعُقَدِ، وَمِن شَرِّ حَاسِدٍ إِذَا حَسَدٌَ    /////ثلاث مرات',
+                      'قُلْ أَعُوذُ بِرَبِّ الْفَلَقِ، مِن شَرِّ مَا خَلَقَ، وَمِن شَرِّ غَاسِقٍ إِذَا وَقَبَ، وَمِن شَرِّالنَّفَّاثَاتِ فِي الْعُقَدِ، وَمِن شَرِّ حَاسِدٍ إِذَا حَسَدٌَ    /////ثلاث مرات',
                       style: TextStyle(
                         fontSize: 20,
                         fontWeight: FontWeight.bold,
@@ -966,14 +964,15 @@ backgroundColor: buttonColor,        ),
                       bottom: 10,
                     ),
                     padding:
-                    EdgeInsets.only(top: 5, bottom: 5, left: 5, right: 8),
-                  ),Divider(
+                        EdgeInsets.only(top: 5, bottom: 5, left: 5, right: 8),
+                  ),
+                  Divider(
                     height: 12,
                   ),
                   Container(
                     child: Text(
                       ''
-                          'قُلْ أَعُوذُ بِرَبِّ النَّاسِ، مَلِكِ النَّاسِ، إِلَهِ النَّاسِ، مِن شَرِّ الْوَسْوَاسِ الْخَنَّاسِ، الَّذِي يُوَسْوِسُ فِي صُدُورِ النَّاسِ، مِنَ الْجِنَّةِ وَ النَّاسِ',
+                      'قُلْ أَعُوذُ بِرَبِّ النَّاسِ، مَلِكِ النَّاسِ، إِلَهِ النَّاسِ، مِن شَرِّ الْوَسْوَاسِ الْخَنَّاسِ، الَّذِي يُوَسْوِسُ فِي صُدُورِ النَّاسِ، مِنَ الْجِنَّةِ وَ النَّاسِ',
                       style: TextStyle(
                         fontSize: 20,
                         fontWeight: FontWeight.bold,
@@ -985,14 +984,15 @@ backgroundColor: buttonColor,        ),
                       bottom: 10,
                     ),
                     padding:
-                    EdgeInsets.only(top: 5, bottom: 5, left: 5, right: 8),
-                  ),Divider(
+                        EdgeInsets.only(top: 5, bottom: 5, left: 5, right: 8),
+                  ),
+                  Divider(
                     height: 12,
                   ),
                   Container(
                     child: Text(
                       ''
-                          'أَمْسَيْـنا وَأَمْسـى المـلكُ لله وَالحَمدُ لله ، لا إلهَ إلاّ اللّهُ وَحدَهُ لا شَريكَ لهُ، لهُ المُـلكُ ولهُ الحَمْـد، وهُوَ على كلّ شَيءٍ قدير ، رَبِّ أسْـأَلُـكَ خَـيرَ ما في هـذهِ اللَّـيْلَةِ وَخَـيرَ ما بَعْـدَهـا ، وَأَعـوذُ بِكَ مِنْ شَـرِّ ما في هـذهِ اللَّـيْلةِ وَشَرِّ ما بَعْـدَهـا ، رَبِّ أَعـوذُبِكَ مِنَ الْكَسَـلِ وَسـوءِ الْكِـبَر ، رَبِّ أَعـوذُبِكَ مِنْ عَـذابٍ في النّـارِ وَعَـذابٍ في القَـبْر.   ////مره وحدهِ',
+                      'أَمْسَيْـنا وَأَمْسـى المـلكُ لله وَالحَمدُ لله ، لا إلهَ إلاّ اللّهُ وَحدَهُ لا شَريكَ لهُ، لهُ المُـلكُ ولهُ الحَمْـد، وهُوَ على كلّ شَيءٍ قدير ، رَبِّ أسْـأَلُـكَ خَـيرَ ما في هـذهِ اللَّـيْلَةِ وَخَـيرَ ما بَعْـدَهـا ، وَأَعـوذُ بِكَ مِنْ شَـرِّ ما في هـذهِ اللَّـيْلةِ وَشَرِّ ما بَعْـدَهـا ، رَبِّ أَعـوذُبِكَ مِنَ الْكَسَـلِ وَسـوءِ الْكِـبَر ، رَبِّ أَعـوذُبِكَ مِنْ عَـذابٍ في النّـارِ وَعَـذابٍ في القَـبْر.   ////مره وحدهِ',
                       style: TextStyle(
                         fontSize: 20,
                         fontWeight: FontWeight.bold,
@@ -1004,14 +1004,15 @@ backgroundColor: buttonColor,        ),
                       bottom: 10,
                     ),
                     padding:
-                    EdgeInsets.only(top: 5, bottom: 5, left: 5, right: 8),
-                  ),Divider(
+                        EdgeInsets.only(top: 5, bottom: 5, left: 5, right: 8),
+                  ),
+                  Divider(
                     height: 12,
                   ),
                   Container(
                     child: Text(
                       ''
-                          'أاللّهـمَّ أَنْتَ رَبِّـي لا إلهَ إلاّ أَنْتَ ، خَلَقْتَنـي وَأَنا عَبْـدُك ، وَأَنا عَلـى عَهْـدِكَ وَوَعْـدِكَ ما اسْتَـطَعْـت ، أَعـوذُ بِكَ مِنْ شَـرِّ ما صَنَـعْت ، أَبـوءُ لَـكَ بِنِعْـمَتِـكَ عَلَـيَّ وَأَبـوءُ بِذَنْـبي فَاغْفـِرْ لي فَإِنَّـهُ لا يَغْـفِرُ الذُّنـوبَ إِلاّ أَنْت   ////مره واحدهَ .ِ',
+                      'أاللّهـمَّ أَنْتَ رَبِّـي لا إلهَ إلاّ أَنْتَ ، خَلَقْتَنـي وَأَنا عَبْـدُك ، وَأَنا عَلـى عَهْـدِكَ وَوَعْـدِكَ ما اسْتَـطَعْـت ، أَعـوذُ بِكَ مِنْ شَـرِّ ما صَنَـعْت ، أَبـوءُ لَـكَ بِنِعْـمَتِـكَ عَلَـيَّ وَأَبـوءُ بِذَنْـبي فَاغْفـِرْ لي فَإِنَّـهُ لا يَغْـفِرُ الذُّنـوبَ إِلاّ أَنْت   ////مره واحدهَ .ِ',
                       style: TextStyle(
                         fontSize: 20,
                         fontWeight: FontWeight.bold,
@@ -1023,14 +1024,15 @@ backgroundColor: buttonColor,        ),
                       bottom: 10,
                     ),
                     padding:
-                    EdgeInsets.only(top: 5, bottom: 5, left: 5, right: 8),
-                  ),Divider(
+                        EdgeInsets.only(top: 5, bottom: 5, left: 5, right: 8),
+                  ),
+                  Divider(
                     height: 12,
                   ),
                   Container(
                     child: Text(
                       ''
-                          'رَضيـتُ بِاللهِ رَبَّـاً وَبِالإسْلامِ ديـناً وَبِمُحَـمَّدٍ صلى الله عليه وسلم نَبِيّـاً ////ثلاث مراتَ .ِ',
+                      'رَضيـتُ بِاللهِ رَبَّـاً وَبِالإسْلامِ ديـناً وَبِمُحَـمَّدٍ صلى الله عليه وسلم نَبِيّـاً ////ثلاث مراتَ .ِ',
                       style: TextStyle(
                         fontSize: 20,
                         fontWeight: FontWeight.bold,
@@ -1042,14 +1044,15 @@ backgroundColor: buttonColor,        ),
                       bottom: 10,
                     ),
                     padding:
-                    EdgeInsets.only(top: 5, bottom: 5, left: 5, right: 8),
-                  ),Divider(
+                        EdgeInsets.only(top: 5, bottom: 5, left: 5, right: 8),
+                  ),
+                  Divider(
                     height: 12,
                   ),
                   Container(
                     child: Text(
                       ''
-                          'اللّهُـمَّ إِنِّـي أَمسيتُ أُشْـهِدُك ، وَأُشْـهِدُ حَمَلَـةَ عَـرْشِـك ، وَمَلائِكَتِك ، وَجَمـيعَ خَلْـقِك ، أَنَّـكَ أَنْـتَ اللهُ لا إلهَ إلاّ أَنْـتَ وَحْـدَكَ لا شَريكَ لَـك ، وَأَنَّ ُ مُحَمّـداً عَبْـدُكَ وَرَسـولُـك    ////اربع مراتِ',
+                      'اللّهُـمَّ إِنِّـي أَمسيتُ أُشْـهِدُك ، وَأُشْـهِدُ حَمَلَـةَ عَـرْشِـك ، وَمَلائِكَتِك ، وَجَمـيعَ خَلْـقِك ، أَنَّـكَ أَنْـتَ اللهُ لا إلهَ إلاّ أَنْـتَ وَحْـدَكَ لا شَريكَ لَـك ، وَأَنَّ ُ مُحَمّـداً عَبْـدُكَ وَرَسـولُـك    ////اربع مراتِ',
                       style: TextStyle(
                         fontSize: 20,
                         fontWeight: FontWeight.bold,
@@ -1061,14 +1064,15 @@ backgroundColor: buttonColor,        ),
                       bottom: 10,
                     ),
                     padding:
-                    EdgeInsets.only(top: 5, bottom: 5, left: 5, right: 8),
-                  ),Divider(
+                        EdgeInsets.only(top: 5, bottom: 5, left: 5, right: 8),
+                  ),
+                  Divider(
                     height: 12,
                   ),
                   Container(
                     child: Text(
                       ''
-                          'حَسْبِـيَ اللّهُ لا إلهَ إلاّ هُوَ عَلَـيهِ تَوَكَّـلتُ وَهُوَ رَبُّ العَرْشِ العَظـيم    ////سبع مراتِ',
+                      'حَسْبِـيَ اللّهُ لا إلهَ إلاّ هُوَ عَلَـيهِ تَوَكَّـلتُ وَهُوَ رَبُّ العَرْشِ العَظـيم    ////سبع مراتِ',
                       style: TextStyle(
                         fontSize: 20,
                         fontWeight: FontWeight.bold,
@@ -1080,14 +1084,15 @@ backgroundColor: buttonColor,        ),
                       bottom: 10,
                     ),
                     padding:
-                    EdgeInsets.only(top: 5, bottom: 5, left: 5, right: 8),
-                  ),Divider(
+                        EdgeInsets.only(top: 5, bottom: 5, left: 5, right: 8),
+                  ),
+                  Divider(
                     height: 12,
                   ),
                   Container(
                     child: Text(
                       ''
-                          'بِسـمِ اللهِ الذي لا يَضُـرُّ مَعَ اسمِـهِ شَيءٌ في الأرْضِ وَلا في السّمـاءِ وَهـوَ السّمـيعُ العَلـيم.   ////ثلاث مراتِ',
+                      'بِسـمِ اللهِ الذي لا يَضُـرُّ مَعَ اسمِـهِ شَيءٌ في الأرْضِ وَلا في السّمـاءِ وَهـوَ السّمـيعُ العَلـيم.   ////ثلاث مراتِ',
                       style: TextStyle(
                         fontSize: 20,
                         fontWeight: FontWeight.bold,
@@ -1099,14 +1104,15 @@ backgroundColor: buttonColor,        ),
                       bottom: 10,
                     ),
                     padding:
-                    EdgeInsets.only(top: 5, bottom: 5, left: 5, right: 8),
-                  ),Divider(
+                        EdgeInsets.only(top: 5, bottom: 5, left: 5, right: 8),
+                  ),
+                  Divider(
                     height: 12,
                   ),
                   Container(
                     child: Text(
                       ''
-                          'اللّهُـمَّ بِكَ أَمْسَـينا وَبِكَ أَصْـبَحْنا، وَبِكَ نَحْـيا وَبِكَ نَمُـوتُ وَإِلَـيْكَ الْمَصِيرُ.    ////مره واحدهِ',
+                      'اللّهُـمَّ بِكَ أَمْسَـينا وَبِكَ أَصْـبَحْنا، وَبِكَ نَحْـيا وَبِكَ نَمُـوتُ وَإِلَـيْكَ الْمَصِيرُ.    ////مره واحدهِ',
                       style: TextStyle(
                         fontSize: 20,
                         fontWeight: FontWeight.bold,
@@ -1118,14 +1124,15 @@ backgroundColor: buttonColor,        ),
                       bottom: 10,
                     ),
                     padding:
-                    EdgeInsets.only(top: 5, bottom: 5, left: 5, right: 8),
-                  ),Divider(
+                        EdgeInsets.only(top: 5, bottom: 5, left: 5, right: 8),
+                  ),
+                  Divider(
                     height: 12,
                   ),
                   Container(
                     child: Text(
                       ''
-                          'أَمْسَيْنَا عَلَى فِطْرَةِ الإسْلاَمِ، وَعَلَى كَلِمَةِ الإِخْلاَصِ، وَعَلَى دِينِ نَبِيِّنَا مُحَمَّدٍ صَلَّى اللهُ عَلَيْهِ وَسَلَّمَ، وَعَلَى مِلَّةِ أَبِينَا إبْرَاهِيمَ حَنِيفاً مُسْلِماً وَمَا كَانَ مِنَ المُشْرِكِينَ.   ///مره واحدهِ',
+                      'أَمْسَيْنَا عَلَى فِطْرَةِ الإسْلاَمِ، وَعَلَى كَلِمَةِ الإِخْلاَصِ، وَعَلَى دِينِ نَبِيِّنَا مُحَمَّدٍ صَلَّى اللهُ عَلَيْهِ وَسَلَّمَ، وَعَلَى مِلَّةِ أَبِينَا إبْرَاهِيمَ حَنِيفاً مُسْلِماً وَمَا كَانَ مِنَ المُشْرِكِينَ.   ///مره واحدهِ',
                       style: TextStyle(
                         fontSize: 20,
                         fontWeight: FontWeight.bold,
@@ -1137,14 +1144,15 @@ backgroundColor: buttonColor,        ),
                       bottom: 10,
                     ),
                     padding:
-                    EdgeInsets.only(top: 5, bottom: 5, left: 5, right: 8),
-                  ),Divider(
+                        EdgeInsets.only(top: 5, bottom: 5, left: 5, right: 8),
+                  ),
+                  Divider(
                     height: 12,
                   ),
                   Container(
                     child: Text(
                       ''
-                          'سُبْحـانَ اللهِ وَبِحَمْـدِهِ عَدَدَ خَلْـقِه ، وَرِضـا نَفْسِـه ، وَزِنَـةَ عَـرْشِـه ، وَمِـدادَ كَلِمـاتِـه.    ///ثلاث مراتِ',
+                      'سُبْحـانَ اللهِ وَبِحَمْـدِهِ عَدَدَ خَلْـقِه ، وَرِضـا نَفْسِـه ، وَزِنَـةَ عَـرْشِـه ، وَمِـدادَ كَلِمـاتِـه.    ///ثلاث مراتِ',
                       style: TextStyle(
                         fontSize: 20,
                         fontWeight: FontWeight.bold,
@@ -1156,14 +1164,15 @@ backgroundColor: buttonColor,        ),
                       bottom: 10,
                     ),
                     padding:
-                    EdgeInsets.only(top: 5, bottom: 5, left: 5, right: 8),
-                  ),Divider(
+                        EdgeInsets.only(top: 5, bottom: 5, left: 5, right: 8),
+                  ),
+                  Divider(
                     height: 12,
                   ),
                   Container(
                     child: Text(
                       ''
-                          'اللّهُـمَّ عافِـني في بَدَنـي ، اللّهُـمَّ عافِـني في سَمْـعي ، اللّهُـمَّ عافِـني في بَصَـري ، لا إلهَ إلاّ أَنْـتَ.   ////ثلاث مراتِ',
+                      'اللّهُـمَّ عافِـني في بَدَنـي ، اللّهُـمَّ عافِـني في سَمْـعي ، اللّهُـمَّ عافِـني في بَصَـري ، لا إلهَ إلاّ أَنْـتَ.   ////ثلاث مراتِ',
                       style: TextStyle(
                         fontSize: 20,
                         fontWeight: FontWeight.bold,
@@ -1175,14 +1184,15 @@ backgroundColor: buttonColor,        ),
                       bottom: 10,
                     ),
                     padding:
-                    EdgeInsets.only(top: 5, bottom: 5, left: 5, right: 8),
-                  ),Divider(
+                        EdgeInsets.only(top: 5, bottom: 5, left: 5, right: 8),
+                  ),
+                  Divider(
                     height: 12,
                   ),
                   Container(
                     child: Text(
                       ''
-                          'اللّهُـمَّ إِنّـي أَعـوذُبِكَ مِنَ الْكُـفر ، وَالفَـقْر ، وَأَعـوذُبِكَ مِنْ عَذابِ القَـبْر ، لا إلهَ إلاّ أَنْـتَ   ///ثلاث مراتِ',
+                      'اللّهُـمَّ إِنّـي أَعـوذُبِكَ مِنَ الْكُـفر ، وَالفَـقْر ، وَأَعـوذُبِكَ مِنْ عَذابِ القَـبْر ، لا إلهَ إلاّ أَنْـتَ   ///ثلاث مراتِ',
                       style: TextStyle(
                         fontSize: 20,
                         fontWeight: FontWeight.bold,
@@ -1194,14 +1204,15 @@ backgroundColor: buttonColor,        ),
                       bottom: 10,
                     ),
                     padding:
-                    EdgeInsets.only(top: 5, bottom: 5, left: 5, right: 8),
-                  ),Divider(
+                        EdgeInsets.only(top: 5, bottom: 5, left: 5, right: 8),
+                  ),
+                  Divider(
                     height: 12,
                   ),
                   Container(
                     child: Text(
                       ''
-                          'اللّهُـمَّ إِنِّـي أسْـأَلُـكَ العَـفْوَ وَالعـافِـيةَ في الدُّنْـيا وَالآخِـرَة ، اللّهُـمَّ إِنِّـي أسْـأَلُـكَ العَـفْوَ وَالعـافِـيةَ في ديني وَدُنْـيايَ وَأهْـلي وَمالـي ، اللّهُـمَّ اسْتُـرْ عـوْراتي وَآمِـنْ رَوْعاتـي ، اللّهُـمَّ احْفَظْـني مِن بَـينِ يَدَيَّ وَمِن خَلْفـي وَعَن يَمـيني وَعَن شِمـالي ، وَمِن فَوْقـي ، وَأَعـوذُ بِعَظَمَـتِكَ أَن أُغْـتالَ مِن تَحْتـي.    ////مره واحدهِ',
+                      'اللّهُـمَّ إِنِّـي أسْـأَلُـكَ العَـفْوَ وَالعـافِـيةَ في الدُّنْـيا وَالآخِـرَة ، اللّهُـمَّ إِنِّـي أسْـأَلُـكَ العَـفْوَ وَالعـافِـيةَ في ديني وَدُنْـيايَ وَأهْـلي وَمالـي ، اللّهُـمَّ اسْتُـرْ عـوْراتي وَآمِـنْ رَوْعاتـي ، اللّهُـمَّ احْفَظْـني مِن بَـينِ يَدَيَّ وَمِن خَلْفـي وَعَن يَمـيني وَعَن شِمـالي ، وَمِن فَوْقـي ، وَأَعـوذُ بِعَظَمَـتِكَ أَن أُغْـتالَ مِن تَحْتـي.    ////مره واحدهِ',
                       style: TextStyle(
                         fontSize: 20,
                         fontWeight: FontWeight.bold,
@@ -1213,14 +1224,15 @@ backgroundColor: buttonColor,        ),
                       bottom: 10,
                     ),
                     padding:
-                    EdgeInsets.only(top: 5, bottom: 5, left: 5, right: 8),
-                  ),Divider(
+                        EdgeInsets.only(top: 5, bottom: 5, left: 5, right: 8),
+                  ),
+                  Divider(
                     height: 12,
                   ),
                   Container(
                     child: Text(
                       ''
-                          'يا حَـيُّ يا قَيّـومُ بِـرَحْمَـتِكَ أَسْتَـغـيث ، أَصْلِـحْ لي شَـأْنـي كُلَّـه ، وَلا تَكِلـني إِلى نَفْـسي طَـرْفَةَ عَـين.   ////ثلاث مراتِ',
+                      'يا حَـيُّ يا قَيّـومُ بِـرَحْمَـتِكَ أَسْتَـغـيث ، أَصْلِـحْ لي شَـأْنـي كُلَّـه ، وَلا تَكِلـني إِلى نَفْـسي طَـرْفَةَ عَـين.   ////ثلاث مراتِ',
                       style: TextStyle(
                         fontSize: 20,
                         fontWeight: FontWeight.bold,
@@ -1232,14 +1244,15 @@ backgroundColor: buttonColor,        ),
                       bottom: 10,
                     ),
                     padding:
-                    EdgeInsets.only(top: 5, bottom: 5, left: 5, right: 8),
-                  ),Divider(
+                        EdgeInsets.only(top: 5, bottom: 5, left: 5, right: 8),
+                  ),
+                  Divider(
                     height: 12,
                   ),
                   Container(
                     child: Text(
                       ''
-                          'أَمْسَيْنا وَأَمْسَى الْمُلْكُ للهِ رَبِّ الْعَالَمَيْنِ، اللَّهُمَّ إِنَّي أسْأَلُكَ خَيْرَ هَذَه اللَّيْلَةِ فَتْحُهَا وَنُصَرُّهَا، وَنورَهُا و برَكَتَهُا، وَهُداهُا، وَأَعُوذُ بِكَ مِنْ شَرِّ مَا فيهِا وَشَرَّ مَا بَعْدَهَا.    ////مره واحدهِ',
+                      'أَمْسَيْنا وَأَمْسَى الْمُلْكُ للهِ رَبِّ الْعَالَمَيْنِ، اللَّهُمَّ إِنَّي أسْأَلُكَ خَيْرَ هَذَه اللَّيْلَةِ فَتْحُهَا وَنُصَرُّهَا، وَنورَهُا و برَكَتَهُا، وَهُداهُا، وَأَعُوذُ بِكَ مِنْ شَرِّ مَا فيهِا وَشَرَّ مَا بَعْدَهَا.    ////مره واحدهِ',
                       style: TextStyle(
                         fontSize: 20,
                         fontWeight: FontWeight.bold,
@@ -1251,14 +1264,15 @@ backgroundColor: buttonColor,        ),
                       bottom: 10,
                     ),
                     padding:
-                    EdgeInsets.only(top: 5, bottom: 5, left: 5, right: 8),
-                  ),Divider(
+                        EdgeInsets.only(top: 5, bottom: 5, left: 5, right: 8),
+                  ),
+                  Divider(
                     height: 12,
                   ),
                   Container(
                     child: Text(
                       ''
-                          'اللّهُـمَّ عالِـمَ الغَـيْبِ وَالشّـهادَةِ فاطِـرَ السّماواتِ وَالأرْضِ رَبَّ كـلِّ شَـيءٍ وَمَليـكَه ، أَشْهَـدُ أَنْ لا إِلـهَ إِلاّ أَنْت ، أَعـوذُ بِكَ مِن شَـرِّ نَفْسـي وَمِن شَـرِّ الشَّيْـطانِ وَشِـرْكِه ، وَأَنْ أَقْتَـرِفَ عَلـى نَفْسـي سوءاً أَوْ أَجُـرَّهُ إِلـى مُسْـلِم.    ///مره واحدهِ',
+                      'اللّهُـمَّ عالِـمَ الغَـيْبِ وَالشّـهادَةِ فاطِـرَ السّماواتِ وَالأرْضِ رَبَّ كـلِّ شَـيءٍ وَمَليـكَه ، أَشْهَـدُ أَنْ لا إِلـهَ إِلاّ أَنْت ، أَعـوذُ بِكَ مِن شَـرِّ نَفْسـي وَمِن شَـرِّ الشَّيْـطانِ وَشِـرْكِه ، وَأَنْ أَقْتَـرِفَ عَلـى نَفْسـي سوءاً أَوْ أَجُـرَّهُ إِلـى مُسْـلِم.    ///مره واحدهِ',
                       style: TextStyle(
                         fontSize: 20,
                         fontWeight: FontWeight.bold,
@@ -1270,14 +1284,15 @@ backgroundColor: buttonColor,        ),
                       bottom: 10,
                     ),
                     padding:
-                    EdgeInsets.only(top: 5, bottom: 5, left: 5, right: 8),
-                  ),Divider(
+                        EdgeInsets.only(top: 5, bottom: 5, left: 5, right: 8),
+                  ),
+                  Divider(
                     height: 12,
                   ),
                   Container(
                     child: Text(
                       ''
-                          'أَعـوذُ بِكَلِمـاتِ اللّهِ التّـامّـاتِ مِنْ شَـرِّ ما خَلَـق.   ///ثلاث مراتِ',
+                      'أَعـوذُ بِكَلِمـاتِ اللّهِ التّـامّـاتِ مِنْ شَـرِّ ما خَلَـق.   ///ثلاث مراتِ',
                       style: TextStyle(
                         fontSize: 20,
                         fontWeight: FontWeight.bold,
@@ -1289,14 +1304,15 @@ backgroundColor: buttonColor,        ),
                       bottom: 10,
                     ),
                     padding:
-                    EdgeInsets.only(top: 5, bottom: 5, left: 5, right: 8),
-                  ),Divider(
+                        EdgeInsets.only(top: 5, bottom: 5, left: 5, right: 8),
+                  ),
+                  Divider(
                     height: 12,
                   ),
                   Container(
                     child: Text(
                       ''
-                          'اللَّهُمَّ إِنَّا نَعُوذُ بِكَ مِنْ أَنْ نُشْرِكَ بِكَ شَيْئًا نَعْلَمُهُ ، وَنَسْتَغْفِرُكَ لِمَا لَا نَعْلَمُهُ    ///ثلاث مرات',
+                      'اللَّهُمَّ إِنَّا نَعُوذُ بِكَ مِنْ أَنْ نُشْرِكَ بِكَ شَيْئًا نَعْلَمُهُ ، وَنَسْتَغْفِرُكَ لِمَا لَا نَعْلَمُهُ    ///ثلاث مرات',
                       style: TextStyle(
                         fontSize: 20,
                         fontWeight: FontWeight.bold,
@@ -1308,14 +1324,15 @@ backgroundColor: buttonColor,        ),
                       bottom: 10,
                     ),
                     padding:
-                    EdgeInsets.only(top: 5, bottom: 5, left: 5, right: 8),
-                  ),Divider(
+                        EdgeInsets.only(top: 5, bottom: 5, left: 5, right: 8),
+                  ),
+                  Divider(
                     height: 12,
                   ),
                   Container(
                     child: Text(
                       ''
-                          'اللَّهُمَّ صَلِّ وَسَلِّمْ وَبَارِكْ على نَبِيِّنَا مُحمَّد.    ///عشر مرات',
+                      'اللَّهُمَّ صَلِّ وَسَلِّمْ وَبَارِكْ على نَبِيِّنَا مُحمَّد.    ///عشر مرات',
                       style: TextStyle(
                         fontSize: 20,
                         fontWeight: FontWeight.bold,
@@ -1327,14 +1344,15 @@ backgroundColor: buttonColor,        ),
                       bottom: 10,
                     ),
                     padding:
-                    EdgeInsets.only(top: 5, bottom: 5, left: 5, right: 8),
-                  ),Divider(
+                        EdgeInsets.only(top: 5, bottom: 5, left: 5, right: 8),
+                  ),
+                  Divider(
                     height: 12,
                   ),
                   Container(
                     child: Text(
                       ''
-                          'اللَّهُمَّ إِنِّي أَعُوذُ بِكَ مِنْ الْهَمِّ وَالْحَزَنِ، وَأَعُوذُ بِكَ مِنْ الْعَجْزِ وَالْكَسَلِ، وَأَعُوذُ بِكَ مِنْ الْجُبْنِ وَالْبُخْلِ، وَأَعُوذُ بِكَ مِنْ غَلَبَةِ الدَّيْنِ، وَقَهْرِ الرِّجَالِ.   ///ثلاث مرات',
+                      'اللَّهُمَّ إِنِّي أَعُوذُ بِكَ مِنْ الْهَمِّ وَالْحَزَنِ، وَأَعُوذُ بِكَ مِنْ الْعَجْزِ وَالْكَسَلِ، وَأَعُوذُ بِكَ مِنْ الْجُبْنِ وَالْبُخْلِ، وَأَعُوذُ بِكَ مِنْ غَلَبَةِ الدَّيْنِ، وَقَهْرِ الرِّجَالِ.   ///ثلاث مرات',
                       style: TextStyle(
                         fontSize: 20,
                         fontWeight: FontWeight.bold,
@@ -1346,14 +1364,15 @@ backgroundColor: buttonColor,        ),
                       bottom: 10,
                     ),
                     padding:
-                    EdgeInsets.only(top: 5, bottom: 5, left: 5, right: 8),
-                  ),Divider(
+                        EdgeInsets.only(top: 5, bottom: 5, left: 5, right: 8),
+                  ),
+                  Divider(
                     height: 12,
                   ),
                   Container(
                     child: Text(
                       ''
-                          'أسْتَغْفِرُ اللهَ العَظِيمَ الَّذِي لاَ إلَهَ إلاَّ هُوَ، الحَيُّ القَيُّومُ، وَأتُوبُ إلَيهِ   ///ثلاث مرات',
+                      'أسْتَغْفِرُ اللهَ العَظِيمَ الَّذِي لاَ إلَهَ إلاَّ هُوَ، الحَيُّ القَيُّومُ، وَأتُوبُ إلَيهِ   ///ثلاث مرات',
                       style: TextStyle(
                         fontSize: 20,
                         fontWeight: FontWeight.bold,
@@ -1365,14 +1384,15 @@ backgroundColor: buttonColor,        ),
                       bottom: 10,
                     ),
                     padding:
-                    EdgeInsets.only(top: 5, bottom: 5, left: 5, right: 8),
-                  ),Divider(
+                        EdgeInsets.only(top: 5, bottom: 5, left: 5, right: 8),
+                  ),
+                  Divider(
                     height: 12,
                   ),
                   Container(
                     child: Text(
                       ''
-                          'يَا رَبِّ , لَكَ الْحَمْدُ كَمَا يَنْبَغِي لِجَلَالِ وَجْهِكَ , وَلِعَظِيمِ سُلْطَانِكَ.   ///ثلاث مرات',
+                      'يَا رَبِّ , لَكَ الْحَمْدُ كَمَا يَنْبَغِي لِجَلَالِ وَجْهِكَ , وَلِعَظِيمِ سُلْطَانِكَ.   ///ثلاث مرات',
                       style: TextStyle(
                         fontSize: 20,
                         fontWeight: FontWeight.bold,
@@ -1384,14 +1404,15 @@ backgroundColor: buttonColor,        ),
                       bottom: 10,
                     ),
                     padding:
-                    EdgeInsets.only(top: 5, bottom: 5, left: 5, right: 8),
-                  ),Divider(
+                        EdgeInsets.only(top: 5, bottom: 5, left: 5, right: 8),
+                  ),
+                  Divider(
                     height: 12,
                   ),
                   Container(
                     child: Text(
                       ''
-                          'ا إلَه إلّا اللهُ وَحَدُّهُ لَا شَرِيكَ لَهُ، لَهُ الْمُلْكُ وَلَهُ الْحَمْدُ وَهُوَ عَلَى كُلُّ شَيْءِ قَدِيرِ.   ///عشر مرات',
+                      'ا إلَه إلّا اللهُ وَحَدُّهُ لَا شَرِيكَ لَهُ، لَهُ الْمُلْكُ وَلَهُ الْحَمْدُ وَهُوَ عَلَى كُلُّ شَيْءِ قَدِيرِ.   ///عشر مرات',
                       style: TextStyle(
                         fontSize: 20,
                         fontWeight: FontWeight.bold,
@@ -1403,14 +1424,15 @@ backgroundColor: buttonColor,        ),
                       bottom: 10,
                     ),
                     padding:
-                    EdgeInsets.only(top: 5, bottom: 5, left: 5, right: 8),
-                  ),Divider(
+                        EdgeInsets.only(top: 5, bottom: 5, left: 5, right: 8),
+                  ),
+                  Divider(
                     height: 12,
                   ),
                   Container(
                     child: Text(
                       ''
-                          'اللَّهُمَّ أَنْتَ رَبِّي لا إِلَهَ إِلا أَنْتَ ، عَلَيْكَ تَوَكَّلْتُ ، وَأَنْتَ رَبُّ الْعَرْشِ الْكَرِيمِ , مَا شَاءَ اللَّهُ كَانَ ، وَمَا لَمْ يَشَأْ لَمْ يَكُنْ ، وَلا حَوْلَ وَلا قُوَّةَ إِلا بِاللَّهِ الْعَلِيِّ الْعَظِيمِ , أَعْلَمُ أَنَّ اللَّهَ عَلَى كُلِّ شَيْءٍ قَدِيرٌ ، وَأَنَّ اللَّهَ قَدْ أَحَاطَ بِكُلِّ شَيْءٍ عِلْمًا , اللَّهُمَّ إِنِّي أَعُوذُ بِكَ مِنْ شَرِّ نَفْسِي ، وَمِنْ شَرِّ كُلِّ دَابَّةٍ أَنْتَ آخِذٌ بِنَاصِيَتِهَا ، إِنَّ رَبِّي عَلَى صِرَاطٍ مُسْتَقِيمٍ.   ///مره واحده',
+                      'اللَّهُمَّ أَنْتَ رَبِّي لا إِلَهَ إِلا أَنْتَ ، عَلَيْكَ تَوَكَّلْتُ ، وَأَنْتَ رَبُّ الْعَرْشِ الْكَرِيمِ , مَا شَاءَ اللَّهُ كَانَ ، وَمَا لَمْ يَشَأْ لَمْ يَكُنْ ، وَلا حَوْلَ وَلا قُوَّةَ إِلا بِاللَّهِ الْعَلِيِّ الْعَظِيمِ , أَعْلَمُ أَنَّ اللَّهَ عَلَى كُلِّ شَيْءٍ قَدِيرٌ ، وَأَنَّ اللَّهَ قَدْ أَحَاطَ بِكُلِّ شَيْءٍ عِلْمًا , اللَّهُمَّ إِنِّي أَعُوذُ بِكَ مِنْ شَرِّ نَفْسِي ، وَمِنْ شَرِّ كُلِّ دَابَّةٍ أَنْتَ آخِذٌ بِنَاصِيَتِهَا ، إِنَّ رَبِّي عَلَى صِرَاطٍ مُسْتَقِيمٍ.   ///مره واحده',
                       style: TextStyle(
                         fontSize: 20,
                         fontWeight: FontWeight.bold,
@@ -1422,14 +1444,15 @@ backgroundColor: buttonColor,        ),
                       bottom: 10,
                     ),
                     padding:
-                    EdgeInsets.only(top: 5, bottom: 5, left: 5, right: 8),
-                  ),Divider(
+                        EdgeInsets.only(top: 5, bottom: 5, left: 5, right: 8),
+                  ),
+                  Divider(
                     height: 12,
                   ),
                   Container(
                     child: Text(
                       ''
-                          'سُبْحَانَ اللَّهِ وَبِحَمْدِهِ   /// مائة مره',
+                      'سُبْحَانَ اللَّهِ وَبِحَمْدِهِ   /// مائة مره',
                       style: TextStyle(
                         fontSize: 20,
                         fontWeight: FontWeight.bold,
@@ -1441,19 +1464,19 @@ backgroundColor: buttonColor,        ),
                       bottom: 10,
                     ),
                     padding:
-                    EdgeInsets.only(top: 5, bottom: 5, left: 5, right: 8),
-                  ),Divider(
+                        EdgeInsets.only(top: 5, bottom: 5, left: 5, right: 8),
+                  ),
+                  Divider(
                     height: 12,
                   ),
-
                 ],
               ),
             ),
           ],
         ));
-
   }
 }
+
 class Masjed extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
@@ -1464,7 +1487,8 @@ class Masjed extends StatelessWidget {
             style: TextStyle(fontSize: 30, fontWeight: FontWeight.bold),
           ),
           centerTitle: true,
-backgroundColor: buttonColor,        ),
+          backgroundColor: buttonColor,
+        ),
         body: ListView(
           children: <Widget>[
             Container(
@@ -1473,8 +1497,8 @@ backgroundColor: buttonColor,        ),
                   Container(
                     child: Text(
                       ''
-                          'قبل الذهاب إلى المسجد : اللّهُـمَّ اجْعَـلْ في قَلْبـي نورا ، وَفي لِسـاني نورا، وَاجْعَـلْ في سَمْعي نورا، وَاجْعَـلْ في بَصَري نورا، وَاجْعَـلْ مِنْ خَلْفي نورا، وَمِنْ أَمامـي نورا، وَاجْعَـلْ مِنْ فَوْقـي نورا ، وَمِن تَحْتـي نورا .اللّهُـمَّ أَعْطِنـي نورا.   ///مره واحده'
-                          '',
+                      'قبل الذهاب إلى المسجد : اللّهُـمَّ اجْعَـلْ في قَلْبـي نورا ، وَفي لِسـاني نورا، وَاجْعَـلْ في سَمْعي نورا، وَاجْعَـلْ في بَصَري نورا، وَاجْعَـلْ مِنْ خَلْفي نورا، وَمِنْ أَمامـي نورا، وَاجْعَـلْ مِنْ فَوْقـي نورا ، وَمِن تَحْتـي نورا .اللّهُـمَّ أَعْطِنـي نورا.   ///مره واحده'
+                      '',
                       style: TextStyle(
                         fontSize: 20,
                         fontWeight: FontWeight.bold,
@@ -1483,10 +1507,9 @@ backgroundColor: buttonColor,        ),
                     ),
                     color: Colors.white,
                     margin: EdgeInsets.only(
-                      bottom: 10,top: 10,left: 10,right: 10
-                    ),
+                        bottom: 10, top: 10, left: 10, right: 10),
                     padding:
-                    EdgeInsets.only(top: 5, bottom: 5, left: 5, right: 8),
+                        EdgeInsets.only(top: 5, bottom: 5, left: 5, right: 8),
                   ),
                   Divider(
                     height: 12,
@@ -1494,8 +1517,8 @@ backgroundColor: buttonColor,        ),
                   Container(
                     child: Text(
                       ''
-                          'الدخول للمسجد : أَعوذُ باللهِ العَظيـم وَبِوَجْهِـهِ الكَرِيـم وَسُلْطـانِه القَديـم مِنَ الشّيْـطانِ الرَّجـيم،[ بِسْـمِ الله، وَالصَّلاةُ وَالسَّلامُ عَلى رَسولِ الله]، اللّهُـمَّ افْتَـحْ لي أَبْوابَ رَحْمَتـِك.   ///مره واحده'
-                          '',
+                      'الدخول للمسجد : أَعوذُ باللهِ العَظيـم وَبِوَجْهِـهِ الكَرِيـم وَسُلْطـانِه القَديـم مِنَ الشّيْـطانِ الرَّجـيم،[ بِسْـمِ الله، وَالصَّلاةُ وَالسَّلامُ عَلى رَسولِ الله]، اللّهُـمَّ افْتَـحْ لي أَبْوابَ رَحْمَتـِك.   ///مره واحده'
+                      '',
                       style: TextStyle(
                         fontSize: 20,
                         fontWeight: FontWeight.bold,
@@ -1507,7 +1530,7 @@ backgroundColor: buttonColor,        ),
                       bottom: 10,
                     ),
                     padding:
-                    EdgeInsets.only(top: 5, bottom: 5, left: 5, right: 8),
+                        EdgeInsets.only(top: 5, bottom: 5, left: 5, right: 8),
                   ),
                   Divider(
                     height: 12,
@@ -1515,8 +1538,8 @@ backgroundColor: buttonColor,        ),
                   Container(
                     child: Text(
                       ''
-                          'الخروج من المسجد : بِسمِ الله وَالصّلاةُ وَالسّلامُ عَلى رَسولِ الله، اللّهُـمَّ إِنّـي أَسْأَلُكَ مِـنْ فَضْـلِك، اللّهُـمَّ اعصِمْنـي مِنَ الشَّيْـطانِ الرَّجـيم.'
-                          '',
+                      'الخروج من المسجد : بِسمِ الله وَالصّلاةُ وَالسّلامُ عَلى رَسولِ الله، اللّهُـمَّ إِنّـي أَسْأَلُكَ مِـنْ فَضْـلِك، اللّهُـمَّ اعصِمْنـي مِنَ الشَّيْـطانِ الرَّجـيم.'
+                      '',
                       style: TextStyle(
                         fontSize: 20,
                         fontWeight: FontWeight.bold,
@@ -1528,17 +1551,16 @@ backgroundColor: buttonColor,        ),
                       bottom: 10,
                     ),
                     padding:
-                    EdgeInsets.only(top: 5, bottom: 5, left: 5, right: 8),
+                        EdgeInsets.only(top: 5, bottom: 5, left: 5, right: 8),
                   ),
-
                 ],
               ),
             ),
           ],
         ));
-
   }
 }
+
 class Alsalah extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
@@ -1549,7 +1571,8 @@ class Alsalah extends StatelessWidget {
             style: TextStyle(fontSize: 30, fontWeight: FontWeight.bold),
           ),
           centerTitle: true,
-backgroundColor: buttonColor,        ),
+          backgroundColor: buttonColor,
+        ),
         body: ListView(
           children: <Widget>[
             Container(
@@ -1558,8 +1581,8 @@ backgroundColor: buttonColor,        ),
                   Container(
                     child: Text(
                       ''
-                          'أسـتغفر الله، أسـتغفر الله، أسـتغفر الله. اللهـم أنـت السلام ، ومـنك السلام ، تباركت يا ذا الجـلال والإكـرام.'
-                          '',
+                      'أسـتغفر الله، أسـتغفر الله، أسـتغفر الله. اللهـم أنـت السلام ، ومـنك السلام ، تباركت يا ذا الجـلال والإكـرام.'
+                      '',
                       style: TextStyle(
                         fontSize: 20,
                         fontWeight: FontWeight.bold,
@@ -1568,16 +1591,15 @@ backgroundColor: buttonColor,        ),
                     ),
                     color: Colors.white,
                     margin: EdgeInsets.only(
-                      bottom: 10,left: 10,right: 10,top: 10
-                    ),
+                        bottom: 10, left: 10, right: 10, top: 10),
                     padding:
-                    EdgeInsets.only(top: 5, bottom: 5, left: 5, right: 8),
+                        EdgeInsets.only(top: 5, bottom: 5, left: 5, right: 8),
                   ),
                   Container(
                     child: Text(
                       ''
-                          'لا إله إلا الله وحده لا شريك له، له المـلك وله الحمد، وهو على كل شيء قدير، اللهـم لا مانع لما أعطـيت، ولا معطـي لما منـعت، ولا ينفـع ذا الجـد منـك الجـد.   //مره واحده'
-                          '',
+                      'لا إله إلا الله وحده لا شريك له، له المـلك وله الحمد، وهو على كل شيء قدير، اللهـم لا مانع لما أعطـيت، ولا معطـي لما منـعت، ولا ينفـع ذا الجـد منـك الجـد.   //مره واحده'
+                      '',
                       style: TextStyle(
                         fontSize: 20,
                         fontWeight: FontWeight.bold,
@@ -1589,13 +1611,13 @@ backgroundColor: buttonColor,        ),
                       bottom: 10,
                     ),
                     padding:
-                    EdgeInsets.only(top: 5, bottom: 5, left: 5, right: 8),
+                        EdgeInsets.only(top: 5, bottom: 5, left: 5, right: 8),
                   ),
                   Container(
                     child: Text(
                       ''
-                          'لا إله إلا الله, وحده لا شريك له، له الملك وله الحمد، وهو على كل شيء قدير، لا حـول ولا قـوة إلا بالله، لا إله إلا اللـه، ولا نعـبـد إلا إيـاه, له النعـمة وله الفضل وله الثـناء الحـسن، لا إله إلا الله مخلصـين لـه الدين ولو كـره الكـافرون.   ///مره واحده'
-                          '',
+                      'لا إله إلا الله, وحده لا شريك له، له الملك وله الحمد، وهو على كل شيء قدير، لا حـول ولا قـوة إلا بالله، لا إله إلا اللـه، ولا نعـبـد إلا إيـاه, له النعـمة وله الفضل وله الثـناء الحـسن، لا إله إلا الله مخلصـين لـه الدين ولو كـره الكـافرون.   ///مره واحده'
+                      '',
                       style: TextStyle(
                         fontSize: 20,
                         fontWeight: FontWeight.bold,
@@ -1607,13 +1629,13 @@ backgroundColor: buttonColor,        ),
                       bottom: 10,
                     ),
                     padding:
-                    EdgeInsets.only(top: 5, bottom: 5, left: 5, right: 8),
+                        EdgeInsets.only(top: 5, bottom: 5, left: 5, right: 8),
                   ),
                   Container(
                     child: Text(
                       ''
-                          'سـبحان الله، والحمـد لله ، والله أكـبر. (ثلاثا وثلاثين). لا إله إلا الله وحـده لا شريك له، له الملك وله الحمد، وهو على كل شيء قـدير.   ///ثلاثا وثلاثين'
-                          '',
+                      'سـبحان الله، والحمـد لله ، والله أكـبر. (ثلاثا وثلاثين). لا إله إلا الله وحـده لا شريك له، له الملك وله الحمد، وهو على كل شيء قـدير.   ///ثلاثا وثلاثين'
+                      '',
                       style: TextStyle(
                         fontSize: 20,
                         fontWeight: FontWeight.bold,
@@ -1625,13 +1647,13 @@ backgroundColor: buttonColor,        ),
                       bottom: 10,
                     ),
                     padding:
-                    EdgeInsets.only(top: 5, bottom: 5, left: 5, right: 8),
+                        EdgeInsets.only(top: 5, bottom: 5, left: 5, right: 8),
                   ),
                   Container(
                     child: Text(
                       ''
-                          'أعوذ بالله من الشيطان الرجيم : {اللّهُ لاَ إِلَـهَ إِلاَّ هُوَ الْحَيُّ الْقَيُّومُ لاَ تَأْخُذُهُ سِنَةٌ وَلاَ نَوْمٌ لَّهُ مَا فِي السَّمَاوَاتِ وَمَا فِي الأَرْضِ مَن ذَا الَّذِي يَشْفَعُ عِنْدَهُ إِلاَّ بِإِذْنِهِ يَعْلَمُ مَا بَيْنَ أَيْدِيهِمْ وَمَا خَلْفَهُمْ وَلاَ يُحِيطُونَ بِشَيْءٍ مِّنْ عِلْمِهِ إِلاَّ بِمَا شَاء وَسِعَ كُرْسِيُّهُ السَّمَاوَاتِ وَالأَرْضَ وَلاَ يَؤُودُهُ حِفْظُهُمَا وَهُوَ الْعَلِيُّ الْعَظِيمُ}'
-                          '',
+                      'أعوذ بالله من الشيطان الرجيم : {اللّهُ لاَ إِلَـهَ إِلاَّ هُوَ الْحَيُّ الْقَيُّومُ لاَ تَأْخُذُهُ سِنَةٌ وَلاَ نَوْمٌ لَّهُ مَا فِي السَّمَاوَاتِ وَمَا فِي الأَرْضِ مَن ذَا الَّذِي يَشْفَعُ عِنْدَهُ إِلاَّ بِإِذْنِهِ يَعْلَمُ مَا بَيْنَ أَيْدِيهِمْ وَمَا خَلْفَهُمْ وَلاَ يُحِيطُونَ بِشَيْءٍ مِّنْ عِلْمِهِ إِلاَّ بِمَا شَاء وَسِعَ كُرْسِيُّهُ السَّمَاوَاتِ وَالأَرْضَ وَلاَ يَؤُودُهُ حِفْظُهُمَا وَهُوَ الْعَلِيُّ الْعَظِيمُ}'
+                      '',
                       style: TextStyle(
                         fontSize: 20,
                         fontWeight: FontWeight.bold,
@@ -1643,13 +1665,13 @@ backgroundColor: buttonColor,        ),
                       bottom: 10,
                     ),
                     padding:
-                    EdgeInsets.only(top: 5, bottom: 5, left: 5, right: 8),
+                        EdgeInsets.only(top: 5, bottom: 5, left: 5, right: 8),
                   ),
                   Container(
                     child: Text(
                       ''
-                          'أعوذ بالله من الشيطان الرجيم : {اللّهُ لاَ إِلَـهَ إِلاَّ هُوَ الْحَيُّ الْقَيُّومُ لاَ تَأْخُذُهُ سِنَةٌ وَلاَ نَوْمٌ لَّهُ مَا فِي السَّمَاوَاتِ وَمَا فِي الأَرْضِ مَن ذَا الَّذِي يَشْفَعُ عِنْدَهُ إِلاَّ بِإِذْنِهِ يَعْلَمُ مَا بَيْنَ أَيْدِيهِمْ وَمَا خَلْفَهُمْ وَلاَ يُحِيطُونَ بِشَيْءٍ مِّنْ عِلْمِهِ إِلاَّ بِمَا شَاء وَسِعَ كُرْسِيُّهُ السَّمَاوَاتِ وَالأَرْضَ وَلاَ يَؤُودُهُ حِفْظُهُمَا وَهُوَ الْعَلِيُّ الْعَظِيمُ}   ///مره واحده'
-                          '',
+                      'أعوذ بالله من الشيطان الرجيم : {اللّهُ لاَ إِلَـهَ إِلاَّ هُوَ الْحَيُّ الْقَيُّومُ لاَ تَأْخُذُهُ سِنَةٌ وَلاَ نَوْمٌ لَّهُ مَا فِي السَّمَاوَاتِ وَمَا فِي الأَرْضِ مَن ذَا الَّذِي يَشْفَعُ عِنْدَهُ إِلاَّ بِإِذْنِهِ يَعْلَمُ مَا بَيْنَ أَيْدِيهِمْ وَمَا خَلْفَهُمْ وَلاَ يُحِيطُونَ بِشَيْءٍ مِّنْ عِلْمِهِ إِلاَّ بِمَا شَاء وَسِعَ كُرْسِيُّهُ السَّمَاوَاتِ وَالأَرْضَ وَلاَ يَؤُودُهُ حِفْظُهُمَا وَهُوَ الْعَلِيُّ الْعَظِيمُ}   ///مره واحده'
+                      '',
                       style: TextStyle(
                         fontSize: 20,
                         fontWeight: FontWeight.bold,
@@ -1661,13 +1683,13 @@ backgroundColor: buttonColor,        ),
                       bottom: 10,
                     ),
                     padding:
-                    EdgeInsets.only(top: 5, bottom: 5, left: 5, right: 8),
+                        EdgeInsets.only(top: 5, bottom: 5, left: 5, right: 8),
                   ),
                   Container(
                     child: Text(
                       ''
-                          'بسم الله الرحمن الرحيم : {قُلْ هُوَ اللَّهُ أَحَدٌ * اللَّهُ الصَّمَدُ * لَمْ يَلِدْ وَلَمْ يُولَدْ * وَلَمْ يَكُن لَّهُ كُفُواً أَحَدٌ}   ///مره واحده'
-                          '',
+                      'بسم الله الرحمن الرحيم : {قُلْ هُوَ اللَّهُ أَحَدٌ * اللَّهُ الصَّمَدُ * لَمْ يَلِدْ وَلَمْ يُولَدْ * وَلَمْ يَكُن لَّهُ كُفُواً أَحَدٌ}   ///مره واحده'
+                      '',
                       style: TextStyle(
                         fontSize: 20,
                         fontWeight: FontWeight.bold,
@@ -1679,13 +1701,13 @@ backgroundColor: buttonColor,        ),
                       bottom: 10,
                     ),
                     padding:
-                    EdgeInsets.only(top: 5, bottom: 5, left: 5, right: 8),
+                        EdgeInsets.only(top: 5, bottom: 5, left: 5, right: 8),
                   ),
                   Container(
                     child: Text(
                       ''
-                          'بسم الله الرحمن الرحيم : {قُلْ أَعُوذُ بِرَبِّ الْفَلَقِ * مِن شَرِّ مَا خَلَقَ * وَمِن شَرِّ غَاسِقٍ إِذَا وَقَبَ * وَمِن شَرِّ النَّفَّاثَاتِ فِي الْعُقَدِ * وَمِن شَرِّ حَاسِدٍ إِذَا حَسَدَ}   ///مره واحده'
-                          '',
+                      'بسم الله الرحمن الرحيم : {قُلْ أَعُوذُ بِرَبِّ الْفَلَقِ * مِن شَرِّ مَا خَلَقَ * وَمِن شَرِّ غَاسِقٍ إِذَا وَقَبَ * وَمِن شَرِّ النَّفَّاثَاتِ فِي الْعُقَدِ * وَمِن شَرِّ حَاسِدٍ إِذَا حَسَدَ}   ///مره واحده'
+                      '',
                       style: TextStyle(
                         fontSize: 20,
                         fontWeight: FontWeight.bold,
@@ -1697,13 +1719,13 @@ backgroundColor: buttonColor,        ),
                       bottom: 10,
                     ),
                     padding:
-                    EdgeInsets.only(top: 5, bottom: 5, left: 5, right: 8),
+                        EdgeInsets.only(top: 5, bottom: 5, left: 5, right: 8),
                   ),
                   Container(
                     child: Text(
                       ''
-                          'بسم الله الرحمن الرحيم : {قُلْ أَعُوذُ بِرَبِّ النَّاسِ * مَلِكِ النَّاسِ * إِلَهِ النَّاسِ * مِن شَرِّ الْوَسْوَاسِ الْخَنَّاسِ * الَّذِي يُوَسْوِسُ فِي صُدُورِ النَّاسِ * مِنَ الْجِنَّةِ وَالنَّاسِ}    ///مره واحده'
-                          '',
+                      'بسم الله الرحمن الرحيم : {قُلْ أَعُوذُ بِرَبِّ النَّاسِ * مَلِكِ النَّاسِ * إِلَهِ النَّاسِ * مِن شَرِّ الْوَسْوَاسِ الْخَنَّاسِ * الَّذِي يُوَسْوِسُ فِي صُدُورِ النَّاسِ * مِنَ الْجِنَّةِ وَالنَّاسِ}    ///مره واحده'
+                      '',
                       style: TextStyle(
                         fontSize: 20,
                         fontWeight: FontWeight.bold,
@@ -1715,13 +1737,13 @@ backgroundColor: buttonColor,        ),
                       bottom: 10,
                     ),
                     padding:
-                    EdgeInsets.only(top: 5, bottom: 5, left: 5, right: 8),
+                        EdgeInsets.only(top: 5, bottom: 5, left: 5, right: 8),
                   ),
                   Container(
                     child: Text(
                       ''
-                          'لا إله إلا الله وحـده لا شريك له، له الملك وله الحمد، يحيـي ويمـيت وهو على كل شيء قدير.'
-                          '',
+                      'لا إله إلا الله وحـده لا شريك له، له الملك وله الحمد، يحيـي ويمـيت وهو على كل شيء قدير.'
+                      '',
                       style: TextStyle(
                         fontSize: 20,
                         fontWeight: FontWeight.bold,
@@ -1733,13 +1755,13 @@ backgroundColor: buttonColor,        ),
                       bottom: 10,
                     ),
                     padding:
-                    EdgeInsets.only(top: 5, bottom: 5, left: 5, right: 8),
+                        EdgeInsets.only(top: 5, bottom: 5, left: 5, right: 8),
                   ),
                   Container(
                     child: Text(
                       ''
-                          'اللهـم إنـي أسألـك علمـا نافعـا ورزقـا طيـبا ، وعمـلا متقـبلا .'
-                          '',
+                      'اللهـم إنـي أسألـك علمـا نافعـا ورزقـا طيـبا ، وعمـلا متقـبلا .'
+                      '',
                       style: TextStyle(
                         fontSize: 20,
                         fontWeight: FontWeight.bold,
@@ -1751,13 +1773,13 @@ backgroundColor: buttonColor,        ),
                       bottom: 10,
                     ),
                     padding:
-                    EdgeInsets.only(top: 5, bottom: 5, left: 5, right: 8),
+                        EdgeInsets.only(top: 5, bottom: 5, left: 5, right: 8),
                   ),
                   Container(
                     child: Text(
                       ''
-                          'اللهم أجرنى من النار.'
-                          '',
+                      'اللهم أجرنى من النار.'
+                      '',
                       style: TextStyle(
                         fontSize: 20,
                         fontWeight: FontWeight.bold,
@@ -1769,13 +1791,13 @@ backgroundColor: buttonColor,        ),
                       bottom: 10,
                     ),
                     padding:
-                    EdgeInsets.only(top: 5, bottom: 5, left: 5, right: 8),
+                        EdgeInsets.only(top: 5, bottom: 5, left: 5, right: 8),
                   ),
                   Container(
                     child: Text(
                       ''
-                          'اللهـم أعنى على ذكرك وشكرك وحسن عبادتك.'
-                          '',
+                      'اللهـم أعنى على ذكرك وشكرك وحسن عبادتك.'
+                      '',
                       style: TextStyle(
                         fontSize: 20,
                         fontWeight: FontWeight.bold,
@@ -1787,18 +1809,16 @@ backgroundColor: buttonColor,        ),
                       bottom: 10,
                     ),
                     padding:
-                    EdgeInsets.only(top: 5, bottom: 5, left: 5, right: 8),
+                        EdgeInsets.only(top: 5, bottom: 5, left: 5, right: 8),
                   ),
-
-
                 ],
               ),
             ),
           ],
         ));
-
   }
 }
+
 class Alnawm extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
@@ -1809,7 +1829,8 @@ class Alnawm extends StatelessWidget {
             style: TextStyle(fontSize: 30, fontWeight: FontWeight.bold),
           ),
           centerTitle: true,
-backgroundColor: buttonColor,        ),
+          backgroundColor: buttonColor,
+        ),
         body: ListView(
           children: <Widget>[
             Container(
@@ -1818,8 +1839,8 @@ backgroundColor: buttonColor,        ),
                   Container(
                     child: Text(
                       ''
-                          'أ– بِإسْمِكَ رَبِّـي وَضَعْـتُ جَنْـبي، وَبِكَ أَرْفَعُـه، فَإِن أَمْسَـكْتَ نَفْسـي فارْحَـمْها، وَإِنْ أَرْسَلْتَـها فاحْفَظْـها بِمـا تَحْفَـظُ بِه عِبـادَكَ الصّـالِحـين. (مرّة واحدة).'
-                          '',
+                      'أ– بِإسْمِكَ رَبِّـي وَضَعْـتُ جَنْـبي، وَبِكَ أَرْفَعُـه، فَإِن أَمْسَـكْتَ نَفْسـي فارْحَـمْها، وَإِنْ أَرْسَلْتَـها فاحْفَظْـها بِمـا تَحْفَـظُ بِه عِبـادَكَ الصّـالِحـين. (مرّة واحدة).'
+                      '',
                       style: TextStyle(
                         fontSize: 20,
                         fontWeight: FontWeight.bold,
@@ -1828,16 +1849,15 @@ backgroundColor: buttonColor,        ),
                     ),
                     color: Colors.white,
                     margin: EdgeInsets.only(
-                        bottom: 10,left: 10,right: 10,top: 10
-                    ),
+                        bottom: 10, left: 10, right: 10, top: 10),
                     padding:
-                    EdgeInsets.only(top: 5, bottom: 5, left: 5, right: 8),
+                        EdgeInsets.only(top: 5, bottom: 5, left: 5, right: 8),
                   ),
                   Container(
                     child: Text(
                       ''
-                          'اللّهُـمَّ إِنَّـكَ خَلَـقْتَ نَفْسـي وَأَنْـتَ تَوَفّـاهـا لَكَ ممَـاتـها وَمَحْـياها، إِنْ أَحْيَيْـتَها فاحْفَظْـها، وَإِنْ أَمَتَّـها فَاغْفِـرْ لَـها. اللّهُـمَّ إِنَّـي أَسْـأَلُـكَ العـافِـيَة. (مرّة واحدة).'
-                          '',
+                      'اللّهُـمَّ إِنَّـكَ خَلَـقْتَ نَفْسـي وَأَنْـتَ تَوَفّـاهـا لَكَ ممَـاتـها وَمَحْـياها، إِنْ أَحْيَيْـتَها فاحْفَظْـها، وَإِنْ أَمَتَّـها فَاغْفِـرْ لَـها. اللّهُـمَّ إِنَّـي أَسْـأَلُـكَ العـافِـيَة. (مرّة واحدة).'
+                      '',
                       style: TextStyle(
                         fontSize: 20,
                         fontWeight: FontWeight.bold,
@@ -1849,13 +1869,13 @@ backgroundColor: buttonColor,        ),
                       bottom: 10,
                     ),
                     padding:
-                    EdgeInsets.only(top: 5, bottom: 5, left: 5, right: 8),
+                        EdgeInsets.only(top: 5, bottom: 5, left: 5, right: 8),
                   ),
                   Container(
                     child: Text(
                       ''
-                          'بِإسْـمِكَ اللّهُـمَّ أَمـوتُ وَأَحْـيا. (مرّة واحدة).'
-                          '',
+                      'بِإسْـمِكَ اللّهُـمَّ أَمـوتُ وَأَحْـيا. (مرّة واحدة).'
+                      '',
                       style: TextStyle(
                         fontSize: 20,
                         fontWeight: FontWeight.bold,
@@ -1867,13 +1887,13 @@ backgroundColor: buttonColor,        ),
                       bottom: 10,
                     ),
                     padding:
-                    EdgeInsets.only(top: 5, bottom: 5, left: 5, right: 8),
+                        EdgeInsets.only(top: 5, bottom: 5, left: 5, right: 8),
                   ),
                   Container(
                     child: Text(
                       ''
-                          ' اللّهُمَّ عالِمَ الغَـيبِ وَالشّهادةِ فاطِرَ السّماواتِ وَالأرْضِ رَبَّ كُـلِّ شَيءٍ وَمَليـكَه، أَشْهدُ أَنّ لا إِلـهَ إِلاّ أَنْت، أَعوذُ بِكَ مِن شَرِّ نَفْسي، وَمِن شَـرِّ الشَّيْطانِ وَشِـرْكِه، وَأَنْ أَقْتَـرِفَ عَلى نَفْسي سُوءاً أَوْ أَجُرَّهُ إِلى مُسْلِم. (مرّة واحدة).'
-                          '',
+                      ' اللّهُمَّ عالِمَ الغَـيبِ وَالشّهادةِ فاطِرَ السّماواتِ وَالأرْضِ رَبَّ كُـلِّ شَيءٍ وَمَليـكَه، أَشْهدُ أَنّ لا إِلـهَ إِلاّ أَنْت، أَعوذُ بِكَ مِن شَرِّ نَفْسي، وَمِن شَـرِّ الشَّيْطانِ وَشِـرْكِه، وَأَنْ أَقْتَـرِفَ عَلى نَفْسي سُوءاً أَوْ أَجُرَّهُ إِلى مُسْلِم. (مرّة واحدة).'
+                      '',
                       style: TextStyle(
                         fontSize: 20,
                         fontWeight: FontWeight.bold,
@@ -1885,13 +1905,13 @@ backgroundColor: buttonColor,        ),
                       bottom: 10,
                     ),
                     padding:
-                    EdgeInsets.only(top: 5, bottom: 5, left: 5, right: 8),
+                        EdgeInsets.only(top: 5, bottom: 5, left: 5, right: 8),
                   ),
                   Container(
                     child: Text(
                       ''
-                          'اللّهُمَّ أَسْلَمْتُ نَفْسي إِلَيْكَ، وَفَوَّضْتُ أَمْري إِلَيْكَ، وَوَجَّهْتُ وَجْهي إِلَـيْكَ، وَأَلْجَاْتُ ظَهري إِلَيْكَ، رَغْبَةً وَرَهْبَةً إِلَيْكَ، لا مَلْجَأَ وَلا مَنْجَى مِنْـكَ إِلاّ إِلَـيْكَ، آمَنْتُ بِكِتابِكَ الذي أَنْزَلْتَ وَبِنَبِـيِّكَ الذي أَرْسَلْتْ. (مرّة واحدة).'
-                          '',
+                      'اللّهُمَّ أَسْلَمْتُ نَفْسي إِلَيْكَ، وَفَوَّضْتُ أَمْري إِلَيْكَ، وَوَجَّهْتُ وَجْهي إِلَـيْكَ، وَأَلْجَاْتُ ظَهري إِلَيْكَ، رَغْبَةً وَرَهْبَةً إِلَيْكَ، لا مَلْجَأَ وَلا مَنْجَى مِنْـكَ إِلاّ إِلَـيْكَ، آمَنْتُ بِكِتابِكَ الذي أَنْزَلْتَ وَبِنَبِـيِّكَ الذي أَرْسَلْتْ. (مرّة واحدة).'
+                      '',
                       style: TextStyle(
                         fontSize: 20,
                         fontWeight: FontWeight.bold,
@@ -1903,13 +1923,13 @@ backgroundColor: buttonColor,        ),
                       bottom: 10,
                     ),
                     padding:
-                    EdgeInsets.only(top: 5, bottom: 5, left: 5, right: 8),
+                        EdgeInsets.only(top: 5, bottom: 5, left: 5, right: 8),
                   ),
                   Container(
                     child: Text(
                       ''
-                          'اللّهُـمَّ قِنـي عَذابَـكَ يَـوْمَ تَبْـعَثُ عِبـادَك. (3 مرّات)'
-                          '',
+                      'اللّهُـمَّ قِنـي عَذابَـكَ يَـوْمَ تَبْـعَثُ عِبـادَك. (3 مرّات)'
+                      '',
                       style: TextStyle(
                         fontSize: 20,
                         fontWeight: FontWeight.bold,
@@ -1921,13 +1941,13 @@ backgroundColor: buttonColor,        ),
                       bottom: 10,
                     ),
                     padding:
-                    EdgeInsets.only(top: 5, bottom: 5, left: 5, right: 8),
+                        EdgeInsets.only(top: 5, bottom: 5, left: 5, right: 8),
                   ),
                   Container(
                     child: Text(
                       ''
-                          ' سُبْحَانَ اللَّ و الْحَمْـــدُ لِلّه و اللَّهُ أَكْبَــــرْ. (33 مرّة)..'
-                          '',
+                      ' سُبْحَانَ اللَّ و الْحَمْـــدُ لِلّه و اللَّهُ أَكْبَــــرْ. (33 مرّة)..'
+                      '',
                       style: TextStyle(
                         fontSize: 20,
                         fontWeight: FontWeight.bold,
@@ -1939,13 +1959,13 @@ backgroundColor: buttonColor,        ),
                       bottom: 10,
                     ),
                     padding:
-                    EdgeInsets.only(top: 5, bottom: 5, left: 5, right: 8),
+                        EdgeInsets.only(top: 5, bottom: 5, left: 5, right: 8),
                   ),
                   Container(
                     child: Text(
                       ''
-                          ' يجمع كفّيه قبل النوم ويقرأ فيهما:‏ ” قل هو الله أحد “‏ و ” ‏قل أعوذ برب الفلق “‏ و” ‏قل أعوذ برب الناس‏ “‏ ثمّ ينفث فيهما، ويمسح بهما على رأسه ووجهه وما استطاع من الجسد. (3 مرّات).'
-                          '',
+                      ' يجمع كفّيه قبل النوم ويقرأ فيهما:‏ ” قل هو الله أحد “‏ و ” ‏قل أعوذ برب الفلق “‏ و” ‏قل أعوذ برب الناس‏ “‏ ثمّ ينفث فيهما، ويمسح بهما على رأسه ووجهه وما استطاع من الجسد. (3 مرّات).'
+                      '',
                       style: TextStyle(
                         fontSize: 20,
                         fontWeight: FontWeight.bold,
@@ -1957,13 +1977,13 @@ backgroundColor: buttonColor,        ),
                       bottom: 10,
                     ),
                     padding:
-                    EdgeInsets.only(top: 5, bottom: 5, left: 5, right: 8),
+                        EdgeInsets.only(top: 5, bottom: 5, left: 5, right: 8),
                   ),
                   Container(
                     child: Text(
                       ''
-                          'آمَنَ الرَّسُولُ بِمَا أُنْزِلَ إِلَيْهِ مِنْ رَبِّهِ وَالْمُؤْمِنُونَ ۚ كُلٌّ آمَنَ بِاللَّهِ وَمَلَائِكَتِهِ وَكُتُبِهِ وَرُسُلِهِ لَا نُفَرِّقُ بَيْنَ أَحَدٍ مِنْ رُسُلِهِ ۚ وَقَالُوا سَمِعْنَا وَأَطَعْنَا ۖ غُفْرَانَكَ رَبَّنَا وَإِلَيْكَ الْمَصِيرُ ﴿285﴾ لَا يُكَلِّفُ اللَّهُ نَفْسًا إِلَّا وُسْعَهَا لَهَا مَا كَسَبَتْ وَعَلَيْهَا مَا اكْتَسَبَتْ رَبَّنَا لَا تُؤَاخِذْنَا إِنْ نَسِينَا أَوْ أَخْطَأْنَا رَبَّنَا وَلَا تَحْمِلْ عَلَيْنَا إِصْرًا كَمَا حَمَلْتَهُ عَلَى الَّذِينَ مِنْ قَبْلِنَا رَبَّنَا وَلَا تُحَمِّلْنَا مَا لَا طَاقَةَ لَنَا بِهِ وَاعْفُ عَنَّا وَاغْفِرْ لَنَا وَارْحَمْنَا أَنْتَ مَوْلَانَا فَانْصُرْنَا عَلَى الْقَوْمِ الْكَافِرِينَ'
-                          '',
+                      'آمَنَ الرَّسُولُ بِمَا أُنْزِلَ إِلَيْهِ مِنْ رَبِّهِ وَالْمُؤْمِنُونَ ۚ كُلٌّ آمَنَ بِاللَّهِ وَمَلَائِكَتِهِ وَكُتُبِهِ وَرُسُلِهِ لَا نُفَرِّقُ بَيْنَ أَحَدٍ مِنْ رُسُلِهِ ۚ وَقَالُوا سَمِعْنَا وَأَطَعْنَا ۖ غُفْرَانَكَ رَبَّنَا وَإِلَيْكَ الْمَصِيرُ ﴿285﴾ لَا يُكَلِّفُ اللَّهُ نَفْسًا إِلَّا وُسْعَهَا لَهَا مَا كَسَبَتْ وَعَلَيْهَا مَا اكْتَسَبَتْ رَبَّنَا لَا تُؤَاخِذْنَا إِنْ نَسِينَا أَوْ أَخْطَأْنَا رَبَّنَا وَلَا تَحْمِلْ عَلَيْنَا إِصْرًا كَمَا حَمَلْتَهُ عَلَى الَّذِينَ مِنْ قَبْلِنَا رَبَّنَا وَلَا تُحَمِّلْنَا مَا لَا طَاقَةَ لَنَا بِهِ وَاعْفُ عَنَّا وَاغْفِرْ لَنَا وَارْحَمْنَا أَنْتَ مَوْلَانَا فَانْصُرْنَا عَلَى الْقَوْمِ الْكَافِرِينَ'
+                      '',
                       style: TextStyle(
                         fontSize: 20,
                         fontWeight: FontWeight.bold,
@@ -1975,13 +1995,13 @@ backgroundColor: buttonColor,        ),
                       bottom: 10,
                     ),
                     padding:
-                    EdgeInsets.only(top: 5, bottom: 5, left: 5, right: 8),
+                        EdgeInsets.only(top: 5, bottom: 5, left: 5, right: 8),
                   ),
                   Container(
                     child: Text(
                       ''
-                          'اللّهُ لاَ إِلَـهَ إِلاَّ هُوَ الْحَيُّ الْقَيُّومُ لاَ تَأْخُذُهُ سِنَةٌ وَلاَ نَوْمٌ لَّهُ مَا فِي السَّمَاوَاتِ وَمَا فِي الأَرْضِ مَن ذَا الَّذِي يَشْفَعُ عِنْدَهُ إِلاَّ بِإِذْنِهِ يَعْلَمُ مَا بَيْنَ أَيْدِيهِمْ وَمَا خَلْفَهُمْ وَلاَ يُحِيطُونَ بِشَيْءٍ مِّنْ عِلْمِهِ إِلاَّ بِمَا شَاء وَسِعَ كُرْسِيُّهُ السَّمَاوَاتِ وَالأَرْضَ وَلاَ يَؤُودُهُ حِفْظُهُمَا وَهُوَ الْعَلِيُّ الْعَظِيمُ.'
-                          '',
+                      'اللّهُ لاَ إِلَـهَ إِلاَّ هُوَ الْحَيُّ الْقَيُّومُ لاَ تَأْخُذُهُ سِنَةٌ وَلاَ نَوْمٌ لَّهُ مَا فِي السَّمَاوَاتِ وَمَا فِي الأَرْضِ مَن ذَا الَّذِي يَشْفَعُ عِنْدَهُ إِلاَّ بِإِذْنِهِ يَعْلَمُ مَا بَيْنَ أَيْدِيهِمْ وَمَا خَلْفَهُمْ وَلاَ يُحِيطُونَ بِشَيْءٍ مِّنْ عِلْمِهِ إِلاَّ بِمَا شَاء وَسِعَ كُرْسِيُّهُ السَّمَاوَاتِ وَالأَرْضَ وَلاَ يَؤُودُهُ حِفْظُهُمَا وَهُوَ الْعَلِيُّ الْعَظِيمُ.'
+                      '',
                       style: TextStyle(
                         fontSize: 20,
                         fontWeight: FontWeight.bold,
@@ -1993,20 +2013,12 @@ backgroundColor: buttonColor,        ),
                       bottom: 10,
                     ),
                     padding:
-                    EdgeInsets.only(top: 5, bottom: 5, left: 5, right: 8),
+                        EdgeInsets.only(top: 5, bottom: 5, left: 5, right: 8),
                   ),
-
-
-
                 ],
               ),
             ),
           ],
         ));
-
   }
 }
-
-
-
-

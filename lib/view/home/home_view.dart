@@ -10,6 +10,7 @@ import 'package:prayer_app/view/home/nav_bar_screens/prayer_view.dart';
 import 'package:prayer_app/view/home/nav_bar_screens/quran.dart';
 import 'package:prayer_app/view/home/nav_bar_screens/startup_view.dart';
 import 'package:prayer_app/widgets/custom_text.dart';
+import 'package:shared_preferences/shared_preferences.dart';
 
 import '../sibha/sibha_view.dart';
 
@@ -22,7 +23,8 @@ class HomeView extends StatefulWidget {
 
 class _HomeViewState extends State<HomeView> {
   int selectedPage = 2;
-  final _pageNo = [  Azkar(), const Quran(),const StartUp(),const Fasting(),Prayer()];
+  final _pageNo = [  Azkar(), const Quran(),const StartUp(),Prayer()];
+
 
   @override
   Widget build(BuildContext context) {
@@ -50,10 +52,6 @@ class _HomeViewState extends State<HomeView> {
           BottomNavigationBarItem(
             icon: Icon(Icons.home_outlined,color: Colors.blue[900],),
             label: 'رئيسيه',
-          ),
-          BottomNavigationBarItem(
-            icon: Icon(FlutterIslamicIcons.iftar,color: Colors.blue[900],),
-            label: 'الصيام',
           ),
           BottomNavigationBarItem(
             icon: Icon(FlutterIslamicIcons.prayingPerson,color: Colors.blue[900],),
