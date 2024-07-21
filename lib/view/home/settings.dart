@@ -1,10 +1,12 @@
 import 'dart:ffi';
 
+import 'package:firebase_auth/firebase_auth.dart';
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter/widgets.dart';
 import 'package:flutter_islamic_icons/flutter_islamic_icons.dart';
 import 'package:get/get.dart';
+import 'package:prayer_app/view/auth/sign_in_view.dart';
 import 'package:provider/provider.dart';
 import 'package:shared_preferences/shared_preferences.dart';
 
@@ -18,6 +20,7 @@ class Settings extends StatefulWidget {
 }
 
 class _SettingsState extends State<Settings> {
+  FirebaseAuth auth = FirebaseAuth.instance;
   @override
   Widget build(BuildContext context) {
     return SafeArea(
@@ -136,9 +139,9 @@ class _SettingsState extends State<Settings> {
                       return Switch(
                           activeColor: CupertinoColors.white,
                           activeTrackColor: CupertinoColors.activeBlue,
-                          value: boolNotifier.value,
+                          value: boolNotifier.value1,
                           onChanged: (val) {
-                              boolNotifier.setValue(val);
+                              boolNotifier.setValue1(val);
                           });
                       },
                     ),
@@ -214,6 +217,41 @@ class _SettingsState extends State<Settings> {
                         ),
                       ),
                       Icon(FlutterIslamicIcons.quran),
+                    ],
+                  ),
+                  width: Get.width * .95,
+                  height: Get.height * .06,
+                  decoration: BoxDecoration(
+                      color: Colors.white,
+                      borderRadius: BorderRadius.circular(5),
+                      boxShadow: [
+                        BoxShadow(
+                            color: Colors.grey, blurRadius: 1, spreadRadius: .5)
+                      ]),
+                ),
+                SizedBox(
+                  height: Get.height * 0.02,
+                ),
+                Container(
+                  margin: const EdgeInsets.only(bottom: 12),
+                  padding: const EdgeInsets.symmetric(horizontal: 10),
+                  child: Row(
+                    mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                    children: [
+                      IconButton(
+                          onPressed: () {
+                            auth.signOut();
+                            Get.offAll( SignInView());
+                          }, icon: Icon(Icons.arrow_back_ios)),
+                      Text(
+                        textDirection: TextDirection.rtl,
+                        'تسجيل الخروج',
+                        style: TextStyle(
+                          fontSize: 20,
+                          fontWeight: FontWeight.bold,
+                          color: Colors.red
+                        ),
+                      ),
                     ],
                   ),
                   width: Get.width * .95,

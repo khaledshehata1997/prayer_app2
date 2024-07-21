@@ -24,9 +24,9 @@ class Prayer extends StatefulWidget {
 late PrayerTimeCalculator _prayerTimeCalculator;
 late DateTime _nextPrayerTime;
 late Timer _timer;
- int nxtDay = 0;
-class _PrayerState extends State<Prayer> with TickerProviderStateMixin {
 
+class _PrayerState extends State<Prayer> with TickerProviderStateMixin {
+  int nxtDay = 0;
   final DatabaseHelper dbHelper = DatabaseHelper();
   PrayerModel? prayerData;
   DateTime selectedDate = DateTime.now();
@@ -47,13 +47,14 @@ class _PrayerState extends State<Prayer> with TickerProviderStateMixin {
     _nextPrayerTime = DateTime(
       _prayerTimeCalculator.currentTime.year,
       _prayerTimeCalculator.currentTime.month,
-      _prayerTimeCalculator.currentTime.day + nxtDay,
+      _prayerTimeCalculator.currentTime.day,
       salahHours[_prayerTimeCalculator.salahCalc],
       salahMin[_prayerTimeCalculator.salahCalc],
     );
-    if (_prayerTimeCalculator.currentTime.isAfter(_nextPrayerTime)&& _nextPrayerTime.difference(DateTime.now()).isNegative) {
-     nxtDay++;
-    }
+    // if (_prayerTimeCalculator.currentTime.isAfter(_nextPrayerTime)&& _nextPrayerTime.difference(DateTime.now()).isNegative) {
+    //   _nextPrayerTime = _nextPrayerTime.add(Duration(days: 1));
+    // }
+    nxtDay = 0;
     _startTimer();
     _controller = TabController(
         initialIndex: _PrayerState._index, length: 2, vsync: this);
@@ -77,29 +78,30 @@ class _PrayerState extends State<Prayer> with TickerProviderStateMixin {
         _prayerTimeCalculator.updateCurrentTime();
       });
       Duration difference = _nextPrayerTime.difference(DateTime.now());
-      if (difference.isNegative || difference.inSeconds == 0 || difference.inHours >= 9) {
+      if (difference.isNegative || difference.inSeconds == 0 || difference.inHours >= 8) {
         _timer.cancel();
-        print("cancel");
         if(_prayerTimeCalculator.salahCalc == 4){
           setState(() {
             _prayerTimeCalculator.salahCalc = 0;
-            print(_prayerTimeCalculator.salahCalc.toString());
           });
 
-        }else{
+        }else if(_prayerTimeCalculator.salahCalc == 0 && _prayerTimeCalculator.currentTime.isAfter(_nextPrayerTime)){
+          nxtDay++;
+        }
+        else{
           setState(() {
             _prayerTimeCalculator.salahCalc++;
-            print(_prayerTimeCalculator.salahCalc.toString());
           });
 
         }
         _nextPrayerTime = DateTime(
           _prayerTimeCalculator.currentTime.year,
           _prayerTimeCalculator.currentTime.month,
-          _prayerTimeCalculator.currentTime.day,
+          _prayerTimeCalculator.currentTime.day + nxtDay,
           salahHours[_prayerTimeCalculator.salahCalc],
           salahMin[_prayerTimeCalculator.salahCalc],
         );
+        nxtDay = 0;
         _startTimer();
       }
 
@@ -112,7 +114,7 @@ class _PrayerState extends State<Prayer> with TickerProviderStateMixin {
     salahHours.add(int.parse(DateFormat.jm().format(getPrayerTime().maghrib)[0]) + 12);
     salahHours.add(int.parse(DateFormat.jm().format(getPrayerTime().isha)[0]) + 12);
     salahMin.add(int.parse(DateFormat.jm().format(getPrayerTime().fajr).substring(2,4)));
-    salahMin.add(int.parse(DateFormat.jm().format(getPrayerTime().dhuhr).substring(2,4)));
+    salahMin.add(int.parse(DateFormat.jm().format(getPrayerTime().dhuhr).substring(3,4)));
     salahMin.add(int.parse(DateFormat.jm().format(getPrayerTime().asr).substring(2,4)));
     salahMin.add(int.parse(DateFormat.jm().format(getPrayerTime().maghrib).substring(2,4)));
     salahMin.add(int.parse(DateFormat.jm().format(getPrayerTime().isha).substring(2,4)));

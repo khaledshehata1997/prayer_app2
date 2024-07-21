@@ -6,6 +6,7 @@ import 'package:prayer_app/view/auth/activate.dart';
 import 'package:prayer_app/view/auth/sign_in_view.dart';
 import 'package:prayer_app/widgets/custom_text.dart';
 import 'package:prayer_app/widgets/custom_text_form_field.dart';
+import 'package:shared_preferences/shared_preferences.dart';
 
 import '../../constants.dart';
 
@@ -86,6 +87,11 @@ class _SignUpViewState extends State<SignUpView> {
     }else{
       print("Not Valid");
     }
+  }
+  Future<void> storeUserData(String username, String email) async {
+    final prefs = await SharedPreferences.getInstance();
+    await prefs.setString('username', username);
+    await prefs.setString('email', email);
   }
   @override
   Widget build(BuildContext context) {
@@ -236,6 +242,7 @@ class _SignUpViewState extends State<SignUpView> {
                   SizedBox(height: Get.height*.016),
                   GestureDetector(
                     onTap: ()async{
+                      storeUserData(name.text, email.text);
                         UserCredential response = await signUp();
                         setState(() {
                           FirebaseAuth.instance.currentUser!.sendEmailVerification();

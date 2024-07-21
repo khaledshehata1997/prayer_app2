@@ -8,6 +8,7 @@ import 'package:flutter_islamic_icons/flutter_islamic_icons.dart';
 import 'package:get/get.dart';
 import 'package:get/get_core/src/get_main.dart';
 import 'package:intl/intl.dart' hide TextDirection;
+import 'package:prayer_app/view/home/dailyGoals.dart';
 import 'package:prayer_app/view/home/nav_bar_screens/prayer_model/PrayerTimeCalculator.dart';
 import 'package:prayer_app/view/home/nav_bar_screens/qiblah.dart';
 import 'package:intl/intl.dart' as intl;
@@ -28,6 +29,16 @@ class StartUp extends StatefulWidget {
 }
 
 class _StartUpState extends State<StartUp> {
+  Future<Map<String, String?>> getUserData() async {
+    final prefs = await SharedPreferences.getInstance();
+    final username = prefs.getString('username');
+    final email = prefs.getString('email');
+
+    return {
+      'username': username,
+      'email': email,
+    };
+  }
   List<String> salahName = ["الفجر", "الضهر", "العصر", "المغرب", "العشاء"];
   late PrayerTimeCalculator _prayerTimeCalculator;
   late DateTime _nextPrayerTime;
@@ -43,13 +54,10 @@ class _StartUpState extends State<StartUp> {
     _nextPrayerTime = DateTime(
       _prayerTimeCalculator.currentTime.year,
       _prayerTimeCalculator.currentTime.month,
-      _prayerTimeCalculator.currentTime.day + nxtDay,
+      _prayerTimeCalculator.currentTime.day,
       salahHours[_prayerTimeCalculator.salahCalc],
       salahMin[_prayerTimeCalculator.salahCalc],
     );
-    if (_prayerTimeCalculator.currentTime.isAfter(_nextPrayerTime)&& _nextPrayerTime.difference(DateTime.now()).isNegative) {
-      nxtDay++;
-    }
     _startTimer();
   }
   void _startTimer() {
@@ -58,29 +66,31 @@ class _StartUpState extends State<StartUp> {
         _prayerTimeCalculator.updateCurrentTime();
       });
       Duration difference = _nextPrayerTime.difference(DateTime.now());
-      if (difference.isNegative || difference.inSeconds == 0 || difference.inHours >= 9) {
+      if (difference.isNegative || difference.inSeconds == 0 || difference.inHours >= 8) {
         _timer.cancel();
-        print("cancel");
         if(_prayerTimeCalculator.salahCalc == 4){
           setState(() {
             _prayerTimeCalculator.salahCalc = 0;
-            print(_prayerTimeCalculator.salahCalc.toString());
           });
 
-        }else{
+
+        }else if(_prayerTimeCalculator.salahCalc == 0 && _prayerTimeCalculator.currentTime.isAfter(_nextPrayerTime)){
+          nxtDay++;
+        }
+        else{
           setState(() {
             _prayerTimeCalculator.salahCalc++;
-            print(_prayerTimeCalculator.salahCalc.toString());
           });
 
         }
         _nextPrayerTime = DateTime(
           _prayerTimeCalculator.currentTime.year,
           _prayerTimeCalculator.currentTime.month,
-          _prayerTimeCalculator.currentTime.day,
+          _prayerTimeCalculator.currentTime.day + nxtDay,
           salahHours[_prayerTimeCalculator.salahCalc],
           salahMin[_prayerTimeCalculator.salahCalc],
         );
+        nxtDay = 0;
         _startTimer();
       }
 
@@ -101,7 +111,7 @@ class _StartUpState extends State<StartUp> {
     salahHours.add(int.parse(DateFormat.jm().format(getPrayerTime().maghrib)[0]) + 12);
     salahHours.add(int.parse(DateFormat.jm().format(getPrayerTime().isha)[0]) + 12);
     salahMin.add(int.parse(DateFormat.jm().format(getPrayerTime().fajr).substring(2,4)));
-    salahMin.add(int.parse(DateFormat.jm().format(getPrayerTime().dhuhr).substring(2,4)));
+    salahMin.add(int.parse(DateFormat.jm().format(getPrayerTime().dhuhr).substring(3,4)));
     salahMin.add(int.parse(DateFormat.jm().format(getPrayerTime().asr).substring(2,4)));
     salahMin.add(int.parse(DateFormat.jm().format(getPrayerTime().maghrib).substring(2,4)));
     salahMin.add(int.parse(DateFormat.jm().format(getPrayerTime().isha).substring(2,4)));
@@ -113,7 +123,7 @@ class _StartUpState extends State<StartUp> {
   }
   @override
   Widget build(BuildContext context) {
-    final bool value = context.watch<BoolNotifier>().value;
+    final bool value = context.watch<BoolNotifier>().value1;
     return Scaffold(
       body: Stack(
         children: [
@@ -140,8 +150,10 @@ class _StartUpState extends State<StartUp> {
                       Row(
                         children: [
                           GestureDetector(
-                            onTap: (){
-                              Get.to(const Profile());
+                            onTap: ()async{
+                              final userData = await getUserData();
+                              Get.to(Profile(username: '${userData['username']}'
+                                , email: '${userData['email']}',));
                             },
                             child: CircleAvatar(
                               radius: 20,
@@ -236,7 +248,7 @@ class _StartUpState extends State<StartUp> {
                             Container(
                               child: TextButton(
                                 onPressed: () {
-                                  context.read<BoolNotifier>().setValue(false);
+                                  context.read<BoolNotifier>().setValue1(false);
                                 },
                                 child: Text(
                                   'اعادة التشغيل',
@@ -313,7 +325,7 @@ class _StartUpState extends State<StartUp> {
                   },
                   child: TextButton(
                     onPressed: (){
-
+                      Get.to(const DailyGoals());
                     },
                     child: Text(textDirection: TextDirection.rtl,
                       'عرض باقي اهداف اليوم',
