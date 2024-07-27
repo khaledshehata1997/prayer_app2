@@ -181,12 +181,35 @@ class _PrayerState extends State<Prayer> with TickerProviderStateMixin {
     return "${date.year}-${date.month.toString().padLeft(2, '0')}-${date.day.toString().padLeft(2, '0')}";
   }
   Future<void> _selectDate(BuildContext context) async {
-    final DateTime? picked = await showDatePicker(
+    final DateTime? picked = await  showDatePicker(
       context: context,
       initialDate: selectedDate,
-      firstDate: DateTime(2000),
-      lastDate: DateTime(2101),
+       firstDate: DateTime(2000),
+      lastDate: DateTime.now(),
+      builder: (context, child) {
+        return Theme(
+          data: Theme.of(context).copyWith(
+            colorScheme: ColorScheme.light(
+              primary: buttonColor, // header background color
+              onPrimary: Colors.white, // header text color
+              onSurface: buttonColor, // body text color
+            ),
+            textButtonTheme: TextButtonThemeData(
+              style: TextButton.styleFrom(
+                foregroundColor: buttonColor, // button text color
+              ),
+            ),
+          ),
+          child: child!,
+        );
+      },
     );
+    // showDatePicker(
+    //   context: context,
+    //   initialDate: selectedDate,
+    //   firstDate: DateTime(2000),
+    //   lastDate: DateTime.now(),
+    // );
     if (picked != null && picked != selectedDate) {
       setState(() {
         selectedDate = picked;
@@ -303,13 +326,16 @@ class _PrayerState extends State<Prayer> with TickerProviderStateMixin {
                 ),
 
                 TabBar(
+                  labelStyle: const TextStyle(fontSize: 17,fontWeight: FontWeight.bold,color: Colors.black),
+                  indicatorColor: Colors.blue[900],
+                  labelColor: Colors.blue[900],
                   controller: _controller,
-                  tabs: const [
+                  tabs:  [
                     Tab(
-                      text: 'الصلوات الفائته',
+                      text: "الصلوات الفائته",
                     ),
                     Tab(
-                      text: 'الصلوات اليومية',
+                      text: "الصلوات اليوميه",
                     ),
                   ],
                 ),

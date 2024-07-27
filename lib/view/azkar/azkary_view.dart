@@ -3,6 +3,8 @@ import 'dart:io';
 import 'package:flutter/material.dart';
 import 'package:get/get.dart';
 import 'package:get/get_core/src/get_main.dart';
+import 'package:image_picker/image_picker.dart';
+import 'package:shared_preferences/shared_preferences.dart';
 
 import '../home/profile.dart';
 import '../home/settings.dart';
@@ -15,10 +17,71 @@ class Azkary extends StatefulWidget {
 }
 
 class _AzkaryState extends State<Azkary> {
+  File? _image;
+  @override
+  void initState() {
+    super.initState();
+    _loadImage();
+  }
+  _loadImage() async {
+    SharedPreferences prefs = await SharedPreferences.getInstance();
+    String? imagePath = prefs.getString('imagePath1');
+    if (imagePath != null) {
+      setState(() {
+        _image = File(imagePath);
+      });
+    }
+  }
+  _openImagePicker() async {
+    final pickedFile = await ImagePicker().pickImage(source: ImageSource.gallery);
+    if (pickedFile != null) {
+      setState(() {
+        _image = File(pickedFile.path);
+      });
+      SharedPreferences prefs = await SharedPreferences.getInstance();
+      prefs.setString('imagePath1', pickedFile.path);
+    }
+  }
+  _showImagePickerDialog(BuildContext context) {
+    showDialog(
+      context: context,
+      builder: (BuildContext context) {
+        return AlertDialog(
+          title: Center(child: Text('من فضلك اختار صورة',textDirection: TextDirection.rtl,)),
+          content: Column(
+            mainAxisSize: MainAxisSize.min,
+            children: <Widget>[
+              ElevatedButton(
+                style: ElevatedButton.styleFrom(
+                    backgroundColor: Colors.blue[900]
+                ),
+                child: Text('اختار',textDirection: TextDirection.rtl,style: TextStyle(color: Colors.white),),
+                onPressed: () {
+                  _openImagePicker();
+                  _loadImage();
+                  setState(() {
+
+                  });
+                  Navigator.of(context).pop();
+                },
+              ),
+            ],
+          ),
+        );
+      },
+    );
+
+  }
 
   @override
   Widget build(BuildContext context) {
     return Scaffold(
+        floatingActionButton: FloatingActionButton(
+          backgroundColor: Colors.blue[900],
+          onPressed: () => _showImagePickerDialog(context),
+          tooltip: 'Pick Image',
+          child: Icon(Icons.add,color: Colors.white,),
+        ),
         body:Stack(
           children: [
             Container(
@@ -120,7 +183,7 @@ class _AzkaryState extends State<Azkary> {
                   height: Get.height * 0.7,
                   width: Get.width,
                   child: Center(
-                    child: widget.image == null ? Text('قم بأختيار صورة للعرض') : Image.file(widget.image!,fit: BoxFit.fill,),
+                    child: _image == null ? Text('قم بأختيار صورة للعرض') : Image.file(_image!,fit: BoxFit.fill,),
                   ),
                 ),
               ],

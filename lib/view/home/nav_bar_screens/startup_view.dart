@@ -10,8 +10,11 @@ import 'package:get/get_core/src/get_main.dart';
 import 'package:intl/intl.dart' hide TextDirection;
 import 'package:prayer_app/view/home/dailyGoals.dart';
 import 'package:prayer_app/view/home/nav_bar_screens/prayer_model/PrayerTimeCalculator.dart';
+import 'package:prayer_app/view/home/nav_bar_screens/prayer_model/prayerModel.dart';
+import 'package:prayer_app/view/home/nav_bar_screens/prayer_model/sqlite/database_helper.dart';
 import 'package:prayer_app/view/home/nav_bar_screens/qiblah.dart';
 import 'package:intl/intl.dart' as intl;
+import 'package:prayer_app/view/home/nav_bar_screens/quran/core/utils/assets_manager.dart';
 import 'package:prayer_app/view/home/profile.dart';
 import 'package:prayer_app/view/home/settings.dart';
 import 'package:provider/provider.dart';
@@ -40,6 +43,32 @@ class _StartUpState extends State<StartUp> {
       'email': email,
     };
   }
+  final DatabaseHelper dbHelper = DatabaseHelper();
+  PrayerModel? prayerData;
+  DateTime selectedDate = DateTime.now();
+  String formattedDate = DateFormat('yyyy-MM-dd').format(DateTime.now());
+  String _formatDate(DateTime date) {
+    return "${date.year}-${date.month.toString().padLeft(2, '0')}-${date.day.toString().padLeft(2, '0')}";
+  }
+  void _savePrayerData() async {
+    if (prayerData != null) {
+      await dbHelper.insertPrayer(prayerData!);
+    }
+  }
+  void _getPrayerData() async {
+    prayerData = await dbHelper.getPrayer(_formatDate(selectedDate));
+    if (prayerData == null) {
+      prayerData = PrayerModel(
+        day: _formatDate(selectedDate),
+        prayer1: false,
+        prayer2: false,
+        prayer3: false,
+        prayer4: false,
+        prayer5: false,
+      );
+    }
+    setState(() {});
+  }
 
   List<String> salahName = ["الفجر", "الضهر", "العصر", "المغرب", "العشاء"];
   late PrayerTimeCalculator _prayerTimeCalculator;
@@ -52,6 +81,7 @@ class _StartUpState extends State<StartUp> {
   @override
   void initState() {
     super.initState();
+    _getPrayerData();
     _salah();
     _prayerTimeCalculator = PrayerTimeCalculator();
     _nextPrayerTime = DateTime(
@@ -139,9 +169,97 @@ class _StartUpState extends State<StartUp> {
   Widget build(BuildContext context) {
     final bool value = context.watch<BoolNotifier>().value1;
     return Scaffold(
+      appBar: PreferredSize(
+          preferredSize: Size(double.infinity, Get.height * .30),
+          // here the desired height
+          child: Stack(
+            alignment: Alignment.center,
+            children: [
+              AppBar(
+                elevation: 0,
+                automaticallyImplyLeading: false,
+                backgroundColor: Colors.white,
+                shape: RoundedRectangleBorder(
+                  borderRadius: BorderRadius.vertical(
+                    bottom: Radius.circular(30),
+                  ),
+                ),
+              ),
+              Image.asset(
+                'images/Rectangle 1.png',
+                fit: BoxFit.fitWidth,
+                width: Get.width,
+              ),
+              Padding(
+                padding:
+                    const EdgeInsets.symmetric(vertical: 35, horizontal: 5),
+                child: Column(
+                  mainAxisAlignment: MainAxisAlignment.spaceAround,
+                  children: [
+                    Row(
+                      mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                      children: [
+                        Row(
+                          children: [
+                            GestureDetector(
+                              onTap: () async {
+                                final userData = await getUserData();
+                                Get.off(Profile(
+                                  username: '${userData['username']}',
+                                  email: '${userData['email']}',
+                                ));
+                              },
+                              child: CircleAvatar(
+                                radius: 15,
+                                backgroundColor: Colors.white,
+                                child: Image.asset(
+                                  'icons/img_1.png',
+                                  width: 20,
+                                  height: 20,
+                                ),
+                              ),
+                            ),
+                          ],
+                        ),
+                        SizedBox(
+                          width: 15,
+                        ),
+                        GestureDetector(
+                          onTap: () {
+                            Get.to(const Settings());
+                          },
+                          child: CircleAvatar(
+                            radius: 15,
+                            child: Image.asset(
+                              'icons/img.png',
+                              width: 20,
+                              height: 20,
+                            ),
+                            backgroundColor: Colors.white,
+                          ),
+                        )
+                      ],
+                    ),
+                    SizedBox(
+                      height: 5,
+                    ),
+                    Container(
+                      alignment: Alignment.center,
+                      child: Text(
+                        'الأذان القادم صلاه ${salahName[_prayerTimeCalculator.salahCalc]}',
+                        style: TextStyle(
+                            fontSize: 23,
+                            fontWeight: FontWeight.w800,
+                            color: Colors.white),
+                      ),
+                    ),
+                  ],
+                ),
+              ),
+            ],
+          )),
       body: Stack(
         children: [
-
           Container(
             height: MediaQuery.of(context).size.height,
             width: MediaQuery.of(context).size.width,
@@ -157,97 +275,6 @@ class _StartUpState extends State<StartUp> {
           SingleChildScrollView(
             child: Column(
               children: [
-                SizedBox(
-                  height: Get.height * 0.05,
-                ),
-                Padding(
-                  padding: const EdgeInsets.all(15.0),
-                  child: Row(
-                    mainAxisAlignment: MainAxisAlignment.spaceBetween,
-                    children: [
-                      Row(
-                        children: [
-                          GestureDetector(
-                            onTap: () async {
-                              final userData = await getUserData();
-                              Get.to(Profile(
-                                username: '${userData['username']}',
-                                email: '${userData['email']}',
-                              ));
-                            },
-                            child: CircleAvatar(
-                              radius: 20,
-                              backgroundColor: Colors.grey.shade400,
-                              child: Image.asset(
-                                'icons/img_1.png',
-                                width: 20,
-                                height: 20,
-                              ),
-                            ),
-                          ),
-                        ],
-                      ),
-                      Row(
-                        children: [
-                          // CircleAvatar(
-                          //   child: Icon(Icons.notifications_none),
-                          //   backgroundColor: Colors.grey.shade400,
-                          //   radius: 20,
-                          // ),
-                          SizedBox(
-                            width: 15,
-                          ),
-                          GestureDetector(
-                            onTap: () {
-                              Get.to(const Settings());
-                            },
-                            child: CircleAvatar(
-                              radius: 20,
-                              child: Image.asset(
-                                'icons/img.png',
-                                width: 20,
-                                height: 20,
-                              ),
-                              backgroundColor: Colors.grey.shade400,
-                            ),
-                          ),
-                        ],
-                      )
-                    ],
-                  ),
-                ),
-                SizedBox(
-                  height: Get.height * 0.04,
-                ),
-                Stack(
-                  alignment: Alignment.center,
-                  children: [
-                    Image.asset(
-                      'images/back ground2.jpeg',
-                    ),
-                    Padding(
-                      padding: const EdgeInsets.symmetric(horizontal: 15),
-                      child: Column(
-                        children: [
-                          Container(
-                            alignment: Alignment.center,
-                            child: Text(
-                              'الأذان القادم صلاه ${salahName[_prayerTimeCalculator.salahCalc]}',
-                              style: TextStyle(
-                                  fontSize: 25,
-                                  fontWeight: FontWeight.bold,
-                                  color: Colors.white),
-                              textDirection: TextDirection.rtl,
-                            ),
-                          )
-                        ],
-                      ),
-                    )
-                  ],
-                ),
-                SizedBox(
-                  height: Get.height * 0.04,
-                ),
                 Container(
                   margin: EdgeInsets.symmetric(horizontal: 10),
                   alignment: Alignment.topRight,
@@ -328,26 +355,70 @@ class _StartUpState extends State<StartUp> {
                               'الفجر',
                               (intl.DateFormat.jm()
                                       .format(getPrayerTime().fajr))
-                                  .replaceAll('AM', "ص")),
+                                  .replaceAll('AM', "ص"),"images/Illustrator.png",Checkbox(
+                            //tristate: true,
+                              activeColor: Colors.blue[900],
+                              value: prayerData == null ? false : prayerData!.prayer1,
+                              onChanged: (value){
+                                setState(() {
+                                  prayerData!.prayer1 = value!;
+                                });
+                                _savePrayerData();
+                              })),
                           SlahBox(
                               'الظهر',
                               (intl.DateFormat.jm()
-                                  .format(getPrayerTime().dhuhr))
-                                  .replaceAll('PM', "م")),
-                          SlahBox('العصر',
-                              (intl.DateFormat.jm()
-                                  .format(getPrayerTime().asr))
-                                  .replaceAll('PM', "م")),
+                                      .format(getPrayerTime().dhuhr))
+                                  .replaceAll('PM', "م"),"images/1.png",Checkbox(
+                            //tristate: true,
+                              activeColor: Colors.blue[900],
+                              value: prayerData == null ? false : prayerData!.prayer2,
+                              onChanged: (value){
+                                setState(() {
+                                  prayerData!.prayer2 = value!;
+                                });
+                                _savePrayerData();
+                              })),
+                          SlahBox(
+                              'العصر',
+                              (intl.DateFormat.jm().format(getPrayerTime().asr))
+                                  .replaceAll('PM', "م"),"images/Union (1).png",Checkbox(
+                            //tristate: true,
+                              activeColor: Colors.blue[900],
+                              value: prayerData == null ? false : prayerData!.prayer3,
+                              onChanged: (value){
+                                setState(() {
+                                  prayerData!.prayer3 = value!;
+                                });
+                                _savePrayerData();
+                              })),
                           SlahBox(
                               'المغرب',
                               (intl.DateFormat.jm()
-                                  .format(getPrayerTime().maghrib))
-                                  .replaceAll('PM', "م")),
+                                      .format(getPrayerTime().maghrib))
+                                  .replaceAll('PM', "م"),"images/Illustrator (2).png",Checkbox(
+                            //tristate: true,
+                              activeColor: Colors.blue[900],
+                              value: prayerData == null ? false : prayerData!.prayer4, onChanged: (value){
+                            setState(() {
+                              prayerData!.prayer4 = value!;
+                            });
+                            _savePrayerData();
+                          })),
                           SlahBox(
                               'العشاء',
                               (intl.DateFormat.jm()
-                                  .format(getPrayerTime().isha))
-                                  .replaceAll('PM', "م")),
+                                      .format(getPrayerTime().isha))
+                                  .replaceAll('PM', "م"),"images/Illustrator (1).png",Checkbox(
+                            //tristate: true,
+                              activeColor: Colors.blue[900],
+                              value: prayerData == null ? false : prayerData!.prayer5,
+                              onChanged: (value){
+                                setState(() {
+                                  prayerData!.prayer5 = value!;
+                                });
+                                _savePrayerData();
+                              })),
                         ],
                       ),
                 SizedBox(
@@ -393,10 +464,7 @@ class _StartUpState extends State<StartUp> {
                       child: Container(
                         child: Column(
                           children: [
-                            Icon(
-                              FlutterIslamicIcons.solidQibla2,
-                              color: Colors.blue[900],
-                            ),
+                            Image.asset("images/Group (1).png"),
                             Text(
                               'القبلة',
                               style: TextStyle(
@@ -425,10 +493,7 @@ class _StartUpState extends State<StartUp> {
                       child: Container(
                         child: Column(
                           children: [
-                            Icon(
-                              FlutterIslamicIcons.quran,
-                              color: Colors.blue[900],
-                            ),
+                            Image.asset("images/Group.png"),
                             Text(
                               'الرقيه الشرعيه',
                               style: TextStyle(
@@ -457,10 +522,7 @@ class _StartUpState extends State<StartUp> {
                       child: Container(
                         child: Column(
                           children: [
-                            Icon(
-                              FlutterIslamicIcons.solidTasbih2,
-                              color: Colors.blue[900],
-                            ),
+                            Image.asset("images/noto_prayer-beads.png"),
                             Text(
                               'السبحة',
                               style: TextStyle(
@@ -492,14 +554,22 @@ class _StartUpState extends State<StartUp> {
     );
   }
 
-  Widget SlahBox(text, time) {
+  Widget SlahBox(text, time,icn,chkbox) {
     return Container(
       margin: EdgeInsets.only(bottom: 12),
       padding: EdgeInsets.symmetric(horizontal: 10),
+      width: Get.width * .95,
+      height: Get.height * .06,
+      decoration: BoxDecoration(
+          color: Colors.white,
+          borderRadius: BorderRadius.circular(5),
+          boxShadow: [
+            BoxShadow(color: Colors.grey, blurRadius: 1, spreadRadius: .5)
+          ]),
       child: Row(
         mainAxisAlignment: MainAxisAlignment.spaceAround,
         children: [
-          Checkbox(value: false, onChanged: (_) {}),
+          chkbox,
           Text(
             textDirection: TextDirection.rtl,
             '$time',
@@ -518,22 +588,16 @@ class _StartUpState extends State<StartUp> {
                   fontWeight: FontWeight.bold,
                 ),
               ),
-              Icon(
-                Icons.sunny_snowing,
-                color: Colors.blue[900],
+              SizedBox(
+                width: Get.width * .02,
+              ),
+              Image.asset(
+                icn
               )
             ],
           )
         ],
       ),
-      width: Get.width * .95,
-      height: Get.height * .06,
-      decoration: BoxDecoration(
-          color: Colors.white,
-          borderRadius: BorderRadius.circular(5),
-          boxShadow: [
-            BoxShadow(color: Colors.grey, blurRadius: 1, spreadRadius: .5)
-          ]),
     );
   }
 }

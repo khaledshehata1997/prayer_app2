@@ -142,8 +142,6 @@ class _QuranState extends State<Quran> {
                       "قراءه القران الكريم",
                       textDirection: TextDirection.rtl,
                     ),
-                    IconButton(
-                        onPressed: () {}, icon: Icon(Icons.menu_book_outlined))
                   ],
                 ),
                 width: Get.width * .95,
@@ -175,8 +173,6 @@ class _QuranState extends State<Quran> {
                       "الرقية الشرعية",
                       textDirection: TextDirection.rtl,
                     ),
-                    IconButton(
-                        onPressed: () {}, icon: Icon(Icons.menu_book_outlined))
                   ],
                 ),
                 width: Get.width * .95,
