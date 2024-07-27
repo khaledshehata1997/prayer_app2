@@ -7,6 +7,8 @@ class BoolNotifier extends ChangeNotifier {
   bool _value3 = false;
   bool _value4 = false;
   bool _value5 = false;
+  bool _male = false;
+  bool _female = false;
   int _counter = 0;
 
   bool get value1 => _value1;
@@ -14,6 +16,8 @@ class BoolNotifier extends ChangeNotifier {
   bool get value3 => _value3;
   bool get value4 => _value4;
   bool get value5 => _value5;
+  bool get male => _male;
+  bool get female => _female;
   int get counter => _counter;
 
   BoolNotifier() {
@@ -27,6 +31,8 @@ class BoolNotifier extends ChangeNotifier {
     _value3 = prefs.getBool('my_bool_key3') ?? false;
     _value4 = prefs.getBool('my_bool_key4') ?? false;
     _value5 = prefs.getBool('my_bool_key5') ?? false;
+    _male = prefs.getBool('my_bool_male') ?? false;
+    _female = prefs.getBool('my_bool_female') ?? false;
     _counter = prefs.getInt('my_counter_key') ?? 0;
     notifyListeners();
   }
@@ -90,5 +96,29 @@ class BoolNotifier extends ChangeNotifier {
       await _updateCounter(newValue);
       notifyListeners();
     }
+  }
+  Future<void> setMale(bool newValue) async {
+    if (_male != newValue) {
+      _male = newValue;
+      final prefs = await SharedPreferences.getInstance();
+      await prefs.setBool('my_bool_male', newValue);
+      await _updateCounter(newValue);
+      notifyListeners();
+    }
+  }
+  Future<void> setFemale(bool newValue) async {
+    if (_female != newValue) {
+      _female = newValue;
+      final prefs = await SharedPreferences.getInstance();
+      await prefs.setBool('my_bool_female', newValue);
+      await _updateCounter(newValue);
+      notifyListeners();
+    }
+  }
+  String? validateSelection() {
+    if (!male && !female) {
+      return 'من فضلك اختار النوع';
+    }
+    return null;
   }
 }

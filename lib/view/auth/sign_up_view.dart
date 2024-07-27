@@ -1,14 +1,18 @@
 import 'package:awesome_dialog/awesome_dialog.dart';
 import 'package:firebase_auth/firebase_auth.dart';
+import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
+import 'package:flutter/widgets.dart';
 import 'package:get/get.dart';
 import 'package:prayer_app/view/auth/activate.dart';
 import 'package:prayer_app/view/auth/sign_in_view.dart';
 import 'package:prayer_app/widgets/custom_text.dart';
 import 'package:prayer_app/widgets/custom_text_form_field.dart';
+import 'package:provider/provider.dart';
 import 'package:shared_preferences/shared_preferences.dart';
 
 import '../../constants.dart';
+import '../../provider/boolNotifier.dart';
 
 class SignUpView extends StatefulWidget {
   const SignUpView({super.key});
@@ -26,6 +30,7 @@ class _SignUpViewState extends State<SignUpView> {
   TextEditingController pass = TextEditingController();
   GlobalKey<FormState> formState = GlobalKey<FormState>();
   bool isScure = true;
+
   signUp() async {
     var formData = formState.currentState;
     if(formData!.validate()){
@@ -95,6 +100,8 @@ class _SignUpViewState extends State<SignUpView> {
   }
   @override
   Widget build(BuildContext context) {
+    final boolNotifier = Provider.of<BoolNotifier>(context);
+    String? errorMessage = boolNotifier.validateSelection();
     return Scaffold(
       body: SafeArea(
         child: Form(
@@ -186,40 +193,91 @@ class _SignUpViewState extends State<SignUpView> {
                   Row(
                     mainAxisAlignment: MainAxisAlignment.spaceAround,
                     children: [
-                      Container(
-                        alignment: Alignment.center,
-                        width: Get.width*.45,
-                        height: Get.height*.12,
+                      InkWell(
+                        onTap: (){
+                          boolNotifier.setMale(!boolNotifier.male);
+                          if(boolNotifier.male&&boolNotifier.female){
+                            boolNotifier.setFemale(false);
+                          }
+                        },
                         child: Container(
-                          child: Image.asset('images/worker.png'),
-                          width: 55,
-                          height: 40,
+                          alignment: Alignment.center,
+                          width: Get.width*.45,
+                          height: Get.height*.12,
+                          child: Container(
+                            child: Image.asset('images/male.png'),
+                            width: 100,
+                            height: 80,
+                          ),
                           decoration: BoxDecoration(
-                              color: Colors.white,
-                              borderRadius: BorderRadius.circular(30)),
+                              color: boolNotifier.male ? Colors.blue[900] :Colors.grey,
+                              borderRadius: BorderRadius.circular(15)),
                         ),
-                        decoration: BoxDecoration(
-                            color: Colors.pinkAccent,
-                            borderRadius: BorderRadius.circular(15)),
                       ),
-                      Container(
-                        alignment: Alignment.center,
-                        width: Get.width*.45,
-                        height: Get.height*.12,
+                      InkWell(
+                        onTap: (){
+                          boolNotifier.setFemale(!boolNotifier.female);
+                                        if(boolNotifier.female&&boolNotifier.male) {
+                                          boolNotifier.setMale(false);
+                                        }
+                        },
                         child: Container(
-                          child: Image.asset('images/businessman.png'),
-                          width: 55,
-                          height: 40,
+                          alignment: Alignment.center,
+                          width: Get.width*.45,
+                          height: Get.height*.12,
+                          child: Container(
+                            child: Image.asset('images/female.png'),
+                            width: 100,
+                            height: 80,
+                          ),
                           decoration: BoxDecoration(
-                              color: Colors.white,
-                              borderRadius: BorderRadius.circular(30)),
+                              color: boolNotifier.female ? Colors.blue[900]  :Colors.grey,
+                              borderRadius: BorderRadius.circular(15)),
                         ),
-                        decoration: BoxDecoration(
-                            color: Colors.blue,
-                            borderRadius: BorderRadius.circular(15)),
                       ),
                     ],
                   ),
+                  if (errorMessage != null)
+                    Padding(
+                      padding: const EdgeInsets.only(top: 10.0),
+                      child: Text(
+                        errorMessage,
+                        style: TextStyle(color: Colors.red),
+                      ),
+                    ),
+                  // Row(
+                  //   mainAxisAlignment: MainAxisAlignment.spaceAround,
+                  //   children: [
+                  //     Row(
+                  //       children: [
+                  //         Checkbox(
+                  //             activeColor: Colors.blue[900],
+                  //             value: boolNotifier.female,
+                  //             onChanged: (val){
+                  //               boolNotifier.setFemale(val!);
+                  //               if(val&&boolNotifier.male){
+                  //                 boolNotifier.setMale(false);
+                  //               }
+                  //             }),
+                  //         Text("انثي",textDirection: TextDirection.rtl,)
+                  //       ],
+                  //     ),
+                  //     Row(
+                  //       children: [
+                  //         Checkbox(
+                  //           activeColor: Colors.blue[900],
+                  //             value: boolNotifier.male,
+                  //             onChanged: (val){
+                  //               boolNotifier.setMale(val!);
+                  //               if(val&&boolNotifier.female){
+                  //                 boolNotifier.setFemale(false);
+                  //               }
+                  //             }),
+                  //         Text("ذكر",textDirection: TextDirection.rtl,)
+                  //       ],
+                  //     ),
+                  //   ],
+                  // ),
                   SizedBox(height: Get.height*.016),
 
                   CustomText(
@@ -242,12 +300,20 @@ class _SignUpViewState extends State<SignUpView> {
                   SizedBox(height: Get.height*.016),
                   GestureDetector(
                     onTap: ()async{
-                      storeUserData(name.text, email.text);
+                      errorMessage = boolNotifier.validateSelection();
+
+                      if (errorMessage == null) {
+                        storeUserData(name.text, email.text);
                         UserCredential response = await signUp();
                         setState(() {
                           FirebaseAuth.instance.currentUser!.sendEmailVerification();
                         });
-                        Get.to(Activate());
+                        Get.to(const Activate());
+                      } else {
+                        ScaffoldMessenger.of(context).showSnackBar(
+                          SnackBar(content: Text(errorMessage!)),
+                        );
+                      }
                     },
                     child: Container(
                       alignment: Alignment.center,

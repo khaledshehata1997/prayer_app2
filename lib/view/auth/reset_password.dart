@@ -5,6 +5,8 @@ import 'package:firebase_auth/firebase_auth.dart';
 import 'package:flutter/material.dart';
 import 'package:get/get.dart';
 
+import '../../widgets/custom_text_form_field.dart';
+
 
 class ResetPasswordView extends StatelessWidget {
   ResetPasswordView({Key? key}) : super(key: key);
@@ -15,8 +17,10 @@ class ResetPasswordView extends StatelessWidget {
   Widget build(BuildContext context) {
     return Scaffold(
       appBar: AppBar(
+        backgroundColor: Colors.blue[900],
         centerTitle: true,
-        title: const Text('إعادة تعيين كلمة السر'),
+        iconTheme: const IconThemeData(color: Colors.white),
+        title: const Text('إعادة تعيين كلمة السر',style:TextStyle(color: Colors.white),),
       ),
       body: Padding(
         padding: const EdgeInsets.all(20.0),
@@ -25,19 +29,26 @@ class ResetPasswordView extends StatelessWidget {
           child: Column(
             children: [
               SizedBox(height: 50,),
-              TextFormField(
+              CustomTextFormField(
+                txt1: "البريد الألكتروني لا يمكن ان يكون اكبر من 100 حرف",
+                txt2: "البريد الألكتروني لا يمكن ان يكون اقل من 4 احرف",
                 controller: _emailController,
-                decoration: const InputDecoration(
-                  labelText: 'البريد الالكتروني',
-                ),
+                onChanged: () {},
+                hint: 's@gmail.com',
+                scure: false,
               ),
-              const SizedBox(
-                height: 100,
+               SizedBox(
+                height: Get.height * .04,
               ),
               SizedBox(
                 width: double.infinity,
+                height: Get.height * .06,
                 child: ElevatedButton(
-                  style: ElevatedButton.styleFrom(backgroundColor: Colors.blue[900]),
+                  style: ElevatedButton.styleFrom(backgroundColor: Colors.blue[900],
+                    shape: RoundedRectangleBorder(
+                        borderRadius: BorderRadius.circular(8.0),
+                    )
+                  ),
                   onPressed: () async {
                     await ResetPasswordService()
                         .resetPassword(_emailController.text.trim());
@@ -48,6 +59,7 @@ class ResetPasswordView extends StatelessWidget {
                         backgroundColor: Colors.green);
                   },
                   child: const Text('اعاده تعيين كلمه السر',style: TextStyle(
+                    fontSize: 20,
                       color: Colors.white
                   ),),
                 ),

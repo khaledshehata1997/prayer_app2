@@ -1,9 +1,12 @@
+import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_qiblah/flutter_qiblah.dart';
 import 'package:get/get.dart';
 import 'package:prayer_app/qiblah/qiblah_compass.dart';
 import 'package:prayer_app/qiblah/qiblah_maps.dart';
 import '../../../qiblah/loading_indicator.dart';
+import '../profile.dart';
+import '../settings.dart';
 
 class Qiblah extends StatefulWidget {
   @override
@@ -17,100 +20,134 @@ class _QiblahState extends State<Qiblah> {
   Widget build(BuildContext context) {
     return SafeArea(
       child: Scaffold(
-          appBar: PreferredSize(
-            preferredSize: Size(double.infinity,Get.height*.27), // here the desired height
-            child: Stack(
-              alignment: Alignment.center,
-              children: [
-                AppBar(
-                  elevation: 0,
-                  automaticallyImplyLeading: false,
-                  backgroundColor: Colors.white,
-                  shape: RoundedRectangleBorder(
-                    borderRadius: BorderRadius.vertical(
-                      bottom: Radius.circular(30),
+          body: Stack(
+            alignment: Alignment.topCenter,
+            children: [
+              Container(
+                height: MediaQuery.of(context).size.height,
+                width: MediaQuery.of(context).size.width,
+                //  margin: EdgeInsets.only(left: 2, top: 5, bottom: 5, right: 2),
+                decoration: BoxDecoration(
+                  image: DecorationImage(
+                      image: AssetImage('images/back ground.jpeg'),
+                      fit: BoxFit.cover),
+                  borderRadius: BorderRadius.circular(1),
+                  color: Colors.white,
+                ),
+              ),
+              Column(
+                children: [
+                  SizedBox(
+                    height: Get.height * 0.05,
+                  ),
+                  Padding(
+                    padding: EdgeInsets.symmetric(horizontal: 20),
+                    child: Row(
+                      mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                      children: [
+                        Row(
+                          children: [
+                            GestureDetector(
+                              onTap: ()async{
+                                final userData = await getUserData();
+                                Get.off(Profile(username: '${userData['username']}'
+                                  , email: '${userData['email']}',));
+                              },
+                              child: CircleAvatar(
+                                radius: 20,
+                                backgroundColor: Colors.grey.shade400,
+                                child: Image.asset(
+                                  'icons/img_1.png',
+                                  width: 20,
+                                  height: 20,
+                                ),
+                              ),
+                            ),
+                          ],
+                        ),
+                        Row(
+                          children: [
+                            SizedBox(
+                              width: 15,
+                            ),
+                            GestureDetector(
+                              onTap: (){
+                                Get.to(const Settings());
+                              },
+                              child: CircleAvatar(
+                                radius: 20,
+                                child: Image.asset(
+                                  'icons/img.png',
+                                  width: 20,
+                                  height: 20,
+                                ),
+                                backgroundColor: Colors.grey.shade400,
+                              ),
+                            ),
+                          ],
+                        )
+                      ],
                     ),
                   ),
-
-                ),
-                Image.asset('images/Rectangle 1.png',fit: BoxFit.fitWidth,
-                  width: Get.width, ),
-                Padding(
-                  padding: const EdgeInsets.symmetric(vertical: 35,horizontal: 10),
-                  child: Column(
-                    mainAxisAlignment: MainAxisAlignment.spaceAround  ,
+                  SizedBox(
+                    height: Get.height * .03,
+                  ),
+                  Stack(
+                    alignment: Alignment.center,
                     children: [
-                      Row(
-                        mainAxisAlignment: MainAxisAlignment.spaceBetween,
-                        children: [
-                          Row(
-                            children: [
-                              CircleAvatar(
-                                radius: 15,
-                                backgroundColor: Colors.white,
-                                child: Image.asset('icons/img_1.png',width: 20,height: 20,),
-                              ),
-                            ],
-                          ),
-                          Row(
-                            children: [
-                              CircleAvatar(
-                                child: Icon(Icons.notifications_none),
-                                backgroundColor: Colors.white,
-                                radius: 15,
-                              ),
-                              SizedBox(width: 15,),
-                              CircleAvatar(
-                                radius: 15,
-                                child: Image.asset('icons/img.png',width: 20,height: 20,),
-                                backgroundColor: Colors.white,
-                              ),
-                            ],
-                          )
-                        ],
+                      Image.asset(
+                        'images/back ground2.jpeg',
                       ),
-                      SizedBox(height: 5,),
-                      Container(
-                        alignment: Alignment.topRight,
-                        child: Text(
-                          'قال تعالي:'
-                          ,textDirection: TextDirection.rtl
-                          ,style: TextStyle(
-                            fontSize: 15,fontWeight: FontWeight.w800,color: Colors.white),
+                      Padding(
+                        padding: const EdgeInsets.symmetric(horizontal: 15),
+                        child: Column(
+                          children: [
+                            Container(
+                              alignment: Alignment.center,
+                              child: Text(
+                                'القبله',
+                                style: TextStyle(
+                                    fontSize: 20,
+                                    fontWeight: FontWeight.bold,
+                                    color: Colors.white),
+                              ),
+                            ),
+                            Container(
+                              alignment: Alignment.center,
+                              child: Text(
+                                'فَوَلِّ وَجْهَكَ شَطْرَ الْمَسْجِدِ الْحَرَامِ ۚ\n وَحَيْثُ مَا كُنتُمْ فَوَلُّوا وُجُوهَكُمْ شَطْرَهُ',
+                                style: TextStyle(
+                                    fontSize: 19,
+                                    fontWeight: FontWeight.bold,
+                                    color: Colors.white),
+                                textDirection: TextDirection.rtl,
+                              ),
+                            )
+                          ],
                         ),
-                      ),
-
-                      Container(
-                        alignment: Alignment.topRight,
-                        child: Text(
-                          '"فَوَلِّ وَجْهَكَ شَطْرَ الْمَسْجِدِ الْحَرَامِ ۚ وَحَيْثُ مَا كُنتُمْ فَوَلُّوا وُجُوهَكُمْ شَطْرَهُ"'
-                          ,textDirection: TextDirection.rtl
-                          ,style: TextStyle(
-                            fontSize: 25,color: Colors.white),
-                        ),
-                      ),
-
+                      )
                     ],
                   ),
-                ),
-              ],
-            ),
+                  Expanded(
+                    child: FutureBuilder(
+                      future: _deviceSupport,
+                      builder: (_, AsyncSnapshot<bool?> snapshot) {
+                        if (snapshot.connectionState == ConnectionState.waiting) return LoadingIndicator();
+                        if (snapshot.hasError)
+                          return Center(
+                            child: Text("Error: ${snapshot.error.toString()}"),
+                          );
 
-          ),
-          body: FutureBuilder(
-            future: _deviceSupport,
-            builder: (_, AsyncSnapshot<bool?> snapshot) {
-              if (snapshot.connectionState == ConnectionState.waiting) return LoadingIndicator();
-              if (snapshot.hasError)
-                return Center(
-                  child: Text("Error: ${snapshot.error.toString()}"),
-                );
-
-              if (snapshot.data!)
-                return QiblahCompass();
-              else
-                return QiblahMaps();
-            },
+                        if (snapshot.data!)
+                          return QiblahCompass();
+                        else
+                          return QiblahMaps();
+                      },
+                    ),
+                  ),
+                ],
+              ),
+            ],
           ),
         ),
     );

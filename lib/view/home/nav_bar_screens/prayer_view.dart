@@ -12,7 +12,10 @@ import 'package:prayer_app/view/home/nav_bar_screens/prayer_model/PrayerTimeCalc
 import 'package:prayer_app/view/home/nav_bar_screens/prayer_model/prayerModel.dart';
 import 'package:prayer_app/view/home/nav_bar_screens/prayer_model/prayerModelCurrent.dart';
 import 'package:prayer_app/view/home/nav_bar_screens/prayer_model/sqlite/database_helper.dart';
+import 'package:prayer_app/view/home/settings.dart';
+import 'package:shared_preferences/shared_preferences.dart';
 import '../../../constants.dart';
+import '../profile.dart';
 
 class Prayer extends StatefulWidget {
   const Prayer({super.key});
@@ -26,6 +29,16 @@ late DateTime _nextPrayerTime;
 late Timer _timer;
 
 class _PrayerState extends State<Prayer> with TickerProviderStateMixin {
+  Future<Map<String, String?>> getUserData() async {
+    final prefs = await SharedPreferences.getInstance();
+    final username = prefs.getString('username');
+    final email = prefs.getString('email');
+
+    return {
+      'username': username,
+      'email': email,
+    };
+  }
   int nxtDay = 0;
   final DatabaseHelper dbHelper = DatabaseHelper();
   PrayerModel? prayerData;
@@ -35,7 +48,6 @@ class _PrayerState extends State<Prayer> with TickerProviderStateMixin {
    List<int> salahMin = [];
    List<String> salahName = ["الفجر","الضهر", "العصر","المغرب","العشاء"];
   PrayerCurrent? prayerCurrent;
-  static int _index = 0;
   late TabController _controller;
   @override
   void initState(){
@@ -57,7 +69,7 @@ class _PrayerState extends State<Prayer> with TickerProviderStateMixin {
     nxtDay = 0;
     _startTimer();
     _controller = TabController(
-        initialIndex: _PrayerState._index, length: 2, vsync: this);
+        initialIndex: 1, length: 2, vsync: this);
   }
   @override
   void dispose() {
@@ -211,7 +223,7 @@ class _PrayerState extends State<Prayer> with TickerProviderStateMixin {
             Column(
               children: [
                 SizedBox(
-                  height: Get.height * .02,
+                  height: Get.height * 0.05,
                 ),
                 Padding(
                   padding: EdgeInsets.symmetric(horizontal: 20),
@@ -220,35 +232,42 @@ class _PrayerState extends State<Prayer> with TickerProviderStateMixin {
                     children: [
                       Row(
                         children: [
-                          CircleAvatar(
-                            radius: 20,
-                            backgroundColor: Colors.grey.shade400,
-                            child: Image.asset(
-                              'icons/img_1.png',
-                              width: 20,
-                              height: 20,
+                          GestureDetector(
+                            onTap: ()async{
+                              final userData = await getUserData();
+                              Get.off(Profile(username: '${userData['username']}'
+                                , email: '${userData['email']}',));
+                            },
+                            child: CircleAvatar(
+                              radius: 20,
+                              backgroundColor: Colors.grey.shade400,
+                              child: Image.asset(
+                                'icons/img_1.png',
+                                width: 20,
+                                height: 20,
+                              ),
                             ),
                           ),
                         ],
                       ),
                       Row(
                         children: [
-                          CircleAvatar(
-                            child: Icon(Icons.notifications_none),
-                            backgroundColor: Colors.grey.shade400,
-                            radius: 20,
-                          ),
                           SizedBox(
                             width: 15,
                           ),
-                          CircleAvatar(
-                            radius: 20,
-                            child: Image.asset(
-                              'icons/img.png',
-                              width: 20,
-                              height: 20,
+                          GestureDetector(
+                            onTap: (){
+                              Get.to(const Settings());
+                            },
+                            child: CircleAvatar(
+                              radius: 20,
+                              child: Image.asset(
+                                'icons/img.png',
+                                width: 20,
+                                height: 20,
+                              ),
+                              backgroundColor: Colors.grey.shade400,
                             ),
-                            backgroundColor: Colors.grey.shade400,
                           ),
                         ],
                       )
@@ -283,18 +302,16 @@ class _PrayerState extends State<Prayer> with TickerProviderStateMixin {
                   ],
                 ),
 
-                Container(
-                  child: TabBar(
-                    controller: _controller,
-                    tabs: const [
-                      Tab(
-                        text: 'الصلوات الفائته',
-                      ),
-                      Tab(
-                        text: 'الصلوات اليومية',
-                      ),
-                    ],
-                  ),
+                TabBar(
+                  controller: _controller,
+                  tabs: const [
+                    Tab(
+                      text: 'الصلوات الفائته',
+                    ),
+                    Tab(
+                      text: 'الصلوات اليومية',
+                    ),
+                  ],
                 ),
                 Expanded(
                   child: SizedBox(

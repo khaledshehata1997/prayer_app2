@@ -99,6 +99,9 @@ class _ProfileState extends State<Profile> {
           SingleChildScrollView(
             child: Column(
               children: [
+                SizedBox(
+                  height: Get.height * 0.05,
+                ),
                 Padding(
                   padding: const EdgeInsets.all(15.0),
                   child: Row(
@@ -132,7 +135,7 @@ class _ProfileState extends State<Profile> {
                           ),
                           GestureDetector(
                             onTap: () {
-                              Get.to(const Settings());
+                              Get.off(const Settings());
                             },
                             child: CircleAvatar(
                               radius: 20,

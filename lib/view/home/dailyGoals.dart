@@ -81,6 +81,9 @@ class _DailyGoalsState extends State<DailyGoals> {
               builder: (context, boolNotifier, child) {
                 return Column(
                   children: [
+                    SizedBox(
+                      height: Get.height * 0.05,
+                    ),
                     Padding(
                       padding: const EdgeInsets.all(15.0),
                       child: Row(

@@ -19,6 +19,7 @@ import 'package:shared_preferences/shared_preferences.dart';
 
 import '../../../constants.dart';
 import '../../../provider/boolNotifier.dart';
+import '../../roqua_view.dart';
 import '../../sibha/sibha_view.dart';
 
 class StartUp extends StatefulWidget {
@@ -39,6 +40,7 @@ class _StartUpState extends State<StartUp> {
       'email': email,
     };
   }
+
   List<String> salahName = ["الفجر", "الضهر", "العصر", "المغرب", "العشاء"];
   late PrayerTimeCalculator _prayerTimeCalculator;
   late DateTime _nextPrayerTime;
@@ -46,8 +48,9 @@ class _StartUpState extends State<StartUp> {
   int nxtDay = 0;
   List<int> salahHours = [];
   List<int> salahMin = [];
+
   @override
-  void initState(){
+  void initState() {
     super.initState();
     _salah();
     _prayerTimeCalculator = PrayerTimeCalculator();
@@ -60,28 +63,28 @@ class _StartUpState extends State<StartUp> {
     );
     _startTimer();
   }
+
   void _startTimer() {
     _timer = Timer.periodic(Duration(seconds: 1), (timer) {
       setState(() {
         _prayerTimeCalculator.updateCurrentTime();
       });
       Duration difference = _nextPrayerTime.difference(DateTime.now());
-      if (difference.isNegative || difference.inSeconds == 0 || difference.inHours >= 8) {
+      if (difference.isNegative ||
+          difference.inSeconds == 0 ||
+          difference.inHours >= 8) {
         _timer.cancel();
-        if(_prayerTimeCalculator.salahCalc == 4){
+        if (_prayerTimeCalculator.salahCalc == 4) {
           setState(() {
             _prayerTimeCalculator.salahCalc = 0;
           });
-
-
-        }else if(_prayerTimeCalculator.salahCalc == 0 && _prayerTimeCalculator.currentTime.isAfter(_nextPrayerTime)){
+        } else if (_prayerTimeCalculator.salahCalc == 0 &&
+            _prayerTimeCalculator.currentTime.isAfter(_nextPrayerTime)) {
           nxtDay++;
-        }
-        else{
+        } else {
           setState(() {
             _prayerTimeCalculator.salahCalc++;
           });
-
         }
         _nextPrayerTime = DateTime(
           _prayerTimeCalculator.currentTime.year,
@@ -93,10 +96,10 @@ class _StartUpState extends State<StartUp> {
         nxtDay = 0;
         _startTimer();
       }
-
     });
   }
-  PrayerTimes getPrayerTime(){
+
+  PrayerTimes getPrayerTime() {
     final myCoordinates = Coordinates(30.033333, 31.233334);
     final params = CalculationMethod.egyptian.getParameters();
     params.madhab = Madhab.shafi;
@@ -104,29 +107,41 @@ class _StartUpState extends State<StartUp> {
     return prayerTimes;
   }
 
-  void _salah(){
+  void _salah() {
     salahHours.add(int.parse(DateFormat.jm().format(getPrayerTime().fajr)[0]));
-    salahHours.add(int.parse(DateFormat.jm().format(getPrayerTime().dhuhr)[0]) + 12);
-    salahHours.add(int.parse(DateFormat.jm().format(getPrayerTime().asr)[0]) + 12);
-    salahHours.add(int.parse(DateFormat.jm().format(getPrayerTime().maghrib)[0]) + 12);
-    salahHours.add(int.parse(DateFormat.jm().format(getPrayerTime().isha)[0]) + 12);
-    salahMin.add(int.parse(DateFormat.jm().format(getPrayerTime().fajr).substring(2,4)));
-    salahMin.add(int.parse(DateFormat.jm().format(getPrayerTime().dhuhr).substring(3,4)));
-    salahMin.add(int.parse(DateFormat.jm().format(getPrayerTime().asr).substring(2,4)));
-    salahMin.add(int.parse(DateFormat.jm().format(getPrayerTime().maghrib).substring(2,4)));
-    salahMin.add(int.parse(DateFormat.jm().format(getPrayerTime().isha).substring(2,4)));
+    salahHours
+        .add(int.parse(DateFormat.jm().format(getPrayerTime().dhuhr)[0]) + 12);
+    salahHours
+        .add(int.parse(DateFormat.jm().format(getPrayerTime().asr)[0]) + 12);
+    salahHours.add(
+        int.parse(DateFormat.jm().format(getPrayerTime().maghrib)[0]) + 12);
+    salahHours
+        .add(int.parse(DateFormat.jm().format(getPrayerTime().isha)[0]) + 12);
+    salahMin.add(int.parse(
+        DateFormat.jm().format(getPrayerTime().fajr).substring(2, 4)));
+    salahMin.add(int.parse(
+        DateFormat.jm().format(getPrayerTime().dhuhr).substring(3, 4)));
+    salahMin.add(
+        int.parse(DateFormat.jm().format(getPrayerTime().asr).substring(2, 4)));
+    salahMin.add(int.parse(
+        DateFormat.jm().format(getPrayerTime().maghrib).substring(2, 4)));
+    salahMin.add(int.parse(
+        DateFormat.jm().format(getPrayerTime().isha).substring(2, 4)));
   }
+
   @override
   void dispose() {
     _timer.cancel();
     super.dispose();
   }
+
   @override
   Widget build(BuildContext context) {
     final bool value = context.watch<BoolNotifier>().value1;
     return Scaffold(
       body: Stack(
         children: [
+
           Container(
             height: MediaQuery.of(context).size.height,
             width: MediaQuery.of(context).size.width,
@@ -142,6 +157,9 @@ class _StartUpState extends State<StartUp> {
           SingleChildScrollView(
             child: Column(
               children: [
+                SizedBox(
+                  height: Get.height * 0.05,
+                ),
                 Padding(
                   padding: const EdgeInsets.all(15.0),
                   child: Row(
@@ -150,10 +168,12 @@ class _StartUpState extends State<StartUp> {
                       Row(
                         children: [
                           GestureDetector(
-                            onTap: ()async{
+                            onTap: () async {
                               final userData = await getUserData();
-                              Get.to(Profile(username: '${userData['username']}'
-                                , email: '${userData['email']}',));
+                              Get.to(Profile(
+                                username: '${userData['username']}',
+                                email: '${userData['email']}',
+                              ));
                             },
                             child: CircleAvatar(
                               radius: 20,
@@ -178,7 +198,7 @@ class _StartUpState extends State<StartUp> {
                             width: 15,
                           ),
                           GestureDetector(
-                            onTap: (){
+                            onTap: () {
                               Get.to(const Settings());
                             },
                             child: CircleAvatar(
@@ -304,39 +324,52 @@ class _StartUpState extends State<StartUp> {
                       )
                     : Column(
                         children: [
-                          SlahBox('الفجر',
-                              intl.DateFormat.jm().format(getPrayerTime().fajr)),
-                          SlahBox('الظهر',
-                              intl.DateFormat.jm().format(getPrayerTime().dhuhr)),
+                          SlahBox(
+                              'الفجر',
+                              (intl.DateFormat.jm()
+                                      .format(getPrayerTime().fajr))
+                                  .replaceAll('AM', "ص")),
+                          SlahBox(
+                              'الظهر',
+                              (intl.DateFormat.jm()
+                                  .format(getPrayerTime().dhuhr))
+                                  .replaceAll('PM', "م")),
                           SlahBox('العصر',
-                              intl.DateFormat.jm().format(getPrayerTime().asr)),
-                          SlahBox('المغرب',
-                              intl.DateFormat.jm().format(getPrayerTime().maghrib)),
-                          SlahBox('العشاء',
-                              intl.DateFormat.jm().format(getPrayerTime().isha)),
+                              (intl.DateFormat.jm()
+                                  .format(getPrayerTime().asr))
+                                  .replaceAll('PM', "م")),
+                          SlahBox(
+                              'المغرب',
+                              (intl.DateFormat.jm()
+                                  .format(getPrayerTime().maghrib))
+                                  .replaceAll('PM', "م")),
+                          SlahBox(
+                              'العشاء',
+                              (intl.DateFormat.jm()
+                                  .format(getPrayerTime().isha))
+                                  .replaceAll('PM', "م")),
                         ],
                       ),
                 SizedBox(
                   height: Get.height * 0.03,
                 ),
                 TextButton(
-                  onPressed: (){
-
-                  },
+                  onPressed: () {},
                   child: TextButton(
-                    onPressed: (){
+                    onPressed: () {
                       Get.to(const DailyGoals());
                     },
-                    child: Text(textDirection: TextDirection.rtl,
+                    child: Text(
+                      textDirection: TextDirection.rtl,
                       'عرض باقي اهداف اليوم',
                       style: TextStyle(
                         fontSize: 20,
                         fontWeight: FontWeight.bold,
                         color: buttonColor,
                         decoration: TextDecoration.underline,
-                      ),),
+                      ),
                     ),
-
+                  ),
                 ),
                 Container(
                   margin: EdgeInsets.all(15),
@@ -360,9 +393,44 @@ class _StartUpState extends State<StartUp> {
                       child: Container(
                         child: Column(
                           children: [
-                            Icon(FlutterIslamicIcons.solidQibla2,color: Colors.blue[900],),
+                            Icon(
+                              FlutterIslamicIcons.solidQibla2,
+                              color: Colors.blue[900],
+                            ),
                             Text(
                               'القبلة',
+                              style: TextStyle(
+                                  fontSize: 16, fontWeight: FontWeight.bold),
+                            )
+                          ],
+                          mainAxisAlignment: MainAxisAlignment.spaceAround,
+                        ),
+                        width: Get.width * .28,
+                        height: Get.height * .08,
+                        decoration: BoxDecoration(
+                            color: Colors.white,
+                            borderRadius: BorderRadius.circular(5),
+                            boxShadow: [
+                              BoxShadow(
+                                  color: Colors.grey,
+                                  blurRadius: 2,
+                                  spreadRadius: .5)
+                            ]),
+                      ),
+                    ),
+                    GestureDetector(
+                      onTap: () {
+                        Get.to(const Roqua());
+                      },
+                      child: Container(
+                        child: Column(
+                          children: [
+                            Icon(
+                              FlutterIslamicIcons.quran,
+                              color: Colors.blue[900],
+                            ),
+                            Text(
+                              'الرقيه الشرعيه',
                               style: TextStyle(
                                   fontSize: 16, fontWeight: FontWeight.bold),
                             )
@@ -389,7 +457,10 @@ class _StartUpState extends State<StartUp> {
                       child: Container(
                         child: Column(
                           children: [
-                            Icon(FlutterIslamicIcons.solidTasbih2,color: Colors.blue[900],),
+                            Icon(
+                              FlutterIslamicIcons.solidTasbih2,
+                              color: Colors.blue[900],
+                            ),
                             Text(
                               'السبحة',
                               style: TextStyle(
@@ -428,6 +499,7 @@ class _StartUpState extends State<StartUp> {
       child: Row(
         mainAxisAlignment: MainAxisAlignment.spaceAround,
         children: [
+          Checkbox(value: false, onChanged: (_) {}),
           Text(
             textDirection: TextDirection.rtl,
             '$time',
@@ -464,5 +536,4 @@ class _StartUpState extends State<StartUp> {
           ]),
     );
   }
-
 }

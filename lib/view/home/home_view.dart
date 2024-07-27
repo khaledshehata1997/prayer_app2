@@ -3,6 +3,7 @@ import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_islamic_icons/flutter_islamic_icons.dart';
 import 'package:get/get.dart';
+import 'package:persistent_bottom_nav_bar/persistent_bottom_nav_bar.dart';
 import 'package:prayer_app/constants.dart';
 import 'package:prayer_app/view/azkar/azkar_view.dart';
 import 'package:prayer_app/view/home/nav_bar_screens/fasting.dart';
@@ -11,7 +12,6 @@ import 'package:prayer_app/view/home/nav_bar_screens/quran.dart';
 import 'package:prayer_app/view/home/nav_bar_screens/startup_view.dart';
 import 'package:prayer_app/widgets/custom_text.dart';
 import 'package:shared_preferences/shared_preferences.dart';
-
 import '../sibha/sibha_view.dart';
 
 class HomeView extends StatefulWidget {
@@ -25,6 +25,7 @@ class _HomeViewState extends State<HomeView> {
   int selectedPage = 2;
   final _pageNo = [  Azkar(), const Quran(),const StartUp(),Prayer()];
 
+  PersistentTabController _controller = PersistentTabController(initialIndex: 0);
 
   @override
   Widget build(BuildContext context) {

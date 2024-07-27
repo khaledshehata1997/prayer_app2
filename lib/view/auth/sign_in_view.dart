@@ -3,6 +3,7 @@ import 'package:firebase_auth/firebase_auth.dart';
 import 'package:flutter/material.dart';
 import 'package:get/get.dart';
 import 'package:prayer_app/test.dart';
+import 'package:prayer_app/view/auth/reset_password.dart';
 import 'package:prayer_app/view/auth/sign_up_view.dart';
 import 'package:prayer_app/view/home/home_view.dart';
 import 'package:prayer_app/widgets/custom_text.dart';
@@ -115,18 +116,23 @@ class _SignUpViewState extends State<SignInView> {
                     hint: '***********',
                     scure: true,
                   ),
-                  CustomText(
-                    text: ' هل نسيت كلمة السر؟',
-                    size: 18,
-                    isBold: false,
-                    alignment: Alignment.topRight,
+                  GestureDetector(
+                    onTap: (){
+                      Get.to(ResetPasswordView());
+                    },
+                    child: CustomText(
+                      text: ' هل نسيت كلمة السر؟',
+                      size: 18,
+                      isBold: false,
+                      alignment: Alignment.topRight,
+                    ),
                   ),
 
                   GestureDetector(
                     onTap: () async{
                       var user =  await signIn();
                       if(user != null && FirebaseAuth.instance.currentUser!.emailVerified){
-                        Navigator.of(context).pushReplacement(MaterialPageRoute(builder: (context)=>const HomeView()));
+                       Get.offAll(const HomeView());
                       }else{
                         _isLoading = false;
                         setState(() {

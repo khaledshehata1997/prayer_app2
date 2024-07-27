@@ -2,6 +2,10 @@ import 'package:flutter/material.dart';
 import 'package:get/get.dart';
 import 'package:get/get_core/src/get_main.dart';
 import 'package:prayer_app/view/home/nav_bar_screens/quran/features/main_screen.dart';
+import 'package:prayer_app/view/roqua_view.dart';
+
+import '../profile.dart';
+import '../settings.dart';
 
 class Quran extends StatefulWidget {
   const Quran({super.key});
@@ -42,35 +46,42 @@ class _QuranState extends State<Quran> {
                   children: [
                     Row(
                       children: [
-                        CircleAvatar(
-                          radius: 20,
-                          backgroundColor: Colors.grey.shade400,
-                          child: Image.asset(
-                            'icons/img_1.png',
-                            width: 20,
-                            height: 20,
+                        GestureDetector(
+                          onTap: ()async{
+                            final userData = await getUserData();
+                            Get.off(Profile(username: '${userData['username']}'
+                              , email: '${userData['email']}',));
+                          },
+                          child: CircleAvatar(
+                            radius: 20,
+                            backgroundColor: Colors.grey.shade400,
+                            child: Image.asset(
+                              'icons/img_1.png',
+                              width: 20,
+                              height: 20,
+                            ),
                           ),
                         ),
                       ],
                     ),
                     Row(
                       children: [
-                        CircleAvatar(
-                          child: Icon(Icons.notifications_none),
-                          backgroundColor: Colors.grey.shade400,
-                          radius: 20,
-                        ),
                         SizedBox(
                           width: 15,
                         ),
-                        CircleAvatar(
-                          radius: 20,
-                          child: Image.asset(
-                            'icons/img.png',
-                            width: 20,
-                            height: 20,
+                        GestureDetector(
+                          onTap: (){
+                            Get.to(const Settings());
+                          },
+                          child: CircleAvatar(
+                            radius: 20,
+                            child: Image.asset(
+                              'icons/img.png',
+                              width: 20,
+                              height: 20,
+                            ),
+                            backgroundColor: Colors.grey.shade400,
                           ),
-                          backgroundColor: Colors.grey.shade400,
                         ),
                       ],
                     )
@@ -98,9 +109,9 @@ class _QuranState extends State<Quran> {
                         padding: const EdgeInsets.all(8.0),
                         child: Text(
                           textDirection: TextDirection.rtl,
-                          "اقرؤوا القران\n فأنه يأتي يوم القيامه شفيعا لأصحابه",
+                          "اقرؤوا القران فأنه يأتي يوم القيامه شفيعا لأصحابه",
                           style: TextStyle(
-                              fontSize: 19,
+                              fontSize: 17,
                               color: Colors.white,
                               fontWeight: FontWeight.bold),
                         ),
@@ -154,37 +165,9 @@ class _QuranState extends State<Quran> {
                 child: Row(
                   mainAxisAlignment: MainAxisAlignment.spaceBetween,
                   children: [
-                    Checkbox(value: false, onChanged: (_){}),
-                    Center(
-                      child: Text(
-                        style: TextStyle(fontSize: 18),
-                        "الورد اليومي",
-                        textDirection: TextDirection.rtl,
-                      ),
-                    ),
-                  ],
-                ),
-                width: Get.width * .95,
-                height: Get.height * .06,
-                decoration: BoxDecoration(
-                    color: Colors.white,
-                    borderRadius: BorderRadius.circular(5),
-                    boxShadow: [
-                      BoxShadow(
-                          color: Colors.grey, blurRadius: 1, spreadRadius: .5)
-                    ]),
-              ),
-              SizedBox(
-                height: Get.height * .03,
-              ),
-              Container(
-                margin: const EdgeInsets.only(bottom: 12),
-                padding: const EdgeInsets.symmetric(horizontal: 10),
-                child: Row(
-                  mainAxisAlignment: MainAxisAlignment.spaceBetween,
-                  children: [
                     IconButton(
                         onPressed: () {
+                          Get.to(const Roqua());
                         },
                         icon: Icon(Icons.arrow_back_ios)),
                     Text(

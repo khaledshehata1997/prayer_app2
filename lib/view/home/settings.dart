@@ -6,7 +6,9 @@ import 'package:flutter/material.dart';
 import 'package:flutter/widgets.dart';
 import 'package:flutter_islamic_icons/flutter_islamic_icons.dart';
 import 'package:get/get.dart';
+import 'package:prayer_app/view/auth/reset_password.dart';
 import 'package:prayer_app/view/auth/sign_in_view.dart';
+import 'package:prayer_app/view/home/profile.dart';
 import 'package:provider/provider.dart';
 import 'package:shared_preferences/shared_preferences.dart';
 
@@ -18,11 +20,21 @@ class Settings extends StatefulWidget {
   @override
   State<Settings> createState() => _SettingsState();
 }
+Future<Map<String, String?>> getUserData() async {
+  final prefs = await SharedPreferences.getInstance();
+  final username = prefs.getString('username');
+  final email = prefs.getString('email');
 
+  return {
+    'username': username,
+    'email': email,
+  };
+}
 class _SettingsState extends State<Settings> {
   FirebaseAuth auth = FirebaseAuth.instance;
   @override
   Widget build(BuildContext context) {
+    final boolNotifier = Provider.of<BoolNotifier>(context);
     return SafeArea(
       child: Scaffold(
         body: Stack(
@@ -41,6 +53,9 @@ class _SettingsState extends State<Settings> {
             ),
             Column(
               children: [
+                SizedBox(
+                  height: Get.height * 0.05,
+                ),
                 Padding(
                   padding: const EdgeInsets.all(15.0),
                   child: Row(
@@ -48,13 +63,20 @@ class _SettingsState extends State<Settings> {
                     children: [
                       Row(
                         children: [
-                          CircleAvatar(
-                            radius: 20,
-                            backgroundColor: Colors.grey.shade400,
-                            child: Image.asset(
-                              'icons/img_1.png',
-                              width: 20,
-                              height: 20,
+                          GestureDetector(
+                            onTap: ()async{
+                              final userData = await getUserData();
+                              Get.off(Profile(username: '${userData['username']}'
+                                , email: '${userData['email']}',));
+                            },
+                            child: CircleAvatar(
+                              radius: 20,
+                              backgroundColor: Colors.grey.shade400,
+                              child: Image.asset(
+                                'icons/img_1.png',
+                                width: 20,
+                                height: 20,
+                              ),
                             ),
                           ),
                         ],
@@ -119,7 +141,7 @@ class _SettingsState extends State<Settings> {
                 SizedBox(
                   height: Get.height * 0.02,
                 ),
-                Container(
+                boolNotifier.female ? Container(
                   margin: const EdgeInsets.only(bottom: 12),
                   padding: const EdgeInsets.symmetric(horizontal: 10),
                   decoration: BoxDecoration(
@@ -164,7 +186,7 @@ class _SettingsState extends State<Settings> {
 
                                       ],
                                     ),
-                ),
+                ): const Text(''),
                 SizedBox(
                   height: Get.height * 0.02,
                 ),
@@ -174,17 +196,31 @@ class _SettingsState extends State<Settings> {
                   child: Row(
                     mainAxisAlignment: MainAxisAlignment.spaceBetween,
                     children: [
-                      IconButton(
-                          onPressed: () {}, icon: Icon(Icons.arrow_back_ios)),
-                      Text(
-                        textDirection: TextDirection.rtl,
-                        'تغيير كلمة السر ',
-                        style: TextStyle(
-                          fontSize: 20,
-                          fontWeight: FontWeight.bold,
-                        ),
+                      Row(
+                        children: [
+                          IconButton(
+                              onPressed: () {
+                                Get.to( ResetPasswordView());
+                              }, icon: Icon(Icons.arrow_back_ios)),
+                        ],
                       ),
-                      Icon(FlutterIslamicIcons.quran),
+                      Row(
+                        children: [
+                          Text(
+                            textDirection: TextDirection.rtl,
+                            'تغيير كلمة السر ',
+                            style: TextStyle(
+                              fontSize: 20,
+                              // fontWeight: FontWeight.bold,
+                            ),
+                          ),
+                          SizedBox(
+                            width: Get.width * 0.01,
+                          ),
+                          Icon(Icons.lock_outline)
+                        ],
+                      ),
+
                     ],
                   ),
                   width: Get.width * .95,
@@ -206,51 +242,29 @@ class _SettingsState extends State<Settings> {
                   child: Row(
                     mainAxisAlignment: MainAxisAlignment.spaceBetween,
                     children: [
-                      IconButton(
-                          onPressed: () {}, icon: Icon(Icons.arrow_back_ios)),
-                      Text(
-                        textDirection: TextDirection.rtl,
-                        'الشروط والأحكام',
-                        style: TextStyle(
-                          fontSize: 20,
-                          fontWeight: FontWeight.bold,
-                        ),
+                      Row(
+                        children: [
+                          IconButton(
+                              onPressed: () {
+                                auth.signOut();
+                                Get.offAll( SignInView());
+                              }, icon: Icon(Icons.arrow_back_ios)),
+                        ],
                       ),
-                      Icon(FlutterIslamicIcons.quran),
-                    ],
-                  ),
-                  width: Get.width * .95,
-                  height: Get.height * .06,
-                  decoration: BoxDecoration(
-                      color: Colors.white,
-                      borderRadius: BorderRadius.circular(5),
-                      boxShadow: [
-                        BoxShadow(
-                            color: Colors.grey, blurRadius: 1, spreadRadius: .5)
-                      ]),
-                ),
-                SizedBox(
-                  height: Get.height * 0.02,
-                ),
-                Container(
-                  margin: const EdgeInsets.only(bottom: 12),
-                  padding: const EdgeInsets.symmetric(horizontal: 10),
-                  child: Row(
-                    mainAxisAlignment: MainAxisAlignment.spaceBetween,
-                    children: [
-                      IconButton(
-                          onPressed: () {
-                            auth.signOut();
-                            Get.offAll( SignInView());
-                          }, icon: Icon(Icons.arrow_back_ios)),
-                      Text(
-                        textDirection: TextDirection.rtl,
-                        'تسجيل الخروج',
-                        style: TextStyle(
-                          fontSize: 20,
-                          fontWeight: FontWeight.bold,
-                          color: Colors.red
-                        ),
+                      Row(
+                        children: [
+                          Text(
+                            textDirection: TextDirection.rtl,
+                            'تسجيل الخروج',
+                            style: TextStyle(
+                              fontSize: 20,
+                            ),
+                          ),
+                          SizedBox(
+                            width: Get.width * 0.01,
+                          ),
+                          Icon(Icons.door_back_door_outlined)
+                        ],
                       ),
                     ],
                   ),

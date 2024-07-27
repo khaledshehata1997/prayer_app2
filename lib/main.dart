@@ -6,6 +6,8 @@ import 'package:flutter_screenutil/flutter_screenutil.dart';
 import 'package:get/get.dart';
 import 'package:prayer_app/firebase_options.dart';
 import 'package:prayer_app/provider/boolNotifier.dart';
+import 'package:prayer_app/view/auth/activate.dart';
+import 'package:prayer_app/view/auth/activite_success.dart';
 import 'package:prayer_app/view/auth/splash_view.dart';
 import 'package:prayer_app/view/home/home_view.dart';
 import 'package:provider/provider.dart';
@@ -73,7 +75,8 @@ class MyApp extends StatelessWidget {
       child: ScreenUtilInit(
         child: GetMaterialApp(
         debugShowCheckedModeBanner: false,
-        home: isLogin == false ? SplashView() : const HomeView(),
+         home: isLogin == false ? SplashView() : const HomeView(),
+        //   home: ActivateSuccess(),
             ),
       )
     );

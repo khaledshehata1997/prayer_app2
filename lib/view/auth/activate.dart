@@ -1,11 +1,34 @@
+import 'package:firebase_auth/firebase_auth.dart';
 import 'package:flutter/material.dart';
 import 'package:get/get.dart';
+import 'package:prayer_app/view/auth/activite_success.dart';
 
 import '../../widgets/custom_text.dart';
 import 'sign_up_view.dart';
 
-class Activate extends StatelessWidget {
+class Activate extends StatefulWidget {
   const Activate({super.key});
+
+  @override
+  State<Activate> createState() => _ActivateState();
+}
+
+class _ActivateState extends State<Activate> {
+  checkVerify() {
+        if(FirebaseAuth.instance.currentUser!.emailVerified){
+          Get.off(ActivateSuccess());
+        }else{
+          Get.off(Activate());
+        }
+
+
+  }
+
+  @override
+  void initState(){
+    super.initState();
+    checkVerify();
+  }
 
   @override
   Widget build(BuildContext context) {
@@ -28,10 +51,10 @@ class Activate extends StatelessWidget {
             SizedBox(height: Get.height*.02),
             Container(
                 margin: EdgeInsets.only(top: 24),
-                width: Get.width * .25,
+                width: Get.width * .45,
                 height: Get.height * .15,
                 alignment: Alignment.center,
-                child: Image.asset('icons/email.png')),
+                child: Image.asset('images/Rectangle.png')),
             SizedBox(height: Get.height*.04),
             CustomText(
               text: 'ستصلك رساله علي البريد  \nالالكتروني لتفعيل الحساب',

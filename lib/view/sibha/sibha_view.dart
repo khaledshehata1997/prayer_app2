@@ -1,7 +1,11 @@
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
+import 'package:flutter/widgets.dart';
 import 'package:get/get.dart';
 import 'package:prayer_app/constants.dart';
+import 'package:prayer_app/view/home/profile.dart';
+import 'package:prayer_app/view/home/settings.dart';
+import 'package:shared_preferences/shared_preferences.dart';
 
 class SibhaView extends StatefulWidget {
   @override
@@ -12,7 +16,16 @@ class ChildSibhaView extends State<SibhaView> {
   int counter = 0;
   String x = ' سبحان الله العظيم';
 
+  Future<Map<String, String?>> getUserData() async {
+    final prefs = await SharedPreferences.getInstance();
+    final username = prefs.getString('username');
+    final email = prefs.getString('email');
 
+    return {
+      'username': username,
+      'email': email,
+    };
+  }
   @override
   Widget build(BuildContext context) {
     return Scaffold(
@@ -36,32 +49,41 @@ class ChildSibhaView extends State<SibhaView> {
           Column(
             mainAxisAlignment: MainAxisAlignment.start,
             children: [
-              SizedBox(height: Get.height*.06,),
+              SizedBox(
+                height: Get.height * 0.05,
+              ),
               Padding(padding: EdgeInsets.symmetric(horizontal: 20),child:
               Row(
                 mainAxisAlignment: MainAxisAlignment.spaceBetween,
                 children: [
                   Row(
                     children: [
-                      CircleAvatar(
-                        radius: 20,
-                        backgroundColor: Colors.grey.shade400,
-                        child: Image.asset('icons/img_1.png',width: 20,height: 20,),
+                      GestureDetector(
+                        onTap: ()async{
+                          final userData = await getUserData();
+                          Get.to(Profile(username: '${userData['username']}'
+                            , email: '${userData['email']}',));
+                        },
+                        child: CircleAvatar(
+                          radius: 20,
+                          backgroundColor: Colors.grey.shade400,
+                          child: Image.asset('icons/img_1.png',width: 20,height: 20,),
+                        ),
                       ),
                     ],
                   ),
                   Row(
                     children: [
-                      CircleAvatar(
-                        child: Icon(Icons.notifications_none),
-                        backgroundColor: Colors.grey.shade400,
-                        radius: 20,
-                      ),
                       SizedBox(width: 15,),
-                      CircleAvatar(
-                        radius: 20,
-                        child: Image.asset('icons/img.png',width: 20,height: 20,),
-                        backgroundColor: Colors.grey.shade400,
+                      GestureDetector(
+                        onTap: (){
+                          Get.to(const Settings());
+                        },
+                        child: CircleAvatar(
+                          radius: 20,
+                          child: Image.asset('icons/img.png',width: 20,height: 20,),
+                          backgroundColor: Colors.grey.shade400,
+                        ),
                       ),
                     ],
                   )
@@ -77,15 +99,17 @@ class ChildSibhaView extends State<SibhaView> {
                 Column(
                   mainAxisAlignment: MainAxisAlignment.start,
                   children: [
-                    Text('التسبيحه الحاليه',style: TextStyle(
-                        fontSize: 25,color: Colors.white
+                    Text('السبحه',style: TextStyle(
+                        fontSize: 30,color: Colors.white
+    ),
+                    ),
 
-                    ),),Text(' $x',style: TextStyle(
-                        fontSize: 30,color: Colors.white,
-                      fontWeight: FontWeight.bold
-
-
-                    ),),
+                    // ),),Text(' $x',style: TextStyle(
+                    //     fontSize: 30,color: Colors.white,
+                    //   fontWeight: FontWeight.bold
+                    //
+                    //
+                    // ),),
                   ],
                 )
                 ],
@@ -115,7 +139,7 @@ class ChildSibhaView extends State<SibhaView> {
                         shape: CircleBorder(),
                         fixedSize: Size.fromRadius(40)
                       ),
-                      child:Icon(Icons.replay)), ElevatedButton(
+                      child:Icon(Icons.replay,color: Colors.white,)), ElevatedButton(
                       onPressed: (){
                         incrementCounter();
                         printer();
@@ -126,7 +150,7 @@ class ChildSibhaView extends State<SibhaView> {
                         fixedSize: Size.fromRadius(55)
                       ),
                       child: Text('تسبيح',style: TextStyle(
-                        fontSize: 30,color: Colors.white,fontWeight: FontWeight.bold
+                        fontSize: 25,color: Colors.white,fontWeight: FontWeight.bold
                       ),)),
                 ],
               )
