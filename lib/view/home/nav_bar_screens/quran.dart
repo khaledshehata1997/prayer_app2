@@ -1,6 +1,7 @@
 import 'package:flutter/material.dart';
 import 'package:get/get.dart';
 import 'package:get/get_core/src/get_main.dart';
+import 'package:persistent_bottom_nav_bar/persistent_bottom_nav_bar.dart';
 import 'package:prayer_app/view/home/nav_bar_screens/quran/features/main_screen.dart';
 import 'package:prayer_app/view/roqua_view.dart';
 
@@ -47,10 +48,15 @@ class _QuranState extends State<Quran> {
                     Row(
                       children: [
                         GestureDetector(
-                          onTap: ()async{
+                          onTap: () async {
                             final userData = await getUserData();
-                            Get.off(Profile(username: '${userData['username']}'
-                              , email: '${userData['email']}',));
+                            PersistentNavBarNavigator.pushNewScreen(
+                              context,
+                              screen:  Profile(username: '${userData['username']}',
+                                email: '${userData['email']}',),
+                              withNavBar: true, // OPTIONAL VALUE. True by default.
+                              pageTransitionAnimation: PageTransitionAnimation.cupertino,
+                            );
                           },
                           child: CircleAvatar(
                             radius: 20,
@@ -71,7 +77,12 @@ class _QuranState extends State<Quran> {
                         ),
                         GestureDetector(
                           onTap: (){
-                            Get.to(const Settings());
+                            PersistentNavBarNavigator.pushNewScreen(
+                              context,
+                              screen: const Settings(),
+                              withNavBar: true, // OPTIONAL VALUE. True by default.
+                              pageTransitionAnimation: PageTransitionAnimation.cupertino,
+                            );
                           },
                           child: CircleAvatar(
                             radius: 20,

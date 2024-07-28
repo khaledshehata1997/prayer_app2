@@ -60,7 +60,7 @@ class SurahWidget extends StatelessWidget {
             children: [
               Stack(
                 children: [
-                  Image.asset('images/icon_no.png', width: 42.0),
+                  Image.asset('images/icon_no.png', width: 42.0,color: Colors.blue[900],),
                   Positioned.fill(
                     child: Align(
                       alignment: Alignment.center,

@@ -4,6 +4,7 @@ import 'package:get/get.dart';
 import 'package:get/get_core/src/get_main.dart';
 import 'package:intl/intl.dart' hide TextDirection;
 import 'package:linear_progress_bar/linear_progress_bar.dart';
+import 'package:persistent_bottom_nav_bar/persistent_bottom_nav_bar.dart';
 import 'package:prayer_app/provider/boolNotifier.dart';
 import 'package:prayer_app/view/home/profile.dart';
 import 'package:prayer_app/view/home/settings.dart';
@@ -92,7 +93,15 @@ class _DailyGoalsState extends State<DailyGoals> {
                           Row(
                             children: [
                               GestureDetector(
-                                onTap: () {
+                                onTap: () async {
+                                  final userData = await getUserData();
+                                  PersistentNavBarNavigator.pushNewScreen(
+                                    context,
+                                    screen:  Profile(username: '${userData['username']}',
+                                      email: '${userData['email']}',),
+                                    withNavBar: true, // OPTIONAL VALUE. True by default.
+                                    pageTransitionAnimation: PageTransitionAnimation.cupertino,
+                                  );
                                 },
                                 child: CircleAvatar(
                                   radius: 20,
@@ -118,7 +127,12 @@ class _DailyGoalsState extends State<DailyGoals> {
                               ),
                               GestureDetector(
                                 onTap: () {
-                                  Get.to(const Settings());
+                                  PersistentNavBarNavigator.pushNewScreen(
+                                    context,
+                                    screen: const Settings(),
+                                    withNavBar: true, // OPTIONAL VALUE. True by default.
+                                    pageTransitionAnimation: PageTransitionAnimation.cupertino,
+                                  );
                                 },
                                 child: CircleAvatar(
                                   radius: 20,
@@ -213,7 +227,7 @@ class _DailyGoalsState extends State<DailyGoals> {
                       ),
                     ),
                     SizedBox(
-                      height: Get.height * 0.04,
+                      height: Get.height * 0.02,
                     ),
                     customSalah(
                         "صلاه النوافل",
@@ -224,7 +238,7 @@ class _DailyGoalsState extends State<DailyGoals> {
                               boolNotifier.setValue2(val!);
                             })),
                     SizedBox(
-                      height: Get.height * 0.04,
+                      height: Get.height * 0.02,
                     ),
                     customSalah(
                         "الورد القراني اليومي",
@@ -235,7 +249,7 @@ class _DailyGoalsState extends State<DailyGoals> {
                               boolNotifier.setValue3(val!);
                             })),
                     SizedBox(
-                      height: Get.height * 0.04,
+                      height: Get.height * 0.02,
                     ),
                     customSalah(
                         "تعويض صلاه فائته",
@@ -246,7 +260,7 @@ class _DailyGoalsState extends State<DailyGoals> {
                               boolNotifier.setValue4(val!);
                             })),
                     SizedBox(
-                      height: Get.height * 0.04,
+                      height: Get.height * 0.02,
                     ),
                     customSalah(
                         "صيام يوم الأثنين",
@@ -257,9 +271,8 @@ class _DailyGoalsState extends State<DailyGoals> {
                               boolNotifier.setValue5(val!);
                             })),
                     SizedBox(
-                      height: Get.height * 0.04,
+                      height: Get.height * 0.02,
                     ),
-
                   ],
                 );
               },

@@ -1,6 +1,7 @@
 import 'package:firebase_auth/firebase_auth.dart';
 import 'package:flutter/material.dart';
 import 'package:get/get.dart';
+import 'package:prayer_app/constants.dart';
 import 'package:prayer_app/view/auth/activite_success.dart';
 
 import '../../widgets/custom_text.dart';
@@ -14,21 +15,32 @@ class Activate extends StatefulWidget {
 }
 
 class _ActivateState extends State<Activate> {
-  checkVerify() {
-        if(FirebaseAuth.instance.currentUser!.emailVerified){
-          Get.off(ActivateSuccess());
-        }else{
-          Get.off(Activate());
-        }
 
-
-  }
+  final FirebaseAuth _auth = FirebaseAuth.instance;
+  late User user;
 
   @override
-  void initState(){
+  void initState() {
     super.initState();
-    checkVerify();
+    user = _auth.currentUser!;
   }
+
+  Future<void> _checkEmailVerified() async {
+    await user.reload();
+    user = _auth.currentUser!;
+    if (user.emailVerified) {
+      Navigator.of(context).pushReplacement(
+        MaterialPageRoute(
+          builder: (context) => const ActivateSuccess(),
+        ),
+      );
+    } else {
+      ScaffoldMessenger.of(context).showSnackBar(
+        SnackBar(content: Text('لم يتم تفعيل البريد الألكتروني')),
+      );
+    }
+  }
+
 
   @override
   Widget build(BuildContext context) {
@@ -85,7 +97,16 @@ class _ActivateState extends State<Activate> {
                   isBold: false,
                   alignment: Alignment.topRight,
                 ),
+
               ],
+            ),
+            Padding(
+              padding: EdgeInsets.all(16.0),
+              child: ElevatedButton(
+                style: ElevatedButton.styleFrom(backgroundColor: buttonColor),
+                onPressed: _checkEmailVerified,
+                child: Text('التحقق من التفعيل ',style: TextStyle(color: Colors.white),),
+              ),
             ),
           ],
         ),

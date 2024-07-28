@@ -53,7 +53,7 @@ class _SignUpViewState extends State<SignUpView> {
             title: "Error",
             body: Padding(
               padding: const EdgeInsets.all(12.0),
-              child: Text("password is too weak",style: TextStyle(fontSize: 18,fontWeight: FontWeight.bold),),
+              child: Text("كلمه السر ضعيفه",style: TextStyle(fontSize: 18,fontWeight: FontWeight.bold),),
             ),
           )..show();
           print('The password provided is too weak.');
@@ -67,7 +67,7 @@ class _SignUpViewState extends State<SignUpView> {
             title: "Error",
             body: Padding(
               padding: const EdgeInsets.all(12.0),
-              child: Text("This is not email address type",style: TextStyle(fontSize: 15,fontWeight: FontWeight.bold),),
+              child: Text("البريد الألكتروني غير صحيح",style: TextStyle(fontSize: 15,fontWeight: FontWeight.bold),),
             ),
           )..show();
         }
@@ -81,7 +81,7 @@ class _SignUpViewState extends State<SignUpView> {
             title: "Error",
             body: Padding(
               padding: const EdgeInsets.all(12.0),
-              child: Text("The account already exists for that email",style: TextStyle(fontSize: 15,fontWeight: FontWeight.bold),),
+              child: Text("البريد الألكتروني مسجل بالفعل",style: TextStyle(fontSize: 15,fontWeight: FontWeight.bold),),
             ),
           )..show();
           print('The account already exists for that email.');
@@ -144,7 +144,7 @@ class _SignUpViewState extends State<SignUpView> {
                     txt1: "الاسم لا يمكن ان يكون اكبر من 100 حرف",
                     txt2: "الاسم لا يمكن ان يكون اصغر من 4 احرف",
                     onChanged: () {},
-                    hint: 'سما ياسر',
+                    hint: '',
                     scure: false,
                   ),
                   SizedBox(height: Get.height*.016),
@@ -162,13 +162,13 @@ class _SignUpViewState extends State<SignUpView> {
                     txt2: "البريد الألكتروني لا يمكن ان يكون اقل من 4 احرف",
                     controller: email,
                     onChanged: () {},
-                    hint: 's@gmail.com',
+                    hint: '',
                     scure: false,
                   ),
                   SizedBox(height: Get.height*.016),
 
                   CustomText(
-                    text: 'ر قم الهاتف',
+                    text: 'رقم الهاتف',
                     size: 18,
                     isBold: false,
                     alignment: Alignment.topRight,
@@ -181,7 +181,7 @@ class _SignUpViewState extends State<SignUpView> {
                     txt1: "رقم الهاتف غير صحيح",
                     txt2: "رقم الهاتف غير صحيح",
                     onChanged: () {},
-                    hint: '01064871625',
+                    hint: '',
                     scure: false,
                   ),
                   CustomText(
@@ -294,14 +294,13 @@ class _SignUpViewState extends State<SignUpView> {
                     txt1: "كلمة السر لا يمكن ان تكون اكبر من 100 رقم",
                     txt2: "كلمة السر لا يمكن ان تكون اقل من 4 ارقام",
                     onChanged: () {},
-                    hint: '***********',
+                    hint: '',
                     scure: true,
                   ),
                   SizedBox(height: Get.height*.016),
                   GestureDetector(
                     onTap: ()async{
                       errorMessage = boolNotifier.validateSelection();
-
                       if (errorMessage == null) {
                         storeUserData(name.text, email.text);
                         UserCredential response = await signUp();

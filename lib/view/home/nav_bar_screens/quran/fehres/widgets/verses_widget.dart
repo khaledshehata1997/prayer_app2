@@ -50,7 +50,7 @@ class _VersesWidgetState extends State<VersesWidget> {
                   // padding: const EdgeInsets.all(2),
                   decoration: BoxDecoration(
                     borderRadius: BorderRadius.circular(100.0),
-                    color: Colors.blue,
+                    color: Colors.blue[900],
                   ),
                   child: Center(
                     child: Text(

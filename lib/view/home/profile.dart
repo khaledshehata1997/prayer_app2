@@ -4,6 +4,7 @@ import 'package:get/get.dart';
 import 'package:image_picker/image_picker.dart';
 import 'package:path_provider/path_provider.dart';
 import 'package:percent_indicator/circular_percent_indicator.dart';
+import 'package:persistent_bottom_nav_bar/persistent_bottom_nav_bar.dart';
 import 'package:prayer_app/view/auth/edit_profile.dart';
 import 'package:prayer_app/view/auth/reset_password.dart';
 import 'package:prayer_app/view/home/settings.dart';
@@ -135,7 +136,12 @@ class _ProfileState extends State<Profile> {
                           ),
                           GestureDetector(
                             onTap: () {
-                              Get.off(const Settings());
+                              PersistentNavBarNavigator.pushNewScreen(
+                                context,
+                                screen: const Settings(),
+                                withNavBar: true, // OPTIONAL VALUE. True by default.
+                                pageTransitionAnimation: PageTransitionAnimation.cupertino,
+                              );
                             },
                             child: CircleAvatar(
                               radius: 20,

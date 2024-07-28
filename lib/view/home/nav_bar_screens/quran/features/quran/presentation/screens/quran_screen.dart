@@ -29,10 +29,12 @@ class QuranScreen extends StatelessWidget {
         listener: (context, state) {},
         builder: (context, state) {
           var quranCubit = QuranOffCubit.get(context);
-          return ScaffoldCustom(
-            appBarCustom: const AppBarCustom(
-              text: 'المصحف الكريم',
-              isNull: false,
+          return Scaffold(
+            appBar:  AppBar(
+              backgroundColor: Colors.blue[900],
+              iconTheme: IconThemeData(color: Colors.white),
+              title: Text('المصحف الكريم',style: TextStyle(color: Colors.white),),
+              centerTitle: true,
             ),
             body: Column(
               children: [
@@ -42,6 +44,8 @@ class QuranScreen extends StatelessWidget {
                     mainAxisSize: MainAxisSize.min,
                     children: [
                       ElevatedButtonCustom(
+                        textColor: Colors.white,
+                        borderColor: Colors.blue[900],
                         width: 20.w,
                         text: 'اذهب',
                         onPressed: () {
@@ -141,7 +145,7 @@ class QuranScreen extends StatelessWidget {
               children: [
                 FloatingActionButton(
                   heroTag: const Key('forward'),
-                  backgroundColor: Colors.blue,
+                  backgroundColor: Colors.blue[900],
                   onPressed: () {
                     // Animate to previous page
                     quranCubit.pdfController.nextPage(
@@ -159,7 +163,7 @@ class QuranScreen extends StatelessWidget {
                   width: 120.w,
                   padding: EdgeInsets.symmetric(horizontal: 6.w),
                   decoration: BoxDecoration(
-                    color: Colors.blue,
+                    color: Colors.blue[900],
                     borderRadius: BorderRadius.circular(15.r),
                     border: Border.all(color: ColorManager.primary),
                   ),
@@ -169,6 +173,7 @@ class QuranScreen extends StatelessWidget {
                     builder: (_, state, loadingState, pagesCount) => Container(
                       alignment: Alignment.center,
                       child: TextCustom(
+                        color: Colors.white,
                           height: 0.0,
                           textAlign: TextAlign.center,
                           text: state == PdfLoadingState.success
@@ -180,7 +185,7 @@ class QuranScreen extends StatelessWidget {
                 ),
                 FloatingActionButton(
                   heroTag: const Key('next'),
-                  backgroundColor: Colors.blue,
+                  backgroundColor: Colors.blue[900],
                   onPressed: () {
                     // Animate to next page
                     quranCubit.pdfController.previousPage(

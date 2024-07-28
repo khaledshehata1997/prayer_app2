@@ -8,6 +8,7 @@ import 'package:get/get.dart';
 import 'package:get/get_core/src/get_main.dart';
 import 'package:intl/intl.dart' hide TextDirection;
 import 'package:linear_progress_bar/linear_progress_bar.dart';
+import 'package:persistent_bottom_nav_bar/persistent_bottom_nav_bar.dart';
 import 'package:prayer_app/view/home/nav_bar_screens/prayer_model/PrayerTimeCalculator.dart';
 import 'package:prayer_app/view/home/nav_bar_screens/prayer_model/prayerModel.dart';
 import 'package:prayer_app/view/home/nav_bar_screens/prayer_model/prayerModelCurrent.dart';
@@ -148,7 +149,6 @@ class _PrayerState extends State<Prayer> with TickerProviderStateMixin {
   void _getPrayerDataCurrent() async {
     prayerCurrent = await dbHelper.getPrayerCurrent(_formatDate(selectedDate));
     if (prayerCurrent == null) {
-      print("get");
     prayerCurrent = PrayerCurrent(
       day: formattedDate,
       prayer1: false,
@@ -183,9 +183,9 @@ class _PrayerState extends State<Prayer> with TickerProviderStateMixin {
   Future<void> _selectDate(BuildContext context) async {
     final DateTime? picked = await  showDatePicker(
       context: context,
-      initialDate: selectedDate,
+      initialDate: selectedDate.subtract(const Duration(days:1)),
        firstDate: DateTime(2000),
-      lastDate: DateTime.now(),
+      lastDate: DateTime.now().subtract(const Duration(days:1)),
       builder: (context, child) {
         return Theme(
           data: Theme.of(context).copyWith(
@@ -219,6 +219,7 @@ class _PrayerState extends State<Prayer> with TickerProviderStateMixin {
   }
   @override
   Widget build(BuildContext context) {
+    _getPrayerDataCurrent();
     Duration timeLeft = _prayerTimeCalculator.timeLeftForNextPrayer(_nextPrayerTime);
     return Scaffold(
         body: Stack(
@@ -256,10 +257,15 @@ class _PrayerState extends State<Prayer> with TickerProviderStateMixin {
                       Row(
                         children: [
                           GestureDetector(
-                            onTap: ()async{
+                            onTap: () async {
                               final userData = await getUserData();
-                              Get.off(Profile(username: '${userData['username']}'
-                                , email: '${userData['email']}',));
+                              PersistentNavBarNavigator.pushNewScreen(
+                                context,
+                                screen:  Profile(username: '${userData['username']}',
+                                  email: '${userData['email']}',),
+                                withNavBar: true, // OPTIONAL VALUE. True by default.
+                                pageTransitionAnimation: PageTransitionAnimation.cupertino,
+                              );
                             },
                             child: CircleAvatar(
                               radius: 20,
@@ -280,7 +286,12 @@ class _PrayerState extends State<Prayer> with TickerProviderStateMixin {
                           ),
                           GestureDetector(
                             onTap: (){
-                              Get.to(const Settings());
+                              PersistentNavBarNavigator.pushNewScreen(
+                                context,
+                                screen: const Settings(),
+                                withNavBar: true, // OPTIONAL VALUE. True by default.
+                                pageTransitionAnimation: PageTransitionAnimation.cupertino,
+                              );
                             },
                             child: CircleAvatar(
                               radius: 20,
@@ -426,536 +437,538 @@ class _PrayerState extends State<Prayer> with TickerProviderStateMixin {
                             })),
                           ],
                         ),
-                        Column(
-                          children: [
-                            Padding(
-                              padding: const EdgeInsets.all(8.0),
-                              child: Row(
-                                mainAxisAlignment: MainAxisAlignment
-                                    .spaceBetween,
-                                children: [
-                                  Icon(
-                                    Icons.date_range_outlined,
-                                    color: Colors.blue[900],
-                                  ),
-                                  Text(
-                                    formattedDate,
-                                  ),
-                                  Text(
-                                    "اليوم",
-                                    style: TextStyle(
+                        SingleChildScrollView(
+                          child: Column(
+                            children: [
+                              Padding(
+                                padding: const EdgeInsets.all(8.0),
+                                child: Row(
+                                  mainAxisAlignment: MainAxisAlignment
+                                      .spaceBetween,
+                                  children: [
+                                    Icon(
+                                      Icons.date_range_outlined,
+                                      color: Colors.blue[900],
+                                    ),
+                                    Text(
+                                      formattedDate,
+                                    ),
+                                    Text(
+                                      "اليوم",
+                                      style: TextStyle(
+                                          fontSize: 20,
+                                          fontWeight: FontWeight.bold),
+                                    ),
+                                  ],
+                                ),
+                              ),
+                              Container(
+                                margin: const EdgeInsets.only(bottom: 12),
+                                padding: const EdgeInsets.symmetric(horizontal: 10),
+                                width: Get.width * .95,
+                                height: Get.height * .06,
+                                decoration: BoxDecoration(
+                                    color: Colors.white,
+                                    borderRadius: BorderRadius.circular(5),
+                                    boxShadow:const [
+                                      BoxShadow(
+                                          color: Colors.grey,
+                                          blurRadius: 1,
+                                          spreadRadius: .5)
+                                    ]),
+                                child: Row(
+                                  mainAxisAlignment: MainAxisAlignment
+                                      .spaceBetween,
+                                  children: [
+                                    Expanded(
+                                      child: Padding(
+                                        padding: const EdgeInsets.all(8.0),
+                                        child: LinearProgressBar(
+                                          maxSteps: 5,
+                                          minHeight: 8,
+                                          progressType:
+                                          LinearProgressBar.progressTypeLinear,
+                                          // Use Linear progress
+                                          currentStep: prayerCurrent == null ? 0: prayerCurrent!.calculation,
+                                          progressColor: Colors.blue[900],
+                                          backgroundColor: Colors.grey,
+                                        ),
+                                      ),
+                                    ),
+                                    const Text(
+                                      'فروض اليوم',
+                                      textDirection: TextDirection.rtl,
+                                      style: TextStyle(
                                         fontSize: 20,
-                                        fontWeight: FontWeight.bold),
-                                  ),
-                                ],
-                              ),
-                            ),
-                            Container(
-                              margin: const EdgeInsets.only(bottom: 12),
-                              padding: const EdgeInsets.symmetric(horizontal: 10),
-                              width: Get.width * .95,
-                              height: Get.height * .06,
-                              decoration: BoxDecoration(
-                                  color: Colors.white,
-                                  borderRadius: BorderRadius.circular(5),
-                                  boxShadow:const [
-                                    BoxShadow(
-                                        color: Colors.grey,
-                                        blurRadius: 1,
-                                        spreadRadius: .5)
-                                  ]),
-                              child: Row(
-                                mainAxisAlignment: MainAxisAlignment
-                                    .spaceBetween,
-                                children: [
-                                  Expanded(
-                                    child: Padding(
-                                      padding: const EdgeInsets.all(8.0),
-                                      child: LinearProgressBar(
-                                        maxSteps: 5,
-                                        minHeight: 8,
-                                        progressType:
-                                        LinearProgressBar.progressTypeLinear,
-                                        // Use Linear progress
-                                        currentStep: prayerCurrent == null ? 0: prayerCurrent!.calculation,
-                                        progressColor: Colors.blue[900],
-                                        backgroundColor: Colors.grey,
-                                      ),
-                                    ),
-                                  ),
-                                  const Text(
-                                    'فروض اليوم',
-                                    textDirection: TextDirection.rtl,
-                                    style: TextStyle(
-                                      fontSize: 20,
-                                      fontWeight: FontWeight.bold,
-                                    ),
-                                  ),
-                                ],
-                              ),
-                            ),
-                            Container(
-                              margin: const EdgeInsets.only(bottom: 12),
-                              padding: const EdgeInsets.symmetric(horizontal: 10),
-                              width: Get.width * .95,
-                              height: Get.height * .06,
-                              decoration: BoxDecoration(
-                                  color: Colors.white,
-                                  borderRadius: BorderRadius.circular(5),
-                                  boxShadow: [
-                                    BoxShadow(
-                                        color: Colors.grey,
-                                        blurRadius: 1,
-                                        spreadRadius: .5)
-                                  ]),
-                              child: Row(
-                                mainAxisAlignment: MainAxisAlignment
-                                    .spaceBetween,
-                                children: [
-                                  Row(children: [
-                                    Checkbox(
-                                        activeColor: buttonColor,
-                                        checkColor: Colors.white,
-                                        value: prayerCurrent == null ? false : prayerCurrent!.prayer1,
-                                        onChanged: (value) {
-                                          setState(() {
-                                            prayerCurrent!.prayer1 = value ?? false;
-                                          });
-                                          _savePrayerDataCurrent();
-                                        }),
-                                    Text(
-                                      'النافله',
-                                      style: TextStyle(
-                                        fontSize: 16,
                                         fontWeight: FontWeight.bold,
                                       ),
                                     ),
-                                  ]),
-                                  Row(children: [
-                                    Checkbox(
-                                        activeColor: buttonColor,
-                                        checkColor: Colors.white,
-                                        value: prayerCurrent == null ? false :prayerCurrent!.prayer2,
-                                        onChanged: (value) {
-                                          setState(() {
-                                            prayerCurrent!.prayer2 = value!;
-                                            if (value) {
-                                              prayerCurrent!.calculation++;
-                                              _savePrayerDataCurrent();
-                                            } else {
-                                              prayerCurrent!.calculation--;
-                                              _savePrayerDataCurrent();
-                                            }
-                                          });
-                                          _savePrayerDataCurrent();
-                                        }),
-                                    Text(
-                                      'الفرض',
-                                      style: TextStyle(
-                                        fontSize: 16,
-                                        fontWeight: FontWeight.bold,
+                                  ],
+                                ),
+                              ),
+                              Container(
+                                margin: const EdgeInsets.only(bottom: 12),
+                                padding: const EdgeInsets.symmetric(horizontal: 10),
+                                width: Get.width * .95,
+                                height: Get.height * .06,
+                                decoration: BoxDecoration(
+                                    color: Colors.white,
+                                    borderRadius: BorderRadius.circular(5),
+                                    boxShadow: [
+                                      BoxShadow(
+                                          color: Colors.grey,
+                                          blurRadius: 1,
+                                          spreadRadius: .5)
+                                    ]),
+                                child: Row(
+                                  mainAxisAlignment: MainAxisAlignment
+                                      .spaceBetween,
+                                  children: [
+                                    Row(children: [
+                                      Checkbox(
+                                          activeColor: buttonColor,
+                                          checkColor: Colors.white,
+                                          value: prayerCurrent == null ? false : prayerCurrent!.prayer1,
+                                          onChanged: (value) {
+                                            setState(() {
+                                              prayerCurrent!.prayer1 = value ?? false;
+                                            });
+                                            _savePrayerDataCurrent();
+                                          }),
+                                      Text(
+                                        'النافله',
+                                        style: TextStyle(
+                                          fontSize: 16,
+                                          fontWeight: FontWeight.bold,
+                                        ),
                                       ),
+                                    ]),
+                                    Row(children: [
+                                      Checkbox(
+                                          activeColor: buttonColor,
+                                          checkColor: Colors.white,
+                                          value: prayerCurrent == null ? false :prayerCurrent!.prayer2,
+                                          onChanged: (value) {
+                                            setState(() {
+                                              prayerCurrent!.prayer2 = value!;
+                                              if (value) {
+                                                prayerCurrent!.calculation++;
+                                                _savePrayerDataCurrent();
+                                              } else {
+                                                prayerCurrent!.calculation--;
+                                                _savePrayerDataCurrent();
+                                              }
+                                            });
+                                            _savePrayerDataCurrent();
+                                          }),
+                                      Text(
+                                        'الفرض',
+                                        style: TextStyle(
+                                          fontSize: 16,
+                                          fontWeight: FontWeight.bold,
+                                        ),
+                                      ),
+                                    ]),
+                                    Row(
+                                      children: [
+                                        Text(
+                                          'الفجر',
+                                          style: TextStyle(
+                                            fontSize: 20,
+                                            fontWeight: FontWeight.bold,
+                                          ),
+                                        ),
+                                        Icon(Icons.sunny_snowing)
+                                      ],
                                     ),
-                                  ]),
-                                  Row(
-                                    children: [
-                                      Text(
-                                        'الفجر',
-                                        style: TextStyle(
-                                          fontSize: 20,
-                                          fontWeight: FontWeight.bold,
-                                        ),
-                                      ),
-                                      Icon(Icons.sunny_snowing)
-                                    ],
-                                  ),
-                                ],
+                                  ],
+                                ),
                               ),
-                            ),
-                            Container(
-                              margin: EdgeInsets.only(bottom: 12),
-                              padding: EdgeInsets.symmetric(horizontal: 10),
-                              child: Row(
-                                mainAxisAlignment: MainAxisAlignment
-                                    .spaceBetween,
-                                children: [
-                                  Row(children: [
-                                    Checkbox(
-                                        activeColor: buttonColor,
-                                        checkColor: Colors.white,
-                                        value: prayerCurrent == null ? false :prayerCurrent!.prayer3,
-                                        onChanged: (value) {
-                                          setState(() {
-                                            prayerCurrent!.prayer3 = value!;
-                                          });
-                                          _savePrayerDataCurrent();
-                                        }),
-                                  ]),
-                                  Row(
-                                    children: [
-                                      Text(
-                                        'الضحي',
-                                        style: TextStyle(
-                                          fontSize: 20,
-                                          fontWeight: FontWeight.bold,
+                              Container(
+                                margin: EdgeInsets.only(bottom: 12),
+                                padding: EdgeInsets.symmetric(horizontal: 10),
+                                child: Row(
+                                  mainAxisAlignment: MainAxisAlignment
+                                      .spaceBetween,
+                                  children: [
+                                    Row(children: [
+                                      Checkbox(
+                                          activeColor: buttonColor,
+                                          checkColor: Colors.white,
+                                          value: prayerCurrent == null ? false :prayerCurrent!.prayer3,
+                                          onChanged: (value) {
+                                            setState(() {
+                                              prayerCurrent!.prayer3 = value!;
+                                            });
+                                            _savePrayerDataCurrent();
+                                          }),
+                                    ]),
+                                    Row(
+                                      children: [
+                                        Text(
+                                          'الضحي',
+                                          style: TextStyle(
+                                            fontSize: 20,
+                                            fontWeight: FontWeight.bold,
+                                          ),
                                         ),
-                                      ),
-                                      Icon(Icons.sunny_snowing)
-                                    ],
-                                  ),
-                                ],
+                                        Icon(Icons.sunny_snowing)
+                                      ],
+                                    ),
+                                  ],
+                                ),
+                                width: Get.width * .95,
+                                height: Get.height * .06,
+                                decoration: BoxDecoration(
+                                    color: Colors.white,
+                                    borderRadius: BorderRadius.circular(5),
+                                    boxShadow: [
+                                      BoxShadow(
+                                          color: Colors.grey,
+                                          blurRadius: 1,
+                                          spreadRadius: .5)
+                                    ]),
                               ),
-                              width: Get.width * .95,
-                              height: Get.height * .06,
-                              decoration: BoxDecoration(
-                                  color: Colors.white,
-                                  borderRadius: BorderRadius.circular(5),
-                                  boxShadow: [
-                                    BoxShadow(
-                                        color: Colors.grey,
-                                        blurRadius: 1,
-                                        spreadRadius: .5)
-                                  ]),
-                            ),
-                            Container(
-                              margin: EdgeInsets.only(bottom: 12),
-                              padding: EdgeInsets.symmetric(horizontal: 10),
-                              child: Row(
-                                mainAxisAlignment: MainAxisAlignment
-                                    .spaceBetween,
-                                children: [
-                                  Row(children: [
-                                    Checkbox(
-                                        activeColor: buttonColor,
-                                        checkColor: Colors.white,
-                                        value: prayerCurrent == null ? false :prayerCurrent!.prayer4,
-                                        onChanged: (value) {
-                                          setState(() {
-                                            prayerCurrent!.prayer4 = value!;
+                              Container(
+                                margin: EdgeInsets.only(bottom: 12),
+                                padding: EdgeInsets.symmetric(horizontal: 10),
+                                child: Row(
+                                  mainAxisAlignment: MainAxisAlignment
+                                      .spaceBetween,
+                                  children: [
+                                    Row(children: [
+                                      Checkbox(
+                                          activeColor: buttonColor,
+                                          checkColor: Colors.white,
+                                          value: prayerCurrent == null ? false :prayerCurrent!.prayer4,
+                                          onChanged: (value) {
+                                            setState(() {
+                                              prayerCurrent!.prayer4 = value!;
 
-                                          });
-                                          _savePrayerDataCurrent();
-                                        }),
-                                    Text(
-                                      'النافلة',
-                                      style: TextStyle(
-                                        fontSize: 16,
-                                        fontWeight: FontWeight.bold,
-                                      ),
-                                    ),
-                                  ]),
-                                  Row(children: [
-                                    Checkbox(
-                                        activeColor: buttonColor,
-                                        checkColor: Colors.white,
-                                        value: prayerCurrent == null ? false :prayerCurrent!.prayer5,
-                                        onChanged: (value) {
-                                          setState(() {
-                                            prayerCurrent!.prayer5 = value!;
-                                            if (value) {
-                                              prayerCurrent!.calculation++;
-                                              _savePrayerDataCurrent();
-                                            } else {
-                                              prayerCurrent!.calculation--;
-                                              _savePrayerDataCurrent();
-                                            }
-                                          });
-                                          _savePrayerDataCurrent();
-                                        }),
-                                    Text(
-                                      'الفرض',
-                                      style: TextStyle(
-                                        fontSize: 16,
-                                        fontWeight: FontWeight.bold,
-                                      ),
-                                    ),
-                                  ]),
-                                  Row(
-                                    children: [
+                                            });
+                                            _savePrayerDataCurrent();
+                                          }),
                                       Text(
-                                        'الضهر',
+                                        'النافلة',
                                         style: TextStyle(
-                                          fontSize: 20,
+                                          fontSize: 16,
                                           fontWeight: FontWeight.bold,
                                         ),
                                       ),
-                                      Icon(Icons.sunny_snowing)
-                                    ],
-                                  ),
-                                ],
-                              ),
-                              width: Get.width * .95,
-                              height: Get.height * .06,
-                              decoration: BoxDecoration(
-                                  color: Colors.white,
-                                  borderRadius: BorderRadius.circular(5),
-                                  boxShadow: [
-                                    BoxShadow(color: Colors.grey,
-                                        blurRadius: 1,
-                                        spreadRadius: .5)
-                                  ]),
-                            ),
-                            Container(
-                              margin: EdgeInsets.only(bottom: 12),
-                              padding: EdgeInsets.symmetric(horizontal: 10),
-                              child: Row(
-                                mainAxisAlignment: MainAxisAlignment
-                                    .spaceBetween,
-                                children: [
-                                  Row(children: [
-                                    Checkbox(
-                                        activeColor: buttonColor,
-                                        checkColor: Colors.white,
-                                        value: prayerCurrent == null ? false :prayerCurrent!.prayer6,
-                                        onChanged: (value) {
-                                          setState(() {
-                                            prayerCurrent!.prayer6 = value!;
-                                            if (value) {
-                                              prayerCurrent!.calculation++;
-                                              _savePrayerDataCurrent();
-                                            } else {
-                                              prayerCurrent!.calculation--;
-                                              _savePrayerDataCurrent();
-                                            }
-                                          });
-                                          _savePrayerDataCurrent();
-                                        }),
-                                    Text(
-                                      'الفرض',
-                                      style: TextStyle(
-                                        fontSize: 16,
-                                        fontWeight: FontWeight.bold,
-                                      ),
-                                    ),
-                                  ]),
-                                  Row(
-                                    children: [
+                                    ]),
+                                    Row(children: [
+                                      Checkbox(
+                                          activeColor: buttonColor,
+                                          checkColor: Colors.white,
+                                          value: prayerCurrent == null ? false :prayerCurrent!.prayer5,
+                                          onChanged: (value) {
+                                            setState(() {
+                                              prayerCurrent!.prayer5 = value!;
+                                              if (value) {
+                                                prayerCurrent!.calculation++;
+                                                _savePrayerDataCurrent();
+                                              } else {
+                                                prayerCurrent!.calculation--;
+                                                _savePrayerDataCurrent();
+                                              }
+                                            });
+                                            _savePrayerDataCurrent();
+                                          }),
                                       Text(
-                                        'العصر',
+                                        'الفرض',
                                         style: TextStyle(
-                                          fontSize: 20,
+                                          fontSize: 16,
                                           fontWeight: FontWeight.bold,
                                         ),
                                       ),
-                                      Icon(Icons.sunny_snowing)
-                                    ],
-                                  ),
-                                ],
+                                    ]),
+                                    Row(
+                                      children: [
+                                        Text(
+                                          'الضهر',
+                                          style: TextStyle(
+                                            fontSize: 20,
+                                            fontWeight: FontWeight.bold,
+                                          ),
+                                        ),
+                                        Icon(Icons.sunny_snowing)
+                                      ],
+                                    ),
+                                  ],
+                                ),
+                                width: Get.width * .95,
+                                height: Get.height * .06,
+                                decoration: BoxDecoration(
+                                    color: Colors.white,
+                                    borderRadius: BorderRadius.circular(5),
+                                    boxShadow: [
+                                      BoxShadow(color: Colors.grey,
+                                          blurRadius: 1,
+                                          spreadRadius: .5)
+                                    ]),
                               ),
-                              width: Get.width * .95,
-                              height: Get.height * .06,
-                              decoration: BoxDecoration(
-                                  color: Colors.white,
-                                  borderRadius: BorderRadius.circular(5),
-                                  boxShadow: [
-                                    BoxShadow(
-                                        color: Colors.grey,
-                                        blurRadius: 1,
-                                        spreadRadius: .5)
-                                  ]),
-                            ),
-                            Container(
-                              margin: EdgeInsets.only(bottom: 12),
-                              padding: EdgeInsets.symmetric(horizontal: 10),
-                              child: Row(
-                                mainAxisAlignment: MainAxisAlignment
-                                    .spaceBetween,
-                                children: [
-                                  Row(children: [
-                                    Checkbox(
-                                        activeColor: buttonColor,
-                                        checkColor: Colors.white,
-                                        value: prayerCurrent == null ? false :prayerCurrent!.prayer7,
-                                        onChanged: (value) {
-                                          setState(() {
-                                            prayerCurrent!.prayer7 = value!;
+                              Container(
+                                margin: EdgeInsets.only(bottom: 12),
+                                padding: EdgeInsets.symmetric(horizontal: 10),
+                                child: Row(
+                                  mainAxisAlignment: MainAxisAlignment
+                                      .spaceBetween,
+                                  children: [
+                                    Row(children: [
+                                      Checkbox(
+                                          activeColor: buttonColor,
+                                          checkColor: Colors.white,
+                                          value: prayerCurrent == null ? false :prayerCurrent!.prayer6,
+                                          onChanged: (value) {
+                                            setState(() {
+                                              prayerCurrent!.prayer6 = value!;
+                                              if (value) {
+                                                prayerCurrent!.calculation++;
+                                                _savePrayerDataCurrent();
+                                              } else {
+                                                prayerCurrent!.calculation--;
+                                                _savePrayerDataCurrent();
+                                              }
+                                            });
+                                            _savePrayerDataCurrent();
+                                          }),
+                                      Text(
+                                        'الفرض',
+                                        style: TextStyle(
+                                          fontSize: 16,
+                                          fontWeight: FontWeight.bold,
+                                        ),
+                                      ),
+                                    ]),
+                                    Row(
+                                      children: [
+                                        Text(
+                                          'العصر',
+                                          style: TextStyle(
+                                            fontSize: 20,
+                                            fontWeight: FontWeight.bold,
+                                          ),
+                                        ),
+                                        Icon(Icons.sunny_snowing)
+                                      ],
+                                    ),
+                                  ],
+                                ),
+                                width: Get.width * .95,
+                                height: Get.height * .06,
+                                decoration: BoxDecoration(
+                                    color: Colors.white,
+                                    borderRadius: BorderRadius.circular(5),
+                                    boxShadow: [
+                                      BoxShadow(
+                                          color: Colors.grey,
+                                          blurRadius: 1,
+                                          spreadRadius: .5)
+                                    ]),
+                              ),
+                              Container(
+                                margin: EdgeInsets.only(bottom: 12),
+                                padding: EdgeInsets.symmetric(horizontal: 10),
+                                child: Row(
+                                  mainAxisAlignment: MainAxisAlignment
+                                      .spaceBetween,
+                                  children: [
+                                    Row(children: [
+                                      Checkbox(
+                                          activeColor: buttonColor,
+                                          checkColor: Colors.white,
+                                          value: prayerCurrent == null ? false :prayerCurrent!.prayer7,
+                                          onChanged: (value) {
+                                            setState(() {
+                                              prayerCurrent!.prayer7 = value!;
 
-                                          });
-                                          _savePrayerDataCurrent();
-                                        }),
-                                    Text(
-                                      'النافلة',
-                                      style: TextStyle(
-                                        fontSize: 16,
-                                        fontWeight: FontWeight.bold,
-                                      ),
-                                    ),
-                                  ]),
-                                  Row(children: [
-                                    Checkbox(
-                                        activeColor: buttonColor,
-                                        checkColor: Colors.white,
-                                        value: prayerCurrent == null ? false :prayerCurrent!.prayer8,
-                                        onChanged: (value) {
-                                          setState(() {
-                                            prayerCurrent!.prayer8 = value!;
-                                            if (value) {
-                                              prayerCurrent!.calculation++;
-                                              _savePrayerDataCurrent();
-                                            } else {
-                                              prayerCurrent!.calculation--;
-                                              _savePrayerDataCurrent();
-                                            }
-                                          });
-                                          _savePrayerDataCurrent();
-                                        }),
-                                    Text(
-                                      'الفرض',
-                                      style: TextStyle(
-                                        fontSize: 16,
-                                        fontWeight: FontWeight.bold,
-                                      ),
-                                    ),
-                                  ]),
-                                  Row(
-                                    children: [
+                                            });
+                                            _savePrayerDataCurrent();
+                                          }),
                                       Text(
-                                        'المغرب',
+                                        'النافلة',
                                         style: TextStyle(
-                                          fontSize: 20,
+                                          fontSize: 16,
                                           fontWeight: FontWeight.bold,
                                         ),
                                       ),
-                                      Icon(Icons.sunny_snowing)
-                                    ],
-                                  ),
-                                ],
+                                    ]),
+                                    Row(children: [
+                                      Checkbox(
+                                          activeColor: buttonColor,
+                                          checkColor: Colors.white,
+                                          value: prayerCurrent == null ? false :prayerCurrent!.prayer8,
+                                          onChanged: (value) {
+                                            setState(() {
+                                              prayerCurrent!.prayer8 = value!;
+                                              if (value) {
+                                                prayerCurrent!.calculation++;
+                                                _savePrayerDataCurrent();
+                                              } else {
+                                                prayerCurrent!.calculation--;
+                                                _savePrayerDataCurrent();
+                                              }
+                                            });
+                                            _savePrayerDataCurrent();
+                                          }),
+                                      Text(
+                                        'الفرض',
+                                        style: TextStyle(
+                                          fontSize: 16,
+                                          fontWeight: FontWeight.bold,
+                                        ),
+                                      ),
+                                    ]),
+                                    Row(
+                                      children: [
+                                        Text(
+                                          'المغرب',
+                                          style: TextStyle(
+                                            fontSize: 20,
+                                            fontWeight: FontWeight.bold,
+                                          ),
+                                        ),
+                                        Icon(Icons.sunny_snowing)
+                                      ],
+                                    ),
+                                  ],
+                                ),
+                                width: Get.width * .95,
+                                height: Get.height * .06,
+                                decoration: BoxDecoration(
+                                    color: Colors.white,
+                                    borderRadius: BorderRadius.circular(5),
+                                    boxShadow: [
+                                      BoxShadow(color: Colors.grey,
+                                          blurRadius: 1,
+                                          spreadRadius: .5)
+                                    ]),
                               ),
-                              width: Get.width * .95,
-                              height: Get.height * .06,
-                              decoration: BoxDecoration(
-                                  color: Colors.white,
-                                  borderRadius: BorderRadius.circular(5),
-                                  boxShadow: [
-                                    BoxShadow(color: Colors.grey,
-                                        blurRadius: 1,
-                                        spreadRadius: .5)
-                                  ]),
-                            ),
-                            Container(
-                              margin: EdgeInsets.only(bottom: 12),
-                              padding: EdgeInsets.symmetric(horizontal: 10),
-                              child: Row(
-                                mainAxisAlignment: MainAxisAlignment
-                                    .spaceBetween,
-                                children: [
-                                  Row(children: [
-                                    Checkbox(
-                                        activeColor: buttonColor,
-                                        checkColor: Colors.white,
-                                        value: prayerCurrent == null ? false :prayerCurrent!.prayer9,
-                                        onChanged: (value) {
-                                          setState(() {
-                                            prayerCurrent!.prayer9 = value!;
+                              Container(
+                                margin: EdgeInsets.only(bottom: 12),
+                                padding: EdgeInsets.symmetric(horizontal: 10),
+                                child: Row(
+                                  mainAxisAlignment: MainAxisAlignment
+                                      .spaceBetween,
+                                  children: [
+                                    Row(children: [
+                                      Checkbox(
+                                          activeColor: buttonColor,
+                                          checkColor: Colors.white,
+                                          value: prayerCurrent == null ? false :prayerCurrent!.prayer9,
+                                          onChanged: (value) {
+                                            setState(() {
+                                              prayerCurrent!.prayer9 = value!;
 
-                                          });
-                                          _savePrayerDataCurrent();
-                                        }),
-                                    Text(
-                                      'النافلة',
-                                      style: TextStyle(
-                                        fontSize: 16,
-                                        fontWeight: FontWeight.bold,
-                                      ),
-                                    ),
-                                  ]),
-                                  Row(children: [
-                                    Checkbox(
-                                        activeColor: buttonColor,
-                                        checkColor: Colors.white,
-                                        value: prayerCurrent == null ? false :prayerCurrent!.prayer10,
-                                        onChanged: (value) {
-                                          setState(() {
-                                            prayerCurrent!.prayer10 = value!;
-                                            if (value) {
-                                              prayerCurrent!.calculation++;
-                                              _savePrayerDataCurrent();
-                                            } else {
-                                              prayerCurrent!.calculation--;
-                                              _savePrayerDataCurrent();
-                                            }
-                                          });
-                                          _savePrayerDataCurrent();
-                                        }),
-                                    Text(
-                                      'الفرض',
-                                      style: TextStyle(
-                                        fontSize: 16,
-                                        fontWeight: FontWeight.bold,
-                                      ),
-                                    ),
-                                  ]),
-                                  Row(
-                                    children: [
+                                            });
+                                            _savePrayerDataCurrent();
+                                          }),
                                       Text(
-                                        'العشاء',
+                                        'النافلة',
                                         style: TextStyle(
-                                          fontSize: 20,
+                                          fontSize: 16,
                                           fontWeight: FontWeight.bold,
                                         ),
                                       ),
-                                      Icon(Icons.sunny_snowing)
-                                    ],
-                                  ),
-                                ],
-                              ),
-                              width: Get.width * .95,
-                              height: Get.height * .06,
-                              decoration: BoxDecoration(
-                                  color: Colors.white,
-                                  borderRadius: BorderRadius.circular(5),
-                                  boxShadow: [
-                                    BoxShadow(color: Colors.grey,
-                                        blurRadius: 1,
-                                        spreadRadius: .5)
-                                  ]),
-                            ),
-                            Container(
-                              margin: EdgeInsets.only(bottom: 12),
-                              padding: EdgeInsets.symmetric(horizontal: 10),
-                              child: Row(
-                                mainAxisAlignment: MainAxisAlignment
-                                    .spaceBetween,
-                                children: [
-                                  Row(children: [
-                                    Checkbox(
-                                        activeColor: buttonColor,
-                                        checkColor: Colors.white,
-                                        value: prayerCurrent == null ? false :prayerCurrent!.prayer11,
-                                        onChanged: (value) {
-                                          setState(() {
-                                            prayerCurrent!.prayer11 = value!;
-                                          });
-                                          _savePrayerDataCurrent();
-                                        }),
-                                  ]),
-                                  Row(
-                                    children: [
+                                    ]),
+                                    Row(children: [
+                                      Checkbox(
+                                          activeColor: buttonColor,
+                                          checkColor: Colors.white,
+                                          value: prayerCurrent == null ? false :prayerCurrent!.prayer10,
+                                          onChanged: (value) {
+                                            setState(() {
+                                              prayerCurrent!.prayer10 = value!;
+                                              if (value) {
+                                                prayerCurrent!.calculation++;
+                                                _savePrayerDataCurrent();
+                                              } else {
+                                                prayerCurrent!.calculation--;
+                                                _savePrayerDataCurrent();
+                                              }
+                                            });
+                                            _savePrayerDataCurrent();
+                                          }),
                                       Text(
-                                        'القيام',
+                                        'الفرض',
                                         style: TextStyle(
-                                          fontSize: 20,
+                                          fontSize: 16,
                                           fontWeight: FontWeight.bold,
                                         ),
                                       ),
-                                      Icon(Icons.sunny_snowing)
-                                    ],
-                                  ),
-                                ],
+                                    ]),
+                                    Row(
+                                      children: [
+                                        Text(
+                                          'العشاء',
+                                          style: TextStyle(
+                                            fontSize: 20,
+                                            fontWeight: FontWeight.bold,
+                                          ),
+                                        ),
+                                        Icon(Icons.sunny_snowing)
+                                      ],
+                                    ),
+                                  ],
+                                ),
+                                width: Get.width * .95,
+                                height: Get.height * .06,
+                                decoration: BoxDecoration(
+                                    color: Colors.white,
+                                    borderRadius: BorderRadius.circular(5),
+                                    boxShadow: [
+                                      BoxShadow(color: Colors.grey,
+                                          blurRadius: 1,
+                                          spreadRadius: .5)
+                                    ]),
                               ),
-                              width: Get.width * .95,
-                              height: Get.height * .06,
-                              decoration: BoxDecoration(
-                                  color: Colors.white,
-                                  borderRadius: BorderRadius.circular(5),
-                                  boxShadow: [
-                                    BoxShadow(
-                                        color: Colors.grey,
-                                        blurRadius: 1,
-                                        spreadRadius: .5)
-                                  ]),
-                            ),
-                          ],
+                              Container(
+                                margin: EdgeInsets.only(bottom: 12),
+                                padding: EdgeInsets.symmetric(horizontal: 10),
+                                child: Row(
+                                  mainAxisAlignment: MainAxisAlignment
+                                      .spaceBetween,
+                                  children: [
+                                    Row(children: [
+                                      Checkbox(
+                                          activeColor: buttonColor,
+                                          checkColor: Colors.white,
+                                          value: prayerCurrent == null ? false :prayerCurrent!.prayer11,
+                                          onChanged: (value) {
+                                            setState(() {
+                                              prayerCurrent!.prayer11 = value!;
+                                            });
+                                            _savePrayerDataCurrent();
+                                          }),
+                                    ]),
+                                    Row(
+                                      children: [
+                                        Text(
+                                          'القيام',
+                                          style: TextStyle(
+                                            fontSize: 20,
+                                            fontWeight: FontWeight.bold,
+                                          ),
+                                        ),
+                                        Icon(Icons.sunny_snowing)
+                                      ],
+                                    ),
+                                  ],
+                                ),
+                                width: Get.width * .95,
+                                height: Get.height * .06,
+                                decoration: BoxDecoration(
+                                    color: Colors.white,
+                                    borderRadius: BorderRadius.circular(5),
+                                    boxShadow: [
+                                      BoxShadow(
+                                          color: Colors.grey,
+                                          blurRadius: 1,
+                                          spreadRadius: .5)
+                                    ]),
+                              ),
+                            ],
+                          ),
                         ),
 
                       ],
@@ -995,13 +1008,13 @@ class _PrayerState extends State<Prayer> with TickerProviderStateMixin {
         children: [
           chkBox,
           Text(
-            '${_formatDate(selectedDate)}',
+            '${_formatDate(selectedDate.subtract(const Duration(days:1)))}',
             style: TextStyle(
-              fontSize: 20,
-              fontWeight: FontWeight.bold,
+              fontSize: 17,
+
             ),
           ),
-          Text(text,style: TextStyle(fontSize: 17,fontWeight: FontWeight.bold),),
+          Text(text,style: TextStyle(fontSize: 20,fontWeight: FontWeight.bold),),
         ],
       ),
       width: Get.width * .95,

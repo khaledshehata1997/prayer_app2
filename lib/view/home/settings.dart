@@ -6,6 +6,7 @@ import 'package:flutter/material.dart';
 import 'package:flutter/widgets.dart';
 import 'package:flutter_islamic_icons/flutter_islamic_icons.dart';
 import 'package:get/get.dart';
+import 'package:persistent_bottom_nav_bar/persistent_bottom_nav_bar.dart';
 import 'package:prayer_app/view/auth/reset_password.dart';
 import 'package:prayer_app/view/auth/sign_in_view.dart';
 import 'package:prayer_app/view/home/profile.dart';
@@ -64,10 +65,19 @@ class _SettingsState extends State<Settings> {
                       Row(
                         children: [
                           GestureDetector(
-                            onTap: ()async{
+                            onTap: () async {
                               final userData = await getUserData();
-                              Get.off(Profile(username: '${userData['username']}'
-                                , email: '${userData['email']}',));
+                              PersistentNavBarNavigator.pushNewScreen(
+                                context,
+                                screen: Profile(
+                                  username: '${userData['username']}',
+                                  email: '${userData['email']}',
+                                ),
+                                withNavBar: true,
+                                // OPTIONAL VALUE. True by default.
+                                pageTransitionAnimation:
+                                PageTransitionAnimation.cupertino,
+                              );
                             },
                             child: CircleAvatar(
                               radius: 20,

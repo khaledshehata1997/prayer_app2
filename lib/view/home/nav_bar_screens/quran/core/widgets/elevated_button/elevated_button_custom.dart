@@ -28,7 +28,7 @@ class ElevatedButtonCustom extends StatelessWidget {
     this.elevation = AppSize.s0,
     this.colors,
     this.fontSize,
-    this.textColor = ColorManager.white,
+    this.textColor = Colors.white,
     this.widget,
     this.borderColor,
     this.fontWeight,
@@ -45,7 +45,7 @@ class ElevatedButtonCustom extends StatelessWidget {
             borderRadius: BorderRadius.circular(radius!),
             side: BorderSide(color: borderColor ?? ColorManager.primary),
           ),
-          backgroundColor: Colors.blue ?? ColorManager.primary,
+          backgroundColor: Colors.blue[900] ?? ColorManager.primary,
           elevation: elevation,
           minimumSize: Size(width!, height!),
 
@@ -59,7 +59,7 @@ class ElevatedButtonCustom extends StatelessWidget {
           TextCustom(
               height: 0.0,
               text: text!,
-              color: Colors.black,
+              color: Colors.white,
               fontSize: fontSize,
               fontWeight: fontWeight,
               textAlign: TextAlign.center),

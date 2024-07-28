@@ -2,6 +2,7 @@ import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_qiblah/flutter_qiblah.dart';
 import 'package:get/get.dart';
+import 'package:persistent_bottom_nav_bar/persistent_bottom_nav_bar.dart';
 import 'package:prayer_app/qiblah/qiblah_compass.dart';
 import 'package:prayer_app/qiblah/qiblah_maps.dart';
 import '../../../qiblah/loading_indicator.dart';
@@ -48,10 +49,15 @@ class _QiblahState extends State<Qiblah> {
                         Row(
                           children: [
                             GestureDetector(
-                              onTap: ()async{
+                              onTap: () async {
                                 final userData = await getUserData();
-                                Get.off(Profile(username: '${userData['username']}'
-                                  , email: '${userData['email']}',));
+                                PersistentNavBarNavigator.pushNewScreen(
+                                  context,
+                                  screen:  Profile(username: '${userData['username']}',
+                                    email: '${userData['email']}',),
+                                  withNavBar: true, // OPTIONAL VALUE. True by default.
+                                  pageTransitionAnimation: PageTransitionAnimation.cupertino,
+                                );
                               },
                               child: CircleAvatar(
                                 radius: 20,
@@ -72,7 +78,12 @@ class _QiblahState extends State<Qiblah> {
                             ),
                             GestureDetector(
                               onTap: (){
-                                Get.to(const Settings());
+                                PersistentNavBarNavigator.pushNewScreen(
+                                  context,
+                                  screen: const Settings(),
+                                  withNavBar: true, // OPTIONAL VALUE. True by default.
+                                  pageTransitionAnimation: PageTransitionAnimation.cupertino,
+                                );
                               },
                               child: CircleAvatar(
                                 radius: 20,

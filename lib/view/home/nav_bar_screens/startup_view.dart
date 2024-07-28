@@ -8,9 +8,11 @@ import 'package:flutter_islamic_icons/flutter_islamic_icons.dart';
 import 'package:get/get.dart';
 import 'package:get/get_core/src/get_main.dart';
 import 'package:intl/intl.dart' hide TextDirection;
+import 'package:persistent_bottom_nav_bar/persistent_bottom_nav_bar.dart';
 import 'package:prayer_app/view/home/dailyGoals.dart';
 import 'package:prayer_app/view/home/nav_bar_screens/prayer_model/PrayerTimeCalculator.dart';
 import 'package:prayer_app/view/home/nav_bar_screens/prayer_model/prayerModel.dart';
+import 'package:prayer_app/view/home/nav_bar_screens/prayer_model/prayerModelCurrent.dart';
 import 'package:prayer_app/view/home/nav_bar_screens/prayer_model/sqlite/database_helper.dart';
 import 'package:prayer_app/view/home/nav_bar_screens/qiblah.dart';
 import 'package:intl/intl.dart' as intl;
@@ -44,29 +46,34 @@ class _StartUpState extends State<StartUp> {
     };
   }
   final DatabaseHelper dbHelper = DatabaseHelper();
-  PrayerModel? prayerData;
+  PrayerCurrent? prayerCurrent;
   DateTime selectedDate = DateTime.now();
   String formattedDate = DateFormat('yyyy-MM-dd').format(DateTime.now());
   String _formatDate(DateTime date) {
     return "${date.year}-${date.month.toString().padLeft(2, '0')}-${date.day.toString().padLeft(2, '0')}";
   }
-  void _savePrayerData() async {
-    if (prayerData != null) {
-      await dbHelper.insertPrayer(prayerData!);
+  void _savePrayerDataCurrent() async {
+    if (prayerCurrent != null) {
+      await dbHelper.insertPrayerCurrent(prayerCurrent!);
     }
   }
-  void _getPrayerData() async {
-    prayerData = await dbHelper.getPrayer(_formatDate(selectedDate));
-    if (prayerData == null) {
-      prayerData = PrayerModel(
-        day: _formatDate(selectedDate),
+  void _getPrayerDataCurrent() async {
+    prayerCurrent = await dbHelper.getPrayerCurrent(_formatDate(selectedDate));
+    prayerCurrent ??= PrayerCurrent(
+        day: formattedDate,
         prayer1: false,
         prayer2: false,
         prayer3: false,
         prayer4: false,
         prayer5: false,
+        prayer6: false,
+        prayer7: false,
+        prayer8: false,
+        prayer9: false,
+        prayer10: false,
+        prayer11: false,
+        calculation: 0,
       );
-    }
     setState(() {});
   }
 
@@ -81,7 +88,7 @@ class _StartUpState extends State<StartUp> {
   @override
   void initState() {
     super.initState();
-    _getPrayerData();
+    _getPrayerDataCurrent();
     _salah();
     _prayerTimeCalculator = PrayerTimeCalculator();
     _nextPrayerTime = DateTime(
@@ -167,11 +174,12 @@ class _StartUpState extends State<StartUp> {
 
   @override
   Widget build(BuildContext context) {
+    _getPrayerDataCurrent();
     final bool value = context.watch<BoolNotifier>().value1;
+    Duration timeLeft = _prayerTimeCalculator.timeLeftForNextPrayer(_nextPrayerTime);
     return Scaffold(
       appBar: PreferredSize(
-          preferredSize: Size(double.infinity, Get.height * .30),
-          // here the desired height
+          preferredSize: Size(double.infinity, Get.height * .21),
           child: Stack(
             alignment: Alignment.center,
             children: [
@@ -204,10 +212,13 @@ class _StartUpState extends State<StartUp> {
                             GestureDetector(
                               onTap: () async {
                                 final userData = await getUserData();
-                                Get.off(Profile(
-                                  username: '${userData['username']}',
-                                  email: '${userData['email']}',
-                                ));
+                                PersistentNavBarNavigator.pushNewScreen(
+                                  context,
+                                  screen:  Profile(username: '${userData['username']}',
+                                    email: '${userData['email']}',),
+                                  withNavBar: true, // OPTIONAL VALUE. True by default.
+                                  pageTransitionAnimation: PageTransitionAnimation.cupertino,
+                                );
                               },
                               child: CircleAvatar(
                                 radius: 15,
@@ -226,7 +237,12 @@ class _StartUpState extends State<StartUp> {
                         ),
                         GestureDetector(
                           onTap: () {
-                            Get.to(const Settings());
+                            PersistentNavBarNavigator.pushNewScreen(
+                              context,
+                              screen: const Settings(),
+                              withNavBar: true, // OPTIONAL VALUE. True by default.
+                              pageTransitionAnimation: PageTransitionAnimation.cupertino,
+                            );
                           },
                           child: CircleAvatar(
                             radius: 15,
@@ -253,6 +269,13 @@ class _StartUpState extends State<StartUp> {
                             color: Colors.white),
                       ),
                     ),
+                    Text(
+                      '${_prayerTimeCalculator.formatDuration(timeLeft)}',
+                      style: TextStyle(
+                          fontSize: 30,
+                          color: Colors.white,
+                          fontWeight: FontWeight.bold),
+                    )
                   ],
                 ),
               ),
@@ -356,68 +379,104 @@ class _StartUpState extends State<StartUp> {
                               (intl.DateFormat.jm()
                                       .format(getPrayerTime().fajr))
                                   .replaceAll('AM', "ص"),"images/Illustrator.png",Checkbox(
-                            //tristate: true,
-                              activeColor: Colors.blue[900],
-                              value: prayerData == null ? false : prayerData!.prayer1,
-                              onChanged: (value){
+                              activeColor: buttonColor,
+                              checkColor: Colors.white,
+                              value: prayerCurrent == null ? false :prayerCurrent!.prayer2,
+                              onChanged: (value) {
                                 setState(() {
-                                  prayerData!.prayer1 = value!;
+                                  prayerCurrent!.prayer2 = value!;
+                                  if (value) {
+                                    prayerCurrent!.calculation++;
+                                    _savePrayerDataCurrent();
+                                  } else {
+                                    prayerCurrent!.calculation--;
+                                    _savePrayerDataCurrent();
+                                  }
                                 });
-                                _savePrayerData();
-                              })),
+                                _savePrayerDataCurrent();
+                              }),),
                           SlahBox(
                               'الظهر',
                               (intl.DateFormat.jm()
                                       .format(getPrayerTime().dhuhr))
                                   .replaceAll('PM', "م"),"images/1.png",Checkbox(
-                            //tristate: true,
-                              activeColor: Colors.blue[900],
-                              value: prayerData == null ? false : prayerData!.prayer2,
-                              onChanged: (value){
+                              activeColor: buttonColor,
+                              checkColor: Colors.white,
+                              value: prayerCurrent == null ? false :prayerCurrent!.prayer5,
+                              onChanged: (value) {
                                 setState(() {
-                                  prayerData!.prayer2 = value!;
+                                  prayerCurrent!.prayer5 = value!;
+                                  if (value) {
+                                    prayerCurrent!.calculation++;
+                                    _savePrayerDataCurrent();
+                                  } else {
+                                    prayerCurrent!.calculation--;
+                                    _savePrayerDataCurrent();
+                                  }
                                 });
-                                _savePrayerData();
-                              })),
+                                _savePrayerDataCurrent();
+                              }),),
                           SlahBox(
                               'العصر',
                               (intl.DateFormat.jm().format(getPrayerTime().asr))
                                   .replaceAll('PM', "م"),"images/Union (1).png",Checkbox(
-                            //tristate: true,
-                              activeColor: Colors.blue[900],
-                              value: prayerData == null ? false : prayerData!.prayer3,
-                              onChanged: (value){
+                              activeColor: buttonColor,
+                              checkColor: Colors.white,
+                              value: prayerCurrent == null ? false :prayerCurrent!.prayer6,
+                              onChanged: (value) {
                                 setState(() {
-                                  prayerData!.prayer3 = value!;
+                                  prayerCurrent!.prayer6 = value!;
+                                  if (value) {
+                                    prayerCurrent!.calculation++;
+                                    _savePrayerDataCurrent();
+                                  } else {
+                                    prayerCurrent!.calculation--;
+                                    _savePrayerDataCurrent();
+                                  }
                                 });
-                                _savePrayerData();
-                              })),
+                                _savePrayerDataCurrent();
+                              }),),
                           SlahBox(
                               'المغرب',
                               (intl.DateFormat.jm()
                                       .format(getPrayerTime().maghrib))
                                   .replaceAll('PM', "م"),"images/Illustrator (2).png",Checkbox(
-                            //tristate: true,
-                              activeColor: Colors.blue[900],
-                              value: prayerData == null ? false : prayerData!.prayer4, onChanged: (value){
-                            setState(() {
-                              prayerData!.prayer4 = value!;
-                            });
-                            _savePrayerData();
-                          })),
+                              activeColor: buttonColor,
+                              checkColor: Colors.white,
+                              value: prayerCurrent == null ? false :prayerCurrent!.prayer8,
+                              onChanged: (value) {
+                                setState(() {
+                                  prayerCurrent!.prayer8 = value!;
+                                  if (value) {
+                                    prayerCurrent!.calculation++;
+                                    _savePrayerDataCurrent();
+                                  } else {
+                                    prayerCurrent!.calculation--;
+                                    _savePrayerDataCurrent();
+                                  }
+                                });
+                                _savePrayerDataCurrent();
+                              })),
                           SlahBox(
                               'العشاء',
                               (intl.DateFormat.jm()
                                       .format(getPrayerTime().isha))
                                   .replaceAll('PM', "م"),"images/Illustrator (1).png",Checkbox(
-                            //tristate: true,
-                              activeColor: Colors.blue[900],
-                              value: prayerData == null ? false : prayerData!.prayer5,
-                              onChanged: (value){
+                              activeColor: buttonColor,
+                              checkColor: Colors.white,
+                              value: prayerCurrent == null ? false :prayerCurrent!.prayer10,
+                              onChanged: (value) {
                                 setState(() {
-                                  prayerData!.prayer5 = value!;
+                                  prayerCurrent!.prayer10 = value!;
+                                  if (value) {
+                                    prayerCurrent!.calculation++;
+                                    _savePrayerDataCurrent();
+                                  } else {
+                                    prayerCurrent!.calculation--;
+                                    _savePrayerDataCurrent();
+                                  }
                                 });
-                                _savePrayerData();
+                                _savePrayerDataCurrent();
                               })),
                         ],
                       ),
@@ -428,7 +487,12 @@ class _StartUpState extends State<StartUp> {
                   onPressed: () {},
                   child: TextButton(
                     onPressed: () {
-                      Get.to(const DailyGoals());
+                      PersistentNavBarNavigator.pushNewScreen(
+                        context,
+                        screen: const DailyGoals(),
+                        withNavBar: true, // OPTIONAL VALUE. True by default.
+                        pageTransitionAnimation: PageTransitionAnimation.cupertino,
+                      );
                     },
                     child: Text(
                       textDirection: TextDirection.rtl,
@@ -459,7 +523,12 @@ class _StartUpState extends State<StartUp> {
                   children: [
                     GestureDetector(
                       onTap: () {
-                        Get.to(Qiblah());
+                        PersistentNavBarNavigator.pushNewScreen(
+                          context,
+                          screen:  Qiblah(),
+                          withNavBar: true, // OPTIONAL VALUE. True by default.
+                          pageTransitionAnimation: PageTransitionAnimation.cupertino,
+                        );
                       },
                       child: Container(
                         child: Column(
@@ -488,7 +557,12 @@ class _StartUpState extends State<StartUp> {
                     ),
                     GestureDetector(
                       onTap: () {
-                        Get.to(const Roqua());
+                        PersistentNavBarNavigator.pushNewScreen(
+                          context,
+                          screen: const Roqua(),
+                          withNavBar: true, // OPTIONAL VALUE. True by default.
+                          pageTransitionAnimation: PageTransitionAnimation.cupertino,
+                        );
                       },
                       child: Container(
                         child: Column(
@@ -517,7 +591,12 @@ class _StartUpState extends State<StartUp> {
                     ),
                     GestureDetector(
                       onTap: () {
-                        Get.to(SibhaView());
+                        PersistentNavBarNavigator.pushNewScreen(
+                          context,
+                          screen:  SibhaView(),
+                          withNavBar: true, // OPTIONAL VALUE. True by default.
+                          pageTransitionAnimation: PageTransitionAnimation.cupertino,
+                        );
                       },
                       child: Container(
                         child: Column(
@@ -567,7 +646,7 @@ class _StartUpState extends State<StartUp> {
             BoxShadow(color: Colors.grey, blurRadius: 1, spreadRadius: .5)
           ]),
       child: Row(
-        mainAxisAlignment: MainAxisAlignment.spaceAround,
+        mainAxisAlignment: MainAxisAlignment.spaceBetween,
         children: [
           chkbox,
           Text(

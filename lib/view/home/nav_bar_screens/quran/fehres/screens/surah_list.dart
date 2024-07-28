@@ -35,6 +35,7 @@ class _SurahListScreenState extends State<SurahListScreen> {
                 // mainAxisAlignment: MainAxisAlignment.spaceBetween,
                 children: [
                   Image.asset(
+                    color: Colors.blue[900],
                     'images/icon_quran.png',
                     width: 28.0,
                   ),

@@ -76,7 +76,6 @@ class _QuranJustAudioScreenState extends State<QuranJustAudioScreen> {
       backgroundColor: const Color(0xff175973),
       appBarCustom: const AppBarCustom(
         brightness: Brightness.light,
-        backgroundColor: Colors.transparent,
         text: 'القرآن الكريم',
         textColor: ColorManager.white,
         iconColor: ColorManager.white,

@@ -22,65 +22,87 @@ class HomeView extends StatefulWidget {
 }
 
 class _HomeViewState extends State<HomeView> {
-  int selectedPage = 2;
-  final _pageNo = [  Azkar(), const Quran(),const StartUp(),Prayer()];
+  final _pageNo = [  const StartUp(), const Quran(),Azkar(),Prayer()];
+  final PersistentTabController _controller = PersistentTabController(initialIndex: 0);
+  List<PersistentBottomNavBarItem> _navBarsItems() {
+    return [
+      PersistentBottomNavBarItem(
+        icon: Icon(Icons.home_outlined, color: Colors.blue[900],),
+        contentPadding: 2,
+        title: 'رئيسيه',
+      ),
 
-  PersistentTabController _controller = PersistentTabController(initialIndex: 0);
+      PersistentBottomNavBarItem(
+        icon: Icon(FlutterIslamicIcons.quran2, color: Colors.blue[900],),
+        contentPadding: 2,
+        title: 'القران',
+      ),
+      PersistentBottomNavBarItem(
+        icon: Icon(FlutterIslamicIcons.tasbih2, color: Colors.blue[900],),
+        contentPadding: 2,
+        title: 'الأذكار',
+
+      ),
+      PersistentBottomNavBarItem(
+        icon: Icon(FlutterIslamicIcons.prayingPerson, color: Colors.blue[900],),
+        contentPadding: 2,
+        title: 'الصلاه',
+      ),
+    ];
+  }
 
   @override
   Widget build(BuildContext context) {
-    GlobalKey<ConvexAppBarState> appBarKey = GlobalKey<ConvexAppBarState>();
-    return Scaffold(
-      bottomNavigationBar: BottomNavigationBar(
-        elevation: 5,
-        type: BottomNavigationBarType.fixed,
-        currentIndex: selectedPage,
-        onTap: (int i) {
-           setState(() {
-            selectedPage = i;
-            appBarKey.currentState?.animateTo(i);
-          });
-        },
-        items:  <BottomNavigationBarItem>[
-          BottomNavigationBarItem(
-            icon: Icon(FlutterIslamicIcons.tasbih2,color: Colors.blue[900],),
-            label: 'الأذكار',
-          ),
-          BottomNavigationBarItem(
-            icon: Icon(FlutterIslamicIcons.quran2,color: Colors.blue[900],),
-            label: 'القران',
-          ),
-          BottomNavigationBarItem(
-            icon: Icon(Icons.home_outlined,color: Colors.blue[900],),
-            label: 'رئيسيه',
-          ),
-          BottomNavigationBarItem(
-            icon: Icon(FlutterIslamicIcons.prayingPerson,color: Colors.blue[900],),
-            label: 'الصلاه',
-          ),
-        ],
+    return Center(
+      child: PersistentTabView(
+        padding: EdgeInsets.all(8),
+        context,
+        screens: _pageNo,
+        items: _navBarsItems(),
+        controller: _controller,
+        backgroundColor: Colors.white,
+        confineToSafeArea: true,
+        handleAndroidBackButtonPress: true,
+        resizeToAvoidBottomInset: true,
+        decoration: NavBarDecoration(
+          borderRadius: BorderRadius.circular(10.0),
+        ),
+        navBarStyle: NavBarStyle.style6,
       ),
-        body: _pageNo[selectedPage]
+
     );
-      // bottomNavigationBar:ConvexAppBar(
-      //   key: appBarKey,
-      //   backgroundColor: Colors.grey,
-      //   items:const [
-      //     TabItem(icon: Icon(Icons.person,color: Colors.white,), title: 'الأذكار'),
-      //     TabItem(icon: Icon(Icons.contact_page_outlined,color: Colors.white,), title: 'القران'),
-      //     TabItem(icon: Icon(Icons.calendar_month,color: Colors.white,), title: 'رئيسيه'),
-      //     TabItem(icon: Icon(Icons.add,color: Colors.white,), title: 'الصيام'),
-      //     TabItem(icon: Icon(Icons.home_outlined,color: Colors.white,),title: 'الصلاه'),
-      //   ],
-      //   style: TabStyle.fixedCircle,
-      //   initialActiveIndex: selectedPage,
-      //   elevation: 5,
-      //   onTap: (int i) {
-      //     setState(() {
-      //       selectedPage = i;
-      //       appBarKey.currentState?.animateTo(i);
-      //     });
-      //   },
-      // ),
+    //   Scaffold(
+    //   bottomNavigationBar: BottomNavigationBar(
+    //     elevation: 5,
+    //     type: BottomNavigationBarType.fixed,
+    //     currentIndex: selectedPage,
+    //     onTap: (int i) {
+    //        setState(() {
+    //         selectedPage = i;
+    //         appBarKey.currentState?.animateTo(i);
+    //       });
+    //     },
+    //     items:  <BottomNavigationBarItem>[
+    //       BottomNavigationBarItem(
+    //         icon: Icon(FlutterIslamicIcons.tasbih2,color: Colors.blue[900],),
+    //         label: 'الأذكار',
+    //       ),
+    //       BottomNavigationBarItem(
+    //         icon: Icon(FlutterIslamicIcons.quran2,color: Colors.blue[900],),
+    //         label: 'القران',
+    //       ),
+    //       BottomNavigationBarItem(
+    //         icon: Icon(Icons.home_outlined,color: Colors.blue[900],),
+    //         label: 'رئيسيه',
+    //       ),
+    //       BottomNavigationBarItem(
+    //         icon: Icon(FlutterIslamicIcons.prayingPerson,color: Colors.blue[900],),
+    //         label: 'الصلاه',
+    //       ),
+    //     ],
+    //   ),
+    //     body: _pageNo[selectedPage]
+    // );
+
   }
 }

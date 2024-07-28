@@ -3,6 +3,7 @@ import 'package:firebase_auth/firebase_auth.dart';
 import 'package:flutter/material.dart';
 import 'package:get/get.dart';
 import 'package:prayer_app/test.dart';
+import 'package:prayer_app/view/auth/phone_signIn_view.dart';
 import 'package:prayer_app/view/auth/reset_password.dart';
 import 'package:prayer_app/view/auth/sign_up_view.dart';
 import 'package:prayer_app/view/home/home_view.dart';
@@ -92,7 +93,7 @@ class _SignUpViewState extends State<SignInView> {
                       myEmail = val!;
                     },
                     onChanged: () {},
-                    hint: 's@gmail.com',
+                    hint: '',
                     scure: false,
                     txt1: "البريد الألكتروني لا يمكن ان يكون اكبر من 100 حرف",
                     txt2: "البريد الألكتروني لا يمكن ان يكون اقل من 4 احرف",
@@ -113,7 +114,7 @@ class _SignUpViewState extends State<SignInView> {
                       myPassword = val!;
                     },
                     onChanged: () {},
-                    hint: '***********',
+                    hint: '',
                     scure: true,
                   ),
                   GestureDetector(
@@ -182,8 +183,38 @@ class _SignUpViewState extends State<SignInView> {
                       ),
                     ],
                   ),
-                  SizedBox(height: Get.height*.016),
-
+                  // SizedBox(height: Get.height*.02),
+                  // Divider(
+                  //   height: 5,
+                  // ),
+                  // SizedBox(height: Get.height*.02),
+                  // CustomText(
+                  //   text: 'او',
+                  //   size: 17,
+                  //   isBold: false,
+                  //   alignment: Alignment.center,
+                  // ),
+                  // GestureDetector(
+                  //   onTap: () {
+                  //     Get.to(const PhoneSignIn());
+                  //   },
+                  //   child: Container(
+                  //     alignment: Alignment.center,
+                  //     child: Text(
+                  //       ' تسجيل الدخول برقم الهاتف',
+                  //       style: TextStyle(
+                  //           fontSize: 20,
+                  //           fontWeight: FontWeight.bold,
+                  //           color: buttonColor),
+                  //     ),
+                  //     decoration: BoxDecoration(
+                  //         color:Colors.white,
+                  //         borderRadius: BorderRadius.circular(10)),
+                  //     margin: EdgeInsets.only(left: 15, right: 15, top: 20),
+                  //     width: MediaQuery.of(context).size.width,
+                  //     height: 60,
+                  //   ),
+                  // ),
                 ],
               ),
             ),

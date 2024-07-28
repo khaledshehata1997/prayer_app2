@@ -20,7 +20,6 @@ class AppBarCustom extends StatelessWidget implements PreferredSizeWidget {
   final FontWeight? fontWeight;
   final bool? centerTitle;
   final Widget? widget;
-  final Color? backgroundColor;
   final Color? textColor;
   final Color? iconColor;
   final Brightness? brightness;
@@ -35,7 +34,6 @@ class AppBarCustom extends StatelessWidget implements PreferredSizeWidget {
     this.textAlign = TextAlign.center,
     this.fontSize = FontSize.s12 * 2,
     this.fontWeight = FontWeight.w600,
-    this.backgroundColor = ColorManager.secondary1,
     this.brightness = Brightness.dark,
     this.textColor = ColorManager.black,
     this.iconColor = ColorManager.primary,
@@ -48,8 +46,8 @@ class AppBarCustom extends StatelessWidget implements PreferredSizeWidget {
       backgroundColor: Colors.blue,
       centerTitle: centerTitle,
       systemOverlayStyle: SystemUiOverlayStyle(
-        statusBarIconBrightness: brightness,
-        statusBarColor: backgroundColor,
+        // statusBarIconBrightness: brightness,
+        statusBarColor: Colors.blue[900],
       ),
       leading: isNull!
           ? IconButton(

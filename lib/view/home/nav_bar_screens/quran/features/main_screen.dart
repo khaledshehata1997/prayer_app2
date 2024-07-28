@@ -1,4 +1,5 @@
 import 'package:flutter/material.dart';
+import 'package:flutter_islamic_icons/flutter_islamic_icons.dart';
 import 'package:prayer_app/view/home/nav_bar_screens/quran/features/quran/presentation/screens/quran_screen.dart';
 import 'package:prayer_app/view/home/nav_bar_screens/quran/features/quran/presentation/screens/quran_surah_screen.dart';
 import 'package:prayer_app/view/home/nav_bar_screens/quran/fehres/screens/surah_list.dart';
@@ -20,7 +21,6 @@ class _MainScreenState extends State<MainScreen> {
   List<Widget> screens = [
     const QuranSurahScreen(),
     const QuranScreen(),
-    Search(),
     const SurahListScreen()
   ];
 
@@ -37,27 +37,27 @@ class _MainScreenState extends State<MainScreen> {
               currentPageIndex = index;
             });
           },
-          indicatorColor: Colors.blue,
+          indicatorColor: Colors.blue[900],
           selectedIndex: currentPageIndex,
-          destinations: const <Widget>[
+          destinations:  <Widget>[
             NavigationDestination(
-              icon: Icon(Icons.folder_copy_outlined),
-              selectedIcon: Icon(Icons.folder_copy),
+              icon: Icon(FlutterIslamicIcons.takbir,color: Colors.blue[900],),
+              selectedIcon: Icon(FlutterIslamicIcons.takbir,color: Colors.white,),
               label: 'القران صوتي',
             ),
             NavigationDestination(
-              selectedIcon: Icon(Icons.my_library_books_sharp),
-              icon: Icon(Icons.my_library_books_sharp),
+              selectedIcon: Icon(FlutterIslamicIcons.solidQuran,color: Colors.white,),
+              icon: Icon(FlutterIslamicIcons.solidQuran,color: Colors.blue[900],),
               label: 'المصحف',
             ),
+            // NavigationDestination(
+            //   selectedIcon: Icon(Icons.my_library_books_sharp),
+            //   icon: Icon(Icons.my_library_books_sharp),
+            //   label: 'البحث',
+            // ),
             NavigationDestination(
-              selectedIcon: Icon(Icons.my_library_books_sharp),
-              icon: Icon(Icons.my_library_books_sharp),
-              label: 'البحث',
-            ),
-            NavigationDestination(
-              selectedIcon: Icon(Icons.my_library_books_sharp),
-              icon: Icon(Icons.my_library_books_sharp),
+              selectedIcon: Icon(Icons.book,color: Colors.white,),
+              icon: Icon(Icons.book,color: Colors.blue[900],),
               label: 'الفهرس',
             ),
           ],

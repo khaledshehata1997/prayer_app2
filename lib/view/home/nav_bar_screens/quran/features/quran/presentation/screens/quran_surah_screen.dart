@@ -1,6 +1,7 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:flutter_screenutil/flutter_screenutil.dart';
+import 'package:prayer_app/constants.dart';
 import 'package:prayer_app/view/home/nav_bar_screens/quran/core/utils/routes_manager.dart';
 import 'package:prayer_app/view/home/nav_bar_screens/quran/core/widgets/component.dart';
 import 'package:prayer_app/view/home/nav_bar_screens/quran/features/quran/presentation/surah_cubit/surah_cubit.dart';
@@ -19,10 +20,12 @@ class QuranSurahScreen extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    return ScaffoldCustom(
-      appBarCustom: const AppBarCustom(
-        text: 'القرآن',
-        isNull: false,
+    return Scaffold(
+      appBar:  AppBar(
+        backgroundColor: Colors.blue[900],
+        centerTitle: true,
+        iconTheme: IconThemeData(color: Colors.white),
+        title: Text('القرآن',style: TextStyle(color: Colors.white),),
       ),
       body: BlocProvider.value(
         value: BlocProvider.of<QuranCubit>(context)..getQuranFun(),
@@ -72,15 +75,16 @@ class QuranSurahScreen extends StatelessWidget {
                               boxShadow: [
                                 BoxShadow(
                                   spreadRadius: 1,
-                                  color: Colors.grey[200]!,
+                                  color: Colors.grey,
                                   offset: const Offset(0.0, 3), //(x,y)
-                                  blurRadius: 2.0,
+                                   blurRadius: 6.0,
                                 ),
                               ],
-                              color: Colors.blue,
+                              color: Colors.white,
                             ),
                                 child: ListTile(
                                 title: TextCustom(
+                                  color: Colors.black,
                                   height: 0.0,
                                   text: state.quranEntity.data[index].name,
                                   fontSize: 20.sp,
@@ -89,7 +93,7 @@ class QuranSurahScreen extends StatelessWidget {
                                     height: 0.0,
                                     text: state
                                         .quranEntity.data[index].englishName,
-                                    color: ColorManager.grey2),
+                                    color: Colors.black),
                                 trailing: SizedBox(
                                   width: 100.w,
                                   child: Row(
@@ -98,6 +102,7 @@ class QuranSurahScreen extends StatelessWidget {
                                         CrossAxisAlignment.center,
                                     children: [
                                       TextCustom(
+                                        color: Colors.black,
                                         text:
                                             '(${state.quranEntity.data[index].numberOfAyahs})',
                                         fontSize: 16.sp,
