@@ -3,11 +3,24 @@ import 'package:flutter/material.dart';
 import 'package:get/get.dart';
 import 'package:get/get_core/src/get_main.dart';
 import 'package:prayer_app/view/auth/sign_in_view.dart';
+import 'package:prayer_app/view/home/home_view.dart';
 
 import '../../widgets/custom_text.dart';
-class ActivateSuccess extends StatelessWidget {
+class ActivateSuccess extends StatefulWidget {
   const ActivateSuccess({super.key});
 
+  @override
+  State<ActivateSuccess> createState() => _ActivateSuccessState();
+}
+
+class _ActivateSuccessState extends State<ActivateSuccess> {
+  @override
+  void initState(){
+    super.initState();
+    Future.delayed(const Duration(seconds: 2),(){
+      Get.offAll(const HomeView());
+    });
+  }
   @override
   Widget build(BuildContext context) {
     return Scaffold(
@@ -38,18 +51,18 @@ class ActivateSuccess extends StatelessWidget {
               textDirection: TextDirection.rtl,
               style: TextStyle(fontWeight: FontWeight.bold,fontSize: 25),),
             SizedBox(height: Get.height*.04),
-            SizedBox(
-              width: Get.width * .9,
-              height: Get.height * 0.05,
-              child: ElevatedButton(
-                style: ElevatedButton.styleFrom(
-                  backgroundColor: Colors.blue[900]
-                ),
-                  onPressed: (){
-                  Get.offAll(SignInView());
-                  }, child: Text("تسجيل الدخول",
-                textDirection: TextDirection.rtl,style: TextStyle(color: Colors.white,fontSize: 18),)),
-            )
+            // SizedBox(
+            //   width: Get.width * .9,
+            //   height: Get.height * 0.05,
+            //   child: ElevatedButton(
+            //     style: ElevatedButton.styleFrom(
+            //       backgroundColor: Colors.blue[900]
+            //     ),
+            //       onPressed: (){
+            //       Get.offAll(SignInView());
+            //       }, child: Text("تسجيل الدخول",
+            //     textDirection: TextDirection.rtl,style: TextStyle(color: Colors.white,fontSize: 18),)),
+            // )
 
           ],
         ),
