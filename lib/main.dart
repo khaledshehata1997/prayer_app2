@@ -6,6 +6,7 @@ import 'package:flutter_screenutil/flutter_screenutil.dart';
 import 'package:get/get.dart';
 import 'package:prayer_app/firebase_options.dart';
 import 'package:prayer_app/provider/boolNotifier.dart';
+import 'package:prayer_app/provider/prayer_provider.dart';
 import 'package:prayer_app/view/auth/activate.dart';
 import 'package:prayer_app/view/auth/activite_success.dart';
 import 'package:prayer_app/view/auth/splash_view.dart';
@@ -64,6 +65,7 @@ class MyApp extends StatelessWidget {
   Widget build(BuildContext context) {
     return  MultiBlocProvider(
         providers: [
+          Provider(create: (context) => PrayerProvider()),
           BlocProvider(create: (context) => QuranOffCubit()),
           BlocProvider(create: (context) => sl<QuranCubit>()),
           BlocProvider(create: (context) => sl<SurahCubit>()),

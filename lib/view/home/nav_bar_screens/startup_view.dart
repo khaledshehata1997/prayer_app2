@@ -24,6 +24,7 @@ import 'package:shared_preferences/shared_preferences.dart';
 
 import '../../../constants.dart';
 import '../../../provider/boolNotifier.dart';
+import '../../../provider/prayer_provider.dart';
 import '../../roqua_view.dart';
 import '../../sibha/sibha_view.dart';
 
@@ -165,6 +166,24 @@ class _StartUpState extends State<StartUp> {
     salahMin.add(int.parse(
         DateFormat.jm().format(getPrayerTime().isha).substring(2, 4)));
   }
+  void _updateCalculation(BuildContext context) {
+    final provider = Provider.of<PrayerProvider>(context, listen: false);
+    final prayer = provider.prayerCurrentData!;
+    int count = 0;
+    if (prayer.prayer1) count++;
+    if (prayer.prayer2) count++;
+    if (prayer.prayer3) count++;
+    if (prayer.prayer4) count++;
+    if (prayer.prayer5) count++;
+    if (prayer.prayer6) count++;
+    if (prayer.prayer7) count++;
+    if (prayer.prayer8) count++;
+    if (prayer.prayer9) count++;
+    if (prayer.prayer10) count++;
+    if (prayer.prayer11) count++;
+    prayer.calculation = count;
+    provider.updatePrayerCurrent(prayer);
+  }
 
   @override
   void dispose() {
@@ -174,12 +193,13 @@ class _StartUpState extends State<StartUp> {
 
   @override
   Widget build(BuildContext context) {
-    _getPrayerDataCurrent();
+    // _getPrayerDataCurrent();
+
     final bool value = context.watch<BoolNotifier>().value1;
     Duration timeLeft = _prayerTimeCalculator.timeLeftForNextPrayer(_nextPrayerTime);
     return Scaffold(
       appBar: PreferredSize(
-          preferredSize: Size(double.infinity, Get.height * .21),
+          preferredSize: Size(double.infinity, Get.height * .3),
           child: Stack(
             alignment: Alignment.center,
             children: [
@@ -281,354 +301,314 @@ class _StartUpState extends State<StartUp> {
               ),
             ],
           )),
-      body: Stack(
-        children: [
-          Container(
-            height: MediaQuery.of(context).size.height,
-            width: MediaQuery.of(context).size.width,
-            //  margin: EdgeInsets.only(left: 2, top: 5, bottom: 5, right: 2),
-            decoration: BoxDecoration(
-              image: DecorationImage(
-                  image: AssetImage('images/back ground.jpeg'),
-                  fit: BoxFit.cover),
-              borderRadius: BorderRadius.circular(1),
-              color: Colors.white,
-            ),
-          ),
-          SingleChildScrollView(
-            child: Column(
-              children: [
-                Container(
-                  margin: EdgeInsets.symmetric(horizontal: 10),
-                  alignment: Alignment.topRight,
-                  child: Text(
-                    'الصلوات اليومية',
-                    style: TextStyle(
-                        letterSpacing: .6,
-                        fontWeight: FontWeight.bold,
-                        fontSize: 20,
-                        color: Colors.black),
-                  ),
+      body: Consumer<PrayerProvider>(
+        builder: (context, provider, child) {
+          final prayer = provider.prayerCurrentData!;
+          return Stack(
+            children: [
+              Container(
+                height: MediaQuery.of(context).size.height,
+                width: MediaQuery.of(context).size.width,
+                //  margin: EdgeInsets.only(left: 2, top: 5, bottom: 5, right: 2),
+                decoration: BoxDecoration(
+                  image: DecorationImage(
+                      image: AssetImage('images/back ground.jpeg'),
+                      fit: BoxFit.cover),
+                  borderRadius: BorderRadius.circular(1),
+                  color: Colors.white,
                 ),
-                value == true
-                    ? Container(
-                        child: Row(
-                          mainAxisAlignment: MainAxisAlignment.spaceAround,
-                          children: [
-                            Container(
-                              child: TextButton(
-                                onPressed: () {
-                                  context.read<BoolNotifier>().setValue1(false);
-                                },
-                                child: Text(
-                                  'اعادة التشغيل',
-                                  textDirection: TextDirection.rtl,
-                                  style: TextStyle(
-                                      color: buttonColor,
-                                      fontSize: 12,
-                                      fontWeight: FontWeight.bold),
-                                ),
-                              ),
-                              alignment: Alignment.center,
-                              width: Get.width * .23,
-                              height: Get.height * .043,
-                              decoration: BoxDecoration(
-                                  color: Colors.white,
-                                  borderRadius: BorderRadius.circular(3),
-                                  boxShadow: [
-                                    BoxShadow(
-                                        color: buttonColor,
-                                        blurRadius: 1,
-                                        spreadRadius: .5)
-                                  ]),
-                            ),
-                            Column(
-                              mainAxisAlignment: MainAxisAlignment.center,
+              ),
+              SingleChildScrollView(
+                child: Column(
+                  children: [
+                    Container(
+                      margin: EdgeInsets.symmetric(horizontal: 10),
+                      alignment: Alignment.topRight,
+                      child: Text(
+                        'الصلوات اليومية',
+                        style: TextStyle(
+                            letterSpacing: .6,
+                            fontWeight: FontWeight.bold,
+                            fontSize: 20,
+                            color: Colors.black),
+                      ),
+                    ),
+                    value == true
+                        ? Container(
+                            child: Row(
+                              mainAxisAlignment: MainAxisAlignment.spaceAround,
                               children: [
                                 Container(
-                                  alignment: Alignment.topRight,
-                                  child: Text(
-                                    'تم تفعيل وضع ايقاف الصلاه والصيام',
-                                    style: TextStyle(
-                                        letterSpacing: .6,
-                                        fontWeight: FontWeight.bold,
-                                        fontSize: 16,
-                                        color: Colors.black),
+                                  child: TextButton(
+                                    onPressed: () {
+                                      context.read<BoolNotifier>().setValue1(false);
+                                    },
+                                    child: Text(
+                                      'اعادة التشغيل',
+                                      textDirection: TextDirection.rtl,
+                                      style: TextStyle(
+                                          color: buttonColor,
+                                          fontSize: 12,
+                                          fontWeight: FontWeight.bold),
+                                    ),
                                   ),
+                                  alignment: Alignment.center,
+                                  width: Get.width * .23,
+                                  height: Get.height * .043,
+                                  decoration: BoxDecoration(
+                                      color: Colors.white,
+                                      borderRadius: BorderRadius.circular(3),
+                                      boxShadow: [
+                                        BoxShadow(
+                                            color: buttonColor,
+                                            blurRadius: 1,
+                                            spreadRadius: .5)
+                                      ]),
                                 ),
+                                Column(
+                                  mainAxisAlignment: MainAxisAlignment.center,
+                                  children: [
+                                    Container(
+                                      alignment: Alignment.topRight,
+                                      child: Text(
+                                        'تم تفعيل وضع ايقاف الصلاه والصيام',
+                                        style: TextStyle(
+                                            letterSpacing: .6,
+                                            fontWeight: FontWeight.bold,
+                                            fontSize: 16,
+                                            color: Colors.black),
+                                      ),
+                                    ),
+                                  ],
+                                )
                               ],
-                            )
-                          ],
+                            ),
+                            width: Get.width * .95,
+                            height: Get.height * .1,
+                            decoration: BoxDecoration(
+                                color: Colors.white,
+                                borderRadius: BorderRadius.circular(5),
+                                boxShadow: [
+                                  BoxShadow(
+                                      color: Colors.grey,
+                                      blurRadius: 2,
+                                      spreadRadius: .5)
+                                ]),
+                          )
+                        : Column(
+                            children: [
+                              SlahBox(
+                                  'الفجر',
+                                  (intl.DateFormat.jm()
+                                          .format(getPrayerTime().fajr))
+                                      .replaceAll('AM', "ص"),"images/Illustrator.png",Checkbox(
+                                  activeColor: buttonColor,
+                                  checkColor: Colors.white,
+                                  value: prayer.prayer2,
+                                  onChanged: (value) {
+                                    prayer.prayer2 = value!;
+                                    _updateCalculation(context);
+                                  }),),
+                              SlahBox(
+                                  'الظهر',
+                                  (intl.DateFormat.jm()
+                                          .format(getPrayerTime().dhuhr))
+                                      .replaceAll('PM', "م"),"images/1.png",Checkbox(
+                                  activeColor: buttonColor,
+                                  checkColor: Colors.white,
+                                  value: prayer.prayer5,
+                                  onChanged: (value) {
+                                    prayer.prayer5 = value!;
+                                    _updateCalculation(context);
+                                  }),),
+                              SlahBox(
+                                  'العصر',
+                                  (intl.DateFormat.jm().format(getPrayerTime().asr))
+                                      .replaceAll('PM', "م"),"images/Union (1).png",Checkbox(
+                                  activeColor: buttonColor,
+                                  checkColor: Colors.white,
+                                  value: prayer.prayer6,
+                                  onChanged: (value) {
+                                    prayer.prayer6 = value!;
+                                    _updateCalculation(context);
+                                  }),),
+                              SlahBox(
+                                  'المغرب',
+                                  (intl.DateFormat.jm()
+                                          .format(getPrayerTime().maghrib))
+                                      .replaceAll('PM', "م"),"images/Illustrator (2).png",Checkbox(
+                                  activeColor: buttonColor,
+                                  checkColor: Colors.white,
+                                  value: prayer.prayer8,
+                                  onChanged: (value) {
+                                    prayer.prayer8 = value!;
+                                    _updateCalculation(context);
+                                  })),
+                              SlahBox(
+                                  'العشاء',
+                                  (intl.DateFormat.jm()
+                                          .format(getPrayerTime().isha))
+                                      .replaceAll('PM', "م"),"images/Illustrator (1).png",Checkbox(
+                                  activeColor: buttonColor,
+                                  checkColor: Colors.white,
+                                  value: prayer.prayer10,
+                                  onChanged: (value) {
+                                    prayer.prayer10 = value!;
+                                    _updateCalculation(context);
+                                  })),
+                            ],
+                          ),
+                    SizedBox(
+                      height: Get.height * 0.03,
+                    ),
+                    TextButton(
+                      onPressed: () {},
+                      child: TextButton(
+                        onPressed: () {
+                          PersistentNavBarNavigator.pushNewScreen(
+                            context,
+                            screen: const DailyGoals(),
+                            withNavBar: true, // OPTIONAL VALUE. True by default.
+                            pageTransitionAnimation: PageTransitionAnimation.cupertino,
+                          );
+                        },
+                        child: Text(
+                          textDirection: TextDirection.rtl,
+                          'عرض باقي اهداف اليوم',
+                          style: TextStyle(
+                            fontSize: 20,
+                            fontWeight: FontWeight.bold,
+                            color: buttonColor,
+                            decoration: TextDecoration.underline,
+                          ),
                         ),
-                        width: Get.width * .95,
-                        height: Get.height * .1,
-                        decoration: BoxDecoration(
-                            color: Colors.white,
-                            borderRadius: BorderRadius.circular(5),
-                            boxShadow: [
-                              BoxShadow(
-                                  color: Colors.grey,
-                                  blurRadius: 2,
-                                  spreadRadius: .5)
-                            ]),
-                      )
-                    : Column(
-                        children: [
-                          SlahBox(
-                              'الفجر',
-                              (intl.DateFormat.jm()
-                                      .format(getPrayerTime().fajr))
-                                  .replaceAll('AM', "ص"),"images/Illustrator.png",Checkbox(
-                              activeColor: buttonColor,
-                              checkColor: Colors.white,
-                              value: prayerCurrent == null ? false :prayerCurrent!.prayer2,
-                              onChanged: (value) {
-                                setState(() {
-                                  prayerCurrent!.prayer2 = value!;
-                                  if (value) {
-                                    prayerCurrent!.calculation++;
-                                    _savePrayerDataCurrent();
-                                  } else {
-                                    prayerCurrent!.calculation--;
-                                    _savePrayerDataCurrent();
-                                  }
-                                });
-                                _savePrayerDataCurrent();
-                              }),),
-                          SlahBox(
-                              'الظهر',
-                              (intl.DateFormat.jm()
-                                      .format(getPrayerTime().dhuhr))
-                                  .replaceAll('PM', "م"),"images/1.png",Checkbox(
-                              activeColor: buttonColor,
-                              checkColor: Colors.white,
-                              value: prayerCurrent == null ? false :prayerCurrent!.prayer5,
-                              onChanged: (value) {
-                                setState(() {
-                                  prayerCurrent!.prayer5 = value!;
-                                  if (value) {
-                                    prayerCurrent!.calculation++;
-                                    _savePrayerDataCurrent();
-                                  } else {
-                                    prayerCurrent!.calculation--;
-                                    _savePrayerDataCurrent();
-                                  }
-                                });
-                                _savePrayerDataCurrent();
-                              }),),
-                          SlahBox(
-                              'العصر',
-                              (intl.DateFormat.jm().format(getPrayerTime().asr))
-                                  .replaceAll('PM', "م"),"images/Union (1).png",Checkbox(
-                              activeColor: buttonColor,
-                              checkColor: Colors.white,
-                              value: prayerCurrent == null ? false :prayerCurrent!.prayer6,
-                              onChanged: (value) {
-                                setState(() {
-                                  prayerCurrent!.prayer6 = value!;
-                                  if (value) {
-                                    prayerCurrent!.calculation++;
-                                    _savePrayerDataCurrent();
-                                  } else {
-                                    prayerCurrent!.calculation--;
-                                    _savePrayerDataCurrent();
-                                  }
-                                });
-                                _savePrayerDataCurrent();
-                              }),),
-                          SlahBox(
-                              'المغرب',
-                              (intl.DateFormat.jm()
-                                      .format(getPrayerTime().maghrib))
-                                  .replaceAll('PM', "م"),"images/Illustrator (2).png",Checkbox(
-                              activeColor: buttonColor,
-                              checkColor: Colors.white,
-                              value: prayerCurrent == null ? false :prayerCurrent!.prayer8,
-                              onChanged: (value) {
-                                setState(() {
-                                  prayerCurrent!.prayer8 = value!;
-                                  if (value) {
-                                    prayerCurrent!.calculation++;
-                                    _savePrayerDataCurrent();
-                                  } else {
-                                    prayerCurrent!.calculation--;
-                                    _savePrayerDataCurrent();
-                                  }
-                                });
-                                _savePrayerDataCurrent();
-                              })),
-                          SlahBox(
-                              'العشاء',
-                              (intl.DateFormat.jm()
-                                      .format(getPrayerTime().isha))
-                                  .replaceAll('PM', "م"),"images/Illustrator (1).png",Checkbox(
-                              activeColor: buttonColor,
-                              checkColor: Colors.white,
-                              value: prayerCurrent == null ? false :prayerCurrent!.prayer10,
-                              onChanged: (value) {
-                                setState(() {
-                                  prayerCurrent!.prayer10 = value!;
-                                  if (value) {
-                                    prayerCurrent!.calculation++;
-                                    _savePrayerDataCurrent();
-                                  } else {
-                                    prayerCurrent!.calculation--;
-                                    _savePrayerDataCurrent();
-                                  }
-                                });
-                                _savePrayerDataCurrent();
-                              })),
-                        ],
-                      ),
-                SizedBox(
-                  height: Get.height * 0.03,
-                ),
-                TextButton(
-                  onPressed: () {},
-                  child: TextButton(
-                    onPressed: () {
-                      PersistentNavBarNavigator.pushNewScreen(
-                        context,
-                        screen: const DailyGoals(),
-                        withNavBar: true, // OPTIONAL VALUE. True by default.
-                        pageTransitionAnimation: PageTransitionAnimation.cupertino,
-                      );
-                    },
-                    child: Text(
-                      textDirection: TextDirection.rtl,
-                      'عرض باقي اهداف اليوم',
-                      style: TextStyle(
-                        fontSize: 20,
-                        fontWeight: FontWeight.bold,
-                        color: buttonColor,
-                        decoration: TextDecoration.underline,
                       ),
                     ),
-                  ),
-                ),
-                Container(
-                  margin: EdgeInsets.all(15),
-                  alignment: Alignment.topRight,
-                  child: Text(
-                    textDirection: TextDirection.rtl,
-                    'يمكنك ايضا تصفح باقي المزايا',
-                    style: TextStyle(
-                      fontSize: 17,
-                      color: Colors.black,
-                    ),
-                  ),
-                ),
-                Row(
-                  mainAxisAlignment: MainAxisAlignment.spaceAround,
-                  children: [
-                    GestureDetector(
-                      onTap: () {
-                        PersistentNavBarNavigator.pushNewScreen(
-                          context,
-                          screen:  Qiblah(),
-                          withNavBar: true, // OPTIONAL VALUE. True by default.
-                          pageTransitionAnimation: PageTransitionAnimation.cupertino,
-                        );
-                      },
-                      child: Container(
-                        child: Column(
-                          children: [
-                            Image.asset("images/Group (1).png"),
-                            Text(
-                              'القبلة',
-                              style: TextStyle(
-                                  fontSize: 16, fontWeight: FontWeight.bold),
-                            )
-                          ],
-                          mainAxisAlignment: MainAxisAlignment.spaceAround,
+                    Container(
+                      margin: EdgeInsets.all(15),
+                      alignment: Alignment.topRight,
+                      child: Text(
+                        textDirection: TextDirection.rtl,
+                        'يمكنك ايضا تصفح باقي المزايا',
+                        style: TextStyle(
+                          fontSize: 17,
+                          color: Colors.black,
                         ),
-                        width: Get.width * .28,
-                        height: Get.height * .08,
-                        decoration: BoxDecoration(
-                            color: Colors.white,
-                            borderRadius: BorderRadius.circular(5),
-                            boxShadow: [
-                              BoxShadow(
-                                  color: Colors.grey,
-                                  blurRadius: 2,
-                                  spreadRadius: .5)
-                            ]),
                       ),
                     ),
-                    GestureDetector(
-                      onTap: () {
-                        PersistentNavBarNavigator.pushNewScreen(
-                          context,
-                          screen: const Roqua(),
-                          withNavBar: true, // OPTIONAL VALUE. True by default.
-                          pageTransitionAnimation: PageTransitionAnimation.cupertino,
-                        );
-                      },
-                      child: Container(
-                        child: Column(
-                          children: [
-                            Image.asset("images/Group.png"),
-                            Text(
-                              'الرقيه الشرعيه',
-                              style: TextStyle(
-                                  fontSize: 16, fontWeight: FontWeight.bold),
-                            )
-                          ],
-                          mainAxisAlignment: MainAxisAlignment.spaceAround,
+                    Row(
+                      mainAxisAlignment: MainAxisAlignment.spaceAround,
+                      children: [
+                        GestureDetector(
+                          onTap: () {
+                            PersistentNavBarNavigator.pushNewScreen(
+                              context,
+                              screen:  Qiblah(),
+                              withNavBar: true, // OPTIONAL VALUE. True by default.
+                              pageTransitionAnimation: PageTransitionAnimation.cupertino,
+                            );
+                          },
+                          child: Container(
+                            child: Column(
+                              children: [
+                                Image.asset("images/Group (1).png"),
+                                Text(
+                                  'القبلة',
+                                  style: TextStyle(
+                                      fontSize: 16, fontWeight: FontWeight.bold),
+                                )
+                              ],
+                              mainAxisAlignment: MainAxisAlignment.spaceAround,
+                            ),
+                            width: Get.width * .28,
+                            height: Get.height * .1,
+                            decoration: BoxDecoration(
+                                color: Colors.white,
+                                borderRadius: BorderRadius.circular(5),
+                                boxShadow: [
+                                  BoxShadow(
+                                      color: Colors.grey,
+                                      blurRadius: 2,
+                                      spreadRadius: .5)
+                                ]),
+                          ),
                         ),
-                        width: Get.width * .28,
-                        height: Get.height * .08,
-                        decoration: BoxDecoration(
-                            color: Colors.white,
-                            borderRadius: BorderRadius.circular(5),
-                            boxShadow: [
-                              BoxShadow(
-                                  color: Colors.grey,
-                                  blurRadius: 2,
-                                  spreadRadius: .5)
-                            ]),
-                      ),
-                    ),
-                    GestureDetector(
-                      onTap: () {
-                        PersistentNavBarNavigator.pushNewScreen(
-                          context,
-                          screen:  SibhaView(),
-                          withNavBar: true, // OPTIONAL VALUE. True by default.
-                          pageTransitionAnimation: PageTransitionAnimation.cupertino,
-                        );
-                      },
-                      child: Container(
-                        child: Column(
-                          children: [
-                            Image.asset("images/noto_prayer-beads.png"),
-                            Text(
-                              'السبحة',
-                              style: TextStyle(
-                                  fontSize: 16, fontWeight: FontWeight.bold),
-                            )
-                          ],
-                          mainAxisAlignment: MainAxisAlignment.spaceAround,
+                        GestureDetector(
+                          onTap: () {
+                            PersistentNavBarNavigator.pushNewScreen(
+                              context,
+                              screen: const Roqua(),
+                              withNavBar: true, // OPTIONAL VALUE. True by default.
+                              pageTransitionAnimation: PageTransitionAnimation.cupertino,
+                            );
+                          },
+                          child: Container(
+                            child: Column(
+                              children: [
+                                Image.asset("images/Group.png"),
+                                Text(
+                                  'الرقيه الشرعيه',
+                                  style: TextStyle(
+                                      fontSize: 16, fontWeight: FontWeight.bold),
+                                )
+                              ],
+                              mainAxisAlignment: MainAxisAlignment.spaceAround,
+                            ),
+                            width: Get.width * .28,
+                            height: Get.height * .1,
+                            decoration: BoxDecoration(
+                                color: Colors.white,
+                                borderRadius: BorderRadius.circular(5),
+                                boxShadow: [
+                                  BoxShadow(
+                                      color: Colors.grey,
+                                      blurRadius: 2,
+                                      spreadRadius: .5)
+                                ]),
+                          ),
                         ),
-                        width: Get.width * .28,
-                        height: Get.height * .08,
-                        decoration: BoxDecoration(
-                            color: Colors.white,
-                            borderRadius: BorderRadius.circular(5),
-                            boxShadow: [
-                              BoxShadow(
-                                  color: Colors.grey,
-                                  blurRadius: 2,
-                                  spreadRadius: .5)
-                            ]),
-                      ),
-                    ),
+                        GestureDetector(
+                          onTap: () {
+                            PersistentNavBarNavigator.pushNewScreen(
+                              context,
+                              screen:  SibhaView(),
+                              withNavBar: true, // OPTIONAL VALUE. True by default.
+                              pageTransitionAnimation: PageTransitionAnimation.cupertino,
+                            );
+                          },
+                          child: Container(
+                            child: Column(
+                              children: [
+                                Image.asset("images/noto_prayer-beads.png"),
+                                Text(
+                                  'السبحة',
+                                  style: TextStyle(
+                                      fontSize: 16, fontWeight: FontWeight.bold),
+                                )
+                              ],
+                              mainAxisAlignment: MainAxisAlignment.spaceAround,
+                            ),
+                            width: Get.width * .28,
+                            height: Get.height * .1,
+                            decoration: BoxDecoration(
+                                color: Colors.white,
+                                borderRadius: BorderRadius.circular(5),
+                                boxShadow: [
+                                  BoxShadow(
+                                      color: Colors.grey,
+                                      blurRadius: 2,
+                                      spreadRadius: .5)
+                                ]),
+                          ),
+                        ),
+                      ],
+                    )
                   ],
-                )
-              ],
-            ),
-          ),
-        ],
+                ),
+              ),
+            ],
+          );
+        }
       ),
     );
   }
