@@ -199,7 +199,7 @@ class _StartUpState extends State<StartUp> {
     Duration timeLeft = _prayerTimeCalculator.timeLeftForNextPrayer(_nextPrayerTime);
     return Scaffold(
       appBar: PreferredSize(
-          preferredSize: Size(double.infinity, Get.height * .3),
+          preferredSize: Size(double.infinity, Get.height * .23),
           child: Stack(
             alignment: Alignment.center,
             children: [
