@@ -21,131 +21,129 @@ class QuranSurahScreen extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     return Scaffold(
-      appBar:  AppBar(
-        backgroundColor: Colors.blue[900],
-        centerTitle: true,
-        iconTheme: IconThemeData(color: Colors.white),
-        title: Text('القرآن',style: TextStyle(color: Colors.white),),
-      ),
-      body: BlocProvider.value(
-        value: BlocProvider.of<QuranCubit>(context)..getQuranFun(),
-        child: BlocConsumer<QuranCubit, QuranStates>(
-          listener: (context, state) {},
-          builder: (context, state) {
-            var cubit = QuranCubit.get(context);
-            return SingleChildScrollView(
-              physics: const BouncingScrollPhysics(),
-              child: Column(
-                children: [
-                  Padding(
-                    padding: EdgeInsets.symmetric(horizontal: 30.0.w),
-                    child: Row(
-                      mainAxisAlignment: MainAxisAlignment.spaceBetween,
-                      children: [
-                        TextCustom(
-                          text: 'السورة',
-                          fontSize: 26.sp,
-                          fontWeight: FontWeight.bold,
-                        ),
-                        TextCustom(
-                          text: 'عدد الآيات',
-                          fontSize: 26.sp,
-                          fontWeight: FontWeight.bold,
-                        ),
-                      ],
-                    ),
-                  ),
-                  state is GetQuranSuccess
-                      ? ListView.builder(
-                          physics: const BouncingScrollPhysics(),
-                          itemCount: state.quranEntity.data.length,
-                          shrinkWrap: true,
-                          itemExtent: 80,
-                          itemBuilder: (BuildContext context, int index) =>
-                              Container(
-                            // width: double.infinity,
-                            margin: EdgeInsets.symmetric(
-                                horizontal: 8.w, vertical: 5.h),
-                            padding: EdgeInsets.symmetric(
-                              horizontal: 16.w,
-                              vertical: 0,
-                            ),
-                            decoration: BoxDecoration(
-                              borderRadius: BorderRadius.circular(16.0.r),
-                              boxShadow: [
-                                BoxShadow(
-                                  spreadRadius: 1,
-                                  color: Colors.grey,
-                                  offset: const Offset(0.0, 3), //(x,y)
-                                   blurRadius: 6.0,
-                                ),
-                              ],
-                              color: Colors.white,
-                            ),
-                                child: ListTile(
-                                title: TextCustom(
-                                  color: Colors.black,
-                                  height: 0.0,
-                                  text: state.quranEntity.data[index].name,
-                                  fontSize: 20.sp,
-                                ),
-                                subtitle: TextCustom(
-                                    height: 0.0,
-                                    text: state
-                                        .quranEntity.data[index].englishName,
-                                    color: Colors.black),
-                                trailing: SizedBox(
-                                  width: 100.w,
-                                  child: Row(
-                                    mainAxisAlignment: MainAxisAlignment.end,
-                                    crossAxisAlignment:
-                                        CrossAxisAlignment.center,
-                                    children: [
-                                      TextCustom(
-                                        color: Colors.black,
-                                        text:
-                                            '(${state.quranEntity.data[index].numberOfAyahs})',
-                                        fontSize: 16.sp,
-                                      ),
-                                      SizedBox(
-                                        width: 10.w,
-                                      ),
-                                      Image(
-                                        image: state.quranEntity.data[index]
-                                                    .revelationType ==
-                                                'Meccan'
-                                            ? const AssetImage(
-                                                'images/kaaba.png',
-                                              )
-                                            : const AssetImage(
-                                                'images/madena.png',
-                                              ),
-                                        width: 30.w,
-                                        height: 50.h,
-                                      )
-                                    ],
-                                  ),
-                                ),
-                                onTap: () {
-                                  BlocProvider.of<SurahCubit>(context).surahId =
-                                      (state.quranEntity.data[index].number)
-                                          .toString();
-                                  BlocProvider.of<SurahCubit>(context)
-                                          .surahName =
-                                      state.quranEntity.data[index].name;
-                                  navigator(context, Routes.surahRoute);
-                                }),
+      
+      body: SafeArea(
+        child: BlocProvider.value(
+          value: BlocProvider.of<QuranCubit>(context)..getQuranFun(),
+          child: BlocConsumer<QuranCubit, QuranStates>(
+            listener: (context, state) {},
+            builder: (context, state) {
+              var cubit = QuranCubit.get(context);
+              return SingleChildScrollView(
+                physics: const BouncingScrollPhysics(),
+                child: Column(
+                  children: [
+                    SizedBox(height: 30,),
+                    Padding(
+                      padding: EdgeInsets.symmetric(horizontal: 30.0.w),
+                      child: Row(
+                        mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                        children: [
+                          TextCustom(
+                            text: 'السورة',
+                            fontSize: 26.sp,
+                            fontWeight: FontWeight.bold,
                           ),
-                        )
-                      : state is GetQuranLoading
-                          ? const ListShimmer()
-                          : ErrorWidgetCustom(onPress: () {
-                              cubit.getQuranFun();
-                            }),
-                ],
-              ),
-            );
-          },
+                          TextCustom(
+                            text: 'عدد الآيات',
+                            fontSize: 26.sp,
+                            fontWeight: FontWeight.bold,
+                          ),
+                        ],
+                      ),
+                    ),
+                    state is GetQuranSuccess
+                        ? ListView.builder(
+                            physics: const BouncingScrollPhysics(),
+                            itemCount: state.quranEntity.data.length,
+                            shrinkWrap: true,
+                            itemExtent: 80,
+                            itemBuilder: (BuildContext context, int index) =>
+                                Container(
+                              // width: double.infinity,
+                              margin: EdgeInsets.symmetric(
+                                  horizontal: 8.w, vertical: 5.h),
+                              padding: EdgeInsets.symmetric(
+                                horizontal: 16.w,
+                                vertical: 0,
+                              ),
+                              decoration: BoxDecoration(
+                                borderRadius: BorderRadius.circular(16.0.r),
+                                boxShadow: [
+                                  BoxShadow(
+                                    spreadRadius: 1,
+                                    color: Colors.grey,
+                                    offset: const Offset(0.0, 3), //(x,y)
+                                     blurRadius: 6.0,
+                                  ),
+                                ],
+                                color: Colors.white,
+                              ),
+                                  child: ListTile(
+                                  title: TextCustom(
+                                    color: Colors.black,
+                                    height: 0.0,
+                                    text: state.quranEntity.data[index].name,
+                                    fontSize: 20.sp,
+                                  ),
+                                  subtitle: TextCustom(
+                                      height: 0.0,
+                                      text: state
+                                          .quranEntity.data[index].englishName,
+                                      color: Colors.black),
+                                  trailing: SizedBox(
+                                    width: 100.w,
+                                    child: Row(
+                                      mainAxisAlignment: MainAxisAlignment.end,
+                                      crossAxisAlignment:
+                                          CrossAxisAlignment.center,
+                                      children: [
+                                        TextCustom(
+                                          color: Colors.black,
+                                          text:
+                                              '(${state.quranEntity.data[index].numberOfAyahs})',
+                                          fontSize: 16.sp,
+                                        ),
+                                        SizedBox(
+                                          width: 10.w,
+                                        ),
+                                        Image(
+                                          image: state.quranEntity.data[index]
+                                                      .revelationType ==
+                                                  'Meccan'
+                                              ? const AssetImage(
+                                                  'images/kaaba.png',
+                                                )
+                                              : const AssetImage(
+                                                  'images/madena.png',
+                                                ),
+                                          width: 30.w,
+                                          height: 50.h,
+                                        )
+                                      ],
+                                    ),
+                                  ),
+                                  onTap: () {
+                                    BlocProvider.of<SurahCubit>(context).surahId =
+                                        (state.quranEntity.data[index].number)
+                                            .toString();
+                                    BlocProvider.of<SurahCubit>(context)
+                                            .surahName =
+                                        state.quranEntity.data[index].name;
+                                    navigator(context, Routes.surahRoute);
+                                  }),
+                            ),
+                          )
+                        : state is GetQuranLoading
+                            ? const ListShimmer()
+                            : ErrorWidgetCustom(onPress: () {
+                                cubit.getQuranFun();
+                              }),
+                  ],
+                ),
+              );
+            },
+          ),
         ),
       ),
     );

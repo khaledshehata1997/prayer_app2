@@ -28,6 +28,7 @@ class _SurahListScreenState extends State<SurahListScreen> {
       body: SafeArea(
         child: Column(
           children: [
+            SizedBox(height: 25,),
             Container(
               padding: const EdgeInsets.all(20),
               child: Row(

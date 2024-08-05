@@ -1409,8 +1409,8 @@ class _PrayerState extends State<Prayer> with TickerProviderStateMixin {
 
   Widget customCard(num,text){
     return SizedBox(
-      height: 70,
-      width: 70,
+      height: 60,
+      width: 60,
       child: Card(
         color: Colors.blue[900],
         child: Center(

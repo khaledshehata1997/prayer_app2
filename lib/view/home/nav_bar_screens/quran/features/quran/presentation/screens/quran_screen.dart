@@ -30,14 +30,10 @@ class QuranScreen extends StatelessWidget {
         builder: (context, state) {
           var quranCubit = QuranOffCubit.get(context);
           return Scaffold(
-            appBar:  AppBar(
-              backgroundColor: Colors.blue[900],
-              iconTheme: IconThemeData(color: Colors.white),
-              title: Text('المصحف الكريم',style: TextStyle(color: Colors.white),),
-              centerTitle: true,
-            ),
+
             body: Column(
               children: [
+                SizedBox(height: 30,),
                 Padding(
                   padding:  EdgeInsets.symmetric(vertical:10.h),
                   child: Row(
