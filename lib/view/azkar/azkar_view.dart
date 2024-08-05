@@ -1,5 +1,6 @@
 import 'dart:io';
 import 'dart:ui' as prefix0;
+import 'package:firebase_auth/firebase_auth.dart';
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter/painting.dart';
@@ -12,12 +13,16 @@ import 'package:image_picker/image_picker.dart';
 import 'package:persistent_bottom_nav_bar/persistent_bottom_nav_bar.dart';
 import 'package:prayer_app/constants.dart';
 import 'package:prayer_app/view/azkar/azkary_view.dart';
+import 'package:prayer_app/view/home/nav_bar_screens/prayer_model/prayerModelCurrent.dart';
 import 'package:shared_preferences/shared_preferences.dart';
 
+import '../auth/sign_in_view.dart';
 import '../home/profile.dart';
 import '../home/settings.dart';
 
 class Azkar extends StatefulWidget {
+  const Azkar({super.key});
+
   @override
   State<Azkar> createState() => _AzkarState();
 }
@@ -124,17 +129,20 @@ class _AzkarState extends State<Azkar> {
                           GestureDetector(
                             onTap: () async {
                               final userData = await getUserData();
-                              PersistentNavBarNavigator.pushNewScreen(
-                                context,
-                                screen: Profile(
-                                  username: '${userData['username']}',
-                                  email: '${userData['email']}',
-                                ),
-                                withNavBar: true,
-                                // OPTIONAL VALUE. True by default.
-                                pageTransitionAnimation:
-                                    PageTransitionAnimation.cupertino,
-                              );
+                              if(FirebaseAuth.instance.currentUser == null){
+                                Get.snackbar("لا يمكن الدخول الي الصفحه الشخصيه", "للدخول الي الصفحه الشخصيه برجاء تسجيل الدخول",
+                                    colorText: Colors.white,snackPosition: SnackPosition.BOTTOM,
+                                    backgroundColor: Colors.blue[900]);
+                                Get.to(SignInView());
+                              }else{
+                                PersistentNavBarNavigator.pushNewScreen(
+                                  context,
+                                  screen:  Profile(username: '${userData['username']}',
+                                    email: '${userData['email']}',),
+                                  withNavBar: true, // OPTIONAL VALUE. True by default.
+                                  pageTransitionAnimation: PageTransitionAnimation.cupertino,
+                                );
+                              }
                             },
                             child: CircleAvatar(
                               radius: 20,

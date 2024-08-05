@@ -4,10 +4,12 @@ import 'package:firebase_auth/firebase_auth.dart';
 import 'package:flutter/material.dart';
 import 'package:get/get.dart';
 import 'package:image_picker/image_picker.dart';
+import 'package:prayer_app/view/home/profile.dart';
 import 'package:shared_preferences/shared_preferences.dart';
 
 import '../../widgets/custom_text.dart';
 import '../../widgets/custom_text_form_field.dart';
+import '../home/settings.dart';
 
 class Editprofile extends StatefulWidget {
   final String username;
@@ -206,7 +208,8 @@ class _EditprofileState extends State<Editprofile> {
                                   setState(() {
                                     storeUserData(nameController.text, emailController.text);
                                   });
-                                  Get.back();
+                                  final userData = await getUserData();
+                                  Get.off(Profile(username: '${userData['username']}', email: '${userData['email']}',));
                                 }
 
                               },

@@ -2,6 +2,8 @@ import 'dart:async';
 import 'package:flutter/material.dart';
 import 'package:get/get.dart';
 import 'package:prayer_app/view/auth/sign_in_view.dart';
+
+import '../home/home_view.dart';
 class SplashView extends StatefulWidget {
   const SplashView({Key? key}) : super(key: key);
 
@@ -16,7 +18,7 @@ class _SplashViewState extends State<SplashView> {
     Timer(
         const Duration(seconds: 5),
             () => Navigator.pushReplacement(
-            context, MaterialPageRoute(builder: (context) => SignInView())));
+            context, MaterialPageRoute(builder: (context) => const HomeView())));
   }
 
   @override

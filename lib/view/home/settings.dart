@@ -67,17 +67,20 @@ class _SettingsState extends State<Settings> {
                           GestureDetector(
                             onTap: () async {
                               final userData = await getUserData();
-                              PersistentNavBarNavigator.pushNewScreen(
-                                context,
-                                screen: Profile(
-                                  username: '${userData['username']}',
-                                  email: '${userData['email']}',
-                                ),
-                                withNavBar: true,
-                                // OPTIONAL VALUE. True by default.
-                                pageTransitionAnimation:
-                                PageTransitionAnimation.cupertino,
-                              );
+                              if(FirebaseAuth.instance.currentUser == null){
+                                Get.snackbar("لا يمكن الدخول الي الصفحه الشخصيه", "للدخول الي الصفحه الشخصيه برجاء تسجيل الدخول",
+                                    colorText: Colors.white,snackPosition: SnackPosition.BOTTOM,
+                                    backgroundColor: Colors.blue[900]);
+                                Get.to(SignInView());
+                              }else{
+                                PersistentNavBarNavigator.pushNewScreen(
+                                  context,
+                                  screen:  Profile(username: '${userData['username']}',
+                                    email: '${userData['email']}',),
+                                  withNavBar: true, // OPTIONAL VALUE. True by default.
+                                  pageTransitionAnimation: PageTransitionAnimation.cupertino,
+                                );
+                              }
                             },
                             child: CircleAvatar(
                               radius: 20,
@@ -210,7 +213,15 @@ class _SettingsState extends State<Settings> {
                         children: [
                           IconButton(
                               onPressed: () {
-                                Get.to( ResetPasswordView());
+                                if(FirebaseAuth.instance.currentUser == null){
+                                  Get.snackbar("حطأ", "برجاء تسجيل الدخول",
+                                      colorText: Colors.white,snackPosition: SnackPosition.BOTTOM,
+                                      backgroundColor: Colors.blue[900]);
+                                  Get.to(SignInView());
+                                }else{
+                                  Get.to( ResetPasswordView());
+                                }
+
                               }, icon: Icon(Icons.arrow_back_ios)),
                         ],
                       ),
@@ -256,8 +267,16 @@ class _SettingsState extends State<Settings> {
                         children: [
                           IconButton(
                               onPressed: () {
-                                auth.signOut();
-                                Get.offAll( SignInView());
+                                if(FirebaseAuth.instance.currentUser == null){
+                                  Get.snackbar("لا يمكن الدخول الي الصفحه الشخصيه", "للدخول الي الصفحه الشخصيه برجاء تسجيل الدخول",
+                                      colorText: Colors.white,snackPosition: SnackPosition.BOTTOM,
+                                      backgroundColor: Colors.blue[900]);
+                                  Get.to(SignInView());
+                                }else{
+                                  auth.signOut();
+                                  Get.offAll( SignInView());
+                                }
+
                               }, icon: Icon(Icons.arrow_back_ios)),
                         ],
                       ),

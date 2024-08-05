@@ -49,6 +49,7 @@ void main()async{
   } else {
     isLogin = true;
   }
+  Provider.debugCheckInvalidValueType = null;
   runApp(
       ChangeNotifierProvider(
           create: (context) => BoolNotifier(),
@@ -77,7 +78,7 @@ class MyApp extends StatelessWidget {
       child: ScreenUtilInit(
         child: GetMaterialApp(
         debugShowCheckedModeBanner: false,
-         home: isLogin == false ? SplashView() : const HomeView(),
+         home: isLogin == false ? const SplashView() : const HomeView(),
         //   home: ActivateSuccess(),
             ),
       )

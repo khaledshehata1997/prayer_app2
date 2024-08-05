@@ -13,6 +13,8 @@ import 'package:prayer_app/widgets/custom_text_form_field.dart';
 import '../../constants.dart';
 
 class SignInView extends StatefulWidget {
+  const SignInView({super.key});
+
 
   @override
   State<SignInView> createState() => _SignUpViewState();

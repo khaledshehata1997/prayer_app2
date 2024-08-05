@@ -18,7 +18,7 @@ class _ActivateSuccessState extends State<ActivateSuccess> {
   void initState(){
     super.initState();
     Future.delayed(const Duration(seconds: 2),(){
-      Get.offAll(const HomeView());
+      Get.offAll(HomeView());
     });
   }
   @override

@@ -1,6 +1,7 @@
 import 'dart:async';
 
 import 'package:adhan/adhan.dart';
+import 'package:firebase_auth/firebase_auth.dart';
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter/widgets.dart';
@@ -9,6 +10,7 @@ import 'package:get/get.dart';
 import 'package:get/get_core/src/get_main.dart';
 import 'package:intl/intl.dart' hide TextDirection;
 import 'package:persistent_bottom_nav_bar/persistent_bottom_nav_bar.dart';
+import 'package:prayer_app/view/auth/sign_in_view.dart';
 import 'package:prayer_app/view/home/dailyGoals.dart';
 import 'package:prayer_app/view/home/nav_bar_screens/prayer_model/PrayerTimeCalculator.dart';
 import 'package:prayer_app/view/home/nav_bar_screens/prayer_model/prayerModel.dart';
@@ -110,7 +112,7 @@ class _StartUpState extends State<StartUp> {
       Duration difference = _nextPrayerTime.difference(DateTime.now());
       if (difference.isNegative ||
           difference.inSeconds == 0 ||
-          difference.inHours >= 8) {
+          difference.inHours >= 7) {
         _timer.cancel();
         if (_prayerTimeCalculator.salahCalc == 4) {
           setState(() {
@@ -232,13 +234,21 @@ class _StartUpState extends State<StartUp> {
                             GestureDetector(
                               onTap: () async {
                                 final userData = await getUserData();
-                                PersistentNavBarNavigator.pushNewScreen(
-                                  context,
-                                  screen:  Profile(username: '${userData['username']}',
-                                    email: '${userData['email']}',),
-                                  withNavBar: true, // OPTIONAL VALUE. True by default.
-                                  pageTransitionAnimation: PageTransitionAnimation.cupertino,
-                                );
+                                if(FirebaseAuth.instance.currentUser == null){
+                                  Get.snackbar("لا يمكن الدخول الي الصفحه الشخصيه", "للدخول الي الصفحه الشخصيه برجاء تسجيل الدخول",
+                                      colorText: Colors.white,snackPosition: SnackPosition.BOTTOM,
+                                      backgroundColor: Colors.blue[900]);
+                                  Get.to(SignInView());
+                                }else{
+                                  PersistentNavBarNavigator.pushNewScreen(
+                                    context,
+                                    screen:  Profile(username: '${userData['username']}',
+                                      email: '${userData['email']}',),
+                                    withNavBar: true, // OPTIONAL VALUE. True by default.
+                                    pageTransitionAnimation: PageTransitionAnimation.cupertino,
+                                  );
+                                }
+
                               },
                               child: CircleAvatar(
                                 radius: 15,
@@ -303,7 +313,21 @@ class _StartUpState extends State<StartUp> {
           )),
       body: Consumer<PrayerProvider>(
         builder: (context, provider, child) {
-          final prayer = provider.prayerCurrentData!;
+          final prayer = provider.prayerCurrentData ?? PrayerCurrent(
+            day: _formatDate(selectedDate),
+            prayer1: false,
+            prayer2: false,
+            prayer3: false,
+            prayer4: false,
+            prayer5: false,
+            prayer6: false,
+            prayer7: false,
+            prayer8: false,
+            prayer9: false,
+            prayer10: false,
+            prayer11: false,
+            calculation: 0,
+          );
           return Stack(
             children: [
               Container(
@@ -406,8 +430,16 @@ class _StartUpState extends State<StartUp> {
                                   checkColor: Colors.white,
                                   value: prayer.prayer2,
                                   onChanged: (value) {
-                                    prayer.prayer2 = value!;
-                                    _updateCalculation(context);
+                                    if(FirebaseAuth.instance.currentUser == null){
+                                      Get.snackbar("لا يمكن تخزين البيانات", "لتخزين البيانات برجاء تسجيل الدخول",
+                                          colorText: Colors.white,snackPosition: SnackPosition.BOTTOM,
+                                          backgroundColor: Colors.blue[900]);
+                                      Get.to(SignInView());
+                                    }else{
+                                      prayer.prayer2 = value!;
+                                      _updateCalculation(context);
+                                    }
+
                                   }),),
                               SlahBox(
                                   'الظهر',
@@ -418,8 +450,15 @@ class _StartUpState extends State<StartUp> {
                                   checkColor: Colors.white,
                                   value: prayer.prayer5,
                                   onChanged: (value) {
-                                    prayer.prayer5 = value!;
-                                    _updateCalculation(context);
+                                    if(FirebaseAuth.instance.currentUser == null){
+                                      Get.snackbar("لا يمكن تخزين البيانات", "لتخزين البيانات برجاء تسجيل الدخول",
+                                          colorText: Colors.white,snackPosition: SnackPosition.BOTTOM,
+                                          backgroundColor: Colors.blue[900]);
+                                      Get.to(SignInView());
+                                    }else{
+                                      prayer.prayer5 = value!;
+                                      _updateCalculation(context);
+                                    }
                                   }),),
                               SlahBox(
                                   'العصر',
@@ -429,8 +468,15 @@ class _StartUpState extends State<StartUp> {
                                   checkColor: Colors.white,
                                   value: prayer.prayer6,
                                   onChanged: (value) {
-                                    prayer.prayer6 = value!;
-                                    _updateCalculation(context);
+                                    if(FirebaseAuth.instance.currentUser == null){
+                                      Get.snackbar("لا يمكن تخزين البيانات", "لتخزين البيانات برجاء تسجيل الدخول",
+                                          colorText: Colors.white,snackPosition: SnackPosition.BOTTOM,
+                                          backgroundColor: Colors.blue[900]);
+                                      Get.to(SignInView());
+                                    }else{
+                                      prayer.prayer6 = value!;
+                                      _updateCalculation(context);
+                                    }
                                   }),),
                               SlahBox(
                                   'المغرب',
@@ -441,8 +487,15 @@ class _StartUpState extends State<StartUp> {
                                   checkColor: Colors.white,
                                   value: prayer.prayer8,
                                   onChanged: (value) {
-                                    prayer.prayer8 = value!;
-                                    _updateCalculation(context);
+                                    if(FirebaseAuth.instance.currentUser == null){
+                                      Get.snackbar("لا يمكن تخزين البيانات", "لتخزين البيانات برجاء تسجيل الدخول",
+                                          colorText: Colors.white,snackPosition: SnackPosition.BOTTOM,
+                                          backgroundColor: Colors.blue[900]);
+                                      Get.to(SignInView());
+                                    }else{
+                                      prayer.prayer8 = value!;
+                                      _updateCalculation(context);
+                                    }
                                   })),
                               SlahBox(
                                   'العشاء',
@@ -453,8 +506,15 @@ class _StartUpState extends State<StartUp> {
                                   checkColor: Colors.white,
                                   value: prayer.prayer10,
                                   onChanged: (value) {
-                                    prayer.prayer10 = value!;
-                                    _updateCalculation(context);
+                                    if(FirebaseAuth.instance.currentUser == null){
+                                      Get.snackbar("لا يمكن تخزين البيانات", "لتخزين البيانات برجاء تسجيل الدخول",
+                                          colorText: Colors.white,snackPosition: SnackPosition.BOTTOM,
+                                          backgroundColor: Colors.blue[900]);
+                                      Get.to(SignInView());
+                                    }else{
+                                      prayer.prayer10 = value!;
+                                      _updateCalculation(context);
+                                    }
                                   })),
                             ],
                           ),
@@ -465,12 +525,20 @@ class _StartUpState extends State<StartUp> {
                       onPressed: () {},
                       child: TextButton(
                         onPressed: () {
-                          PersistentNavBarNavigator.pushNewScreen(
-                            context,
-                            screen: const DailyGoals(),
-                            withNavBar: true, // OPTIONAL VALUE. True by default.
-                            pageTransitionAnimation: PageTransitionAnimation.cupertino,
-                          );
+                          if(FirebaseAuth.instance.currentUser == null){
+                            Get.snackbar("لا يمكن عرض اهداف اليوم", "لعرض اهداف اليوم برجاء تسجيل الدخول",
+                                colorText: Colors.white,snackPosition: SnackPosition.BOTTOM,
+                                backgroundColor: Colors.blue[900]);
+                            Get.to(SignInView());
+                          }else{
+                            PersistentNavBarNavigator.pushNewScreen(
+                              context,
+                              screen: const DailyGoals(),
+                              withNavBar: true, // OPTIONAL VALUE. True by default.
+                              pageTransitionAnimation: PageTransitionAnimation.cupertino,
+                            );
+                          }
+
                         },
                         child: Text(
                           textDirection: TextDirection.rtl,

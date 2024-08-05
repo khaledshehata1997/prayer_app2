@@ -1,6 +1,7 @@
 import 'dart:async';
 
 import 'package:adhan/adhan.dart';
+import 'package:firebase_auth/firebase_auth.dart';
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter/widgets.dart';
@@ -18,6 +19,7 @@ import 'package:provider/provider.dart';
 import 'package:shared_preferences/shared_preferences.dart';
 import '../../../constants.dart';
 import '../../../provider/prayer_provider.dart';
+import '../../auth/sign_in_view.dart';
 import '../profile.dart';
 
 class Prayer extends StatefulWidget {
@@ -93,7 +95,7 @@ class _PrayerState extends State<Prayer> with TickerProviderStateMixin {
         _prayerTimeCalculator.updateCurrentTime();
       });
       Duration difference = _nextPrayerTime.difference(DateTime.now());
-      if (difference.isNegative || difference.inSeconds == 0 || difference.inHours >= 8) {
+      if (difference.isNegative || difference.inSeconds == 0 || difference.inHours >= 7) {
         _timer.cancel();
         if(_prayerTimeCalculator.salahCalc == 4){
           setState(() {
@@ -280,16 +282,20 @@ class _PrayerState extends State<Prayer> with TickerProviderStateMixin {
                               GestureDetector(
                                 onTap: () async {
                                   final userData = await getUserData();
-                                  PersistentNavBarNavigator.pushNewScreen(
-                                    context,
-                                    screen: Profile(
-                                      username: '${userData['username']}',
-                                      email: '${userData['email']}',),
-                                    withNavBar: true,
-                                    // OPTIONAL VALUE. True by default.
-                                    pageTransitionAnimation: PageTransitionAnimation
-                                        .cupertino,
-                                  );
+                                  if(FirebaseAuth.instance.currentUser == null){
+                                    Get.snackbar("لا يمكن الدخول الي الصفحه الشخصيه", "للدخول الي الصفحه الشخصيه برجاء تسجيل الدخول",
+                                        colorText: Colors.white,snackPosition: SnackPosition.BOTTOM,
+                                        backgroundColor: Colors.blue[900]);
+                                    Get.to(SignInView());
+                                  }else{
+                                    PersistentNavBarNavigator.pushNewScreen(
+                                      context,
+                                      screen:  Profile(username: '${userData['username']}',
+                                        email: '${userData['email']}',),
+                                      withNavBar: true, // OPTIONAL VALUE. True by default.
+                                      pageTransitionAnimation: PageTransitionAnimation.cupertino,
+                                    );
+                                  }
                                 },
                                 child: CircleAvatar(
                                   radius: 20,
@@ -431,10 +437,17 @@ class _PrayerState extends State<Prayer> with TickerProviderStateMixin {
                                         ? false
                                         : prayerData!.prayer1,
                                     onChanged: (value) {
-                                      setState(() {
-                                        prayerData!.prayer1 = value!;
-                                      });
-                                      _savePrayerData();
+                                      if(FirebaseAuth.instance.currentUser == null){
+                                        Get.snackbar("لا يمكن تخزين البيانات", "لتخزين البيانات برجاء تسجيل الدخول",
+                                            colorText: Colors.white,snackPosition: SnackPosition.BOTTOM,
+                                            backgroundColor: Colors.blue[900]);
+                                        Get.to(SignInView());
+                                      }else{
+                                        setState(() {
+                                          prayerData!.prayer1 = value!;
+                                        });
+                                        _savePrayerData();
+                                      }
                                     })),
                                 customSalah("الضهر", Checkbox(
                                   //tristate: true,
@@ -443,10 +456,18 @@ class _PrayerState extends State<Prayer> with TickerProviderStateMixin {
                                         ? false
                                         : prayerData!.prayer2,
                                     onChanged: (value) {
-                                      setState(() {
-                                        prayerData!.prayer2 = value!;
-                                      });
-                                      _savePrayerData();
+                                      if(FirebaseAuth.instance.currentUser == null){
+                                        Get.snackbar("لا يمكن تخزين البيانات", "لتخزين البيانات برجاء تسجيل الدخول",
+                                            colorText: Colors.white,snackPosition: SnackPosition.BOTTOM,
+                                            backgroundColor: Colors.blue[900]);
+                                        Get.to(SignInView());
+                                      }else{
+                                        setState(() {
+                                          prayerData!.prayer2 = value!;
+                                        });
+                                        _savePrayerData();
+                                      }
+
                                     })),
                                 customSalah("العصر", Checkbox(
                                   //tristate: true,
@@ -455,10 +476,17 @@ class _PrayerState extends State<Prayer> with TickerProviderStateMixin {
                                         ? false
                                         : prayerData!.prayer3,
                                     onChanged: (value) {
-                                      setState(() {
-                                        prayerData!.prayer3 = value!;
-                                      });
-                                      _savePrayerData();
+                                      if(FirebaseAuth.instance.currentUser == null){
+                                        Get.snackbar("لا يمكن تخزين البيانات", "لتخزين البيانات برجاء تسجيل الدخول",
+                                            colorText: Colors.white,snackPosition: SnackPosition.BOTTOM,
+                                            backgroundColor: Colors.blue[900]);
+                                        Get.to(SignInView());
+                                      }else{
+                                        setState(() {
+                                          prayerData!.prayer3 = value!;
+                                        });
+                                        _savePrayerData();
+                                      }
                                     })),
                                 customSalah("المغرب", Checkbox(
                                   //tristate: true,
@@ -467,10 +495,17 @@ class _PrayerState extends State<Prayer> with TickerProviderStateMixin {
                                         ? false
                                         : prayerData!.prayer4,
                                     onChanged: (value) {
-                                      setState(() {
-                                        prayerData!.prayer4 = value!;
-                                      });
-                                      _savePrayerData();
+                                      if(FirebaseAuth.instance.currentUser == null){
+                                        Get.snackbar("لا يمكن تخزين البيانات", "لتخزين البيانات برجاء تسجيل الدخول",
+                                            colorText: Colors.white,snackPosition: SnackPosition.BOTTOM,
+                                            backgroundColor: Colors.blue[900]);
+                                        Get.to(SignInView());
+                                      }else{
+                                        setState(() {
+                                          prayerData!.prayer4 = value!;
+                                        });
+                                        _savePrayerData();
+                                      }
                                     })),
                                 customSalah("العشاء", Checkbox(
                                   //tristate: true,
@@ -479,10 +514,17 @@ class _PrayerState extends State<Prayer> with TickerProviderStateMixin {
                                         ? false
                                         : prayerData!.prayer5,
                                     onChanged: (value) {
-                                      setState(() {
-                                        prayerData!.prayer5 = value!;
-                                      });
-                                      _savePrayerData();
+                                      if(FirebaseAuth.instance.currentUser == null){
+                                        Get.snackbar("لا يمكن تخزين البيانات", "لتخزين البيانات برجاء تسجيل الدخول",
+                                            colorText: Colors.white,snackPosition: SnackPosition.BOTTOM,
+                                            backgroundColor: Colors.blue[900]);
+                                        Get.to(SignInView());
+                                      }else{
+                                        setState(() {
+                                          prayerData!.prayer5 = value!;
+                                        });
+                                        _savePrayerData();
+                                      }
                                     })),
                               ],
                             ),
@@ -584,7 +626,15 @@ class _PrayerState extends State<Prayer> with TickerProviderStateMixin {
                                               checkColor: Colors.white,
                                               value: prayer.prayer1,
                                               onChanged: (value) {
-                                                prayer.prayer1 = value!;
+                                                if(FirebaseAuth.instance.currentUser == null){
+                                                  Get.snackbar("لا يمكن تخزين البيانات", "لتخزين البيانات برجاء تسجيل الدخول",
+                                                      colorText: Colors.white,snackPosition: SnackPosition.BOTTOM,
+                                                      backgroundColor: Colors.blue[900]);
+                                                  Get.to(SignInView());
+                                                }else{
+                                                  prayer.prayer1 = value!;
+                                                }
+
                                               }),
                                           Text(
                                             'النافله',
@@ -600,9 +650,17 @@ class _PrayerState extends State<Prayer> with TickerProviderStateMixin {
                                               checkColor: Colors.white,
                                               value: prayer.prayer2,
                                               onChanged: (value) {
-                                                prayer.prayer2 = value!;
-                                                _updateCalculation(context);
-                                              }),
+                                                if(FirebaseAuth.instance.currentUser == null){
+                                                  Get.snackbar("لا يمكن تخزين البيانات", "لتخزين البيانات برجاء تسجيل الدخول",
+                                                      colorText: Colors.white,snackPosition: SnackPosition.BOTTOM,
+                                                      backgroundColor: Colors.blue[900]);
+                                                  Get.to(SignInView());
+                                                }else{
+                                                  prayer.prayer2 = value!;
+                                                  _updateCalculation(context);
+                                                }
+                                              }
+                                              ),
                                           Text(
                                             'الفرض',
                                             style: TextStyle(
@@ -640,7 +698,14 @@ class _PrayerState extends State<Prayer> with TickerProviderStateMixin {
                                               checkColor: Colors.white,
                                               value: prayer.prayer3,
                                               onChanged: (value) {
-                                                prayer.prayer3 = value!;
+                                                if(FirebaseAuth.instance.currentUser == null){
+                                                  Get.snackbar("لا يمكن تخزين البيانات", "لتخزين البيانات برجاء تسجيل الدخول",
+                                                      colorText: Colors.white,snackPosition: SnackPosition.BOTTOM,
+                                                      backgroundColor: Colors.blue[900]);
+                                                  Get.to(SignInView());
+                                                }else{
+                                                  prayer.prayer3 = value!;
+                                                }
                                               }),
                                         ]),
                                         Row(
@@ -683,7 +748,14 @@ class _PrayerState extends State<Prayer> with TickerProviderStateMixin {
                                               checkColor: Colors.white,
                                               value: prayer.prayer4,
                                               onChanged: (value) {
-                                                prayer.prayer4 = value!;
+                                                if(FirebaseAuth.instance.currentUser == null){
+                                                  Get.snackbar("لا يمكن تخزين البيانات", "لتخزين البيانات برجاء تسجيل الدخول",
+                                                      colorText: Colors.white,snackPosition: SnackPosition.BOTTOM,
+                                                      backgroundColor: Colors.blue[900]);
+                                                  Get.to(SignInView());
+                                                }else{
+                                                  prayer.prayer4 = value!;
+                                                }
                                               }),
                                           Text(
                                             'النافلة',
@@ -699,8 +771,15 @@ class _PrayerState extends State<Prayer> with TickerProviderStateMixin {
                                               checkColor: Colors.white,
                                               value: prayer.prayer5,
                                               onChanged: (value) {
-                                                prayer.prayer5 = value!;
-                                                _updateCalculation(context);
+                                                if(FirebaseAuth.instance.currentUser == null){
+                                                  Get.snackbar("لا يمكن تخزين البيانات", "لتخزين البيانات برجاء تسجيل الدخول",
+                                                      colorText: Colors.white,snackPosition: SnackPosition.BOTTOM,
+                                                      backgroundColor: Colors.blue[900]);
+                                                  Get.to(SignInView());
+                                                }else{
+                                                  prayer.prayer5 = value!;
+                                                  _updateCalculation(context);
+                                                }
                                               }),
                                           Text(
                                             'الفرض',
@@ -749,8 +828,15 @@ class _PrayerState extends State<Prayer> with TickerProviderStateMixin {
                                               checkColor: Colors.white,
                                               value: prayer.prayer6,
                                               onChanged: (value) {
-                                                prayer.prayer6 = value!;
-                                                _updateCalculation(context);
+                                                if(FirebaseAuth.instance.currentUser == null){
+                                                  Get.snackbar("لا يمكن تخزين البيانات", "لتخزين البيانات برجاء تسجيل الدخول",
+                                                      colorText: Colors.white,snackPosition: SnackPosition.BOTTOM,
+                                                      backgroundColor: Colors.blue[900]);
+                                                  Get.to(SignInView());
+                                                }else{
+                                                  prayer.prayer6 = value!;
+                                                  _updateCalculation(context);
+                                                }
                                               }),
                                           Text(
                                             'الفرض',
@@ -800,7 +886,14 @@ class _PrayerState extends State<Prayer> with TickerProviderStateMixin {
                                               checkColor: Colors.white,
                                               value: prayer.prayer7,
                                               onChanged: (value) {
-                                                prayer.prayer7 = value!;
+                                                if(FirebaseAuth.instance.currentUser == null){
+                                                  Get.snackbar("لا يمكن تخزين البيانات", "لتخزين البيانات برجاء تسجيل الدخول",
+                                                      colorText: Colors.white,snackPosition: SnackPosition.BOTTOM,
+                                                      backgroundColor: Colors.blue[900]);
+                                                  Get.to(SignInView());
+                                                }else{
+                                                  prayer.prayer7 = value!;
+                                                }
 
                                               }),
                                           Text(
@@ -817,8 +910,15 @@ class _PrayerState extends State<Prayer> with TickerProviderStateMixin {
                                               checkColor: Colors.white,
                                               value: prayer.prayer8,
                                               onChanged: (value) {
-                                                prayer.prayer8 = value!;
-                                                _updateCalculation(context);
+                                                if(FirebaseAuth.instance.currentUser == null){
+                                                  Get.snackbar("لا يمكن تخزين البيانات", "لتخزين البيانات برجاء تسجيل الدخول",
+                                                      colorText: Colors.white,snackPosition: SnackPosition.BOTTOM,
+                                                      backgroundColor: Colors.blue[900]);
+                                                  Get.to(SignInView());
+                                                }else{
+                                                  prayer.prayer8 = value!;
+                                                  _updateCalculation(context);
+                                                }
                                               }),
                                           Text(
                                             'الفرض',
@@ -867,7 +967,14 @@ class _PrayerState extends State<Prayer> with TickerProviderStateMixin {
                                               checkColor: Colors.white,
                                               value: prayer.prayer9,
                                               onChanged: (value) {
-                                                prayer.prayer9 = value!;
+                                                if(FirebaseAuth.instance.currentUser == null){
+                                                  Get.snackbar("لا يمكن تخزين البيانات", "لتخزين البيانات برجاء تسجيل الدخول",
+                                                      colorText: Colors.white,snackPosition: SnackPosition.BOTTOM,
+                                                      backgroundColor: Colors.blue[900]);
+                                                  Get.to(SignInView());
+                                                }else{
+                                                  prayer.prayer9 = value!;
+                                                }
 
                                               }),
                                           Text(
@@ -884,8 +991,15 @@ class _PrayerState extends State<Prayer> with TickerProviderStateMixin {
                                               checkColor: Colors.white,
                                               value: prayer.prayer10,
                                               onChanged: (value) {
-                                                prayer.prayer10 = value!;
-                                                _updateCalculation(context);
+                                                if(FirebaseAuth.instance.currentUser == null){
+                                                  Get.snackbar("لا يمكن تخزين البيانات", "لتخزين البيانات برجاء تسجيل الدخول",
+                                                      colorText: Colors.white,snackPosition: SnackPosition.BOTTOM,
+                                                      backgroundColor: Colors.blue[900]);
+                                                  Get.to(SignInView());
+                                                }else{
+                                                  prayer.prayer10 = value!;
+                                                  _updateCalculation(context);
+                                                }
                                               }),
                                           Text(
                                             'الفرض',
@@ -934,7 +1048,14 @@ class _PrayerState extends State<Prayer> with TickerProviderStateMixin {
                                               checkColor: Colors.white,
                                               value: prayer.prayer11,
                                               onChanged: (value) {
-                                                prayer.prayer11 = value!;
+                                                if(FirebaseAuth.instance.currentUser == null){
+                                                  Get.snackbar("لا يمكن تخزين البيانات", "لتخزين البيانات برجاء تسجيل الدخول",
+                                                      colorText: Colors.white,snackPosition: SnackPosition.BOTTOM,
+                                                      backgroundColor: Colors.blue[900]);
+                                                  Get.to(SignInView());
+                                                }else{
+                                                  prayer.prayer11 = value!;
+                                                }
 
                                               }),
                                         ]),

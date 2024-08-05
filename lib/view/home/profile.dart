@@ -1,4 +1,5 @@
 import 'dart:io';
+import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import 'package:get/get.dart';
 import 'package:image_picker/image_picker.dart';
@@ -73,7 +74,7 @@ class _ProfileState extends State<Profile> {
   @override
   void initState() {
     super.initState();
-    _loadImage(); // Load image path when the app starts
+    _loadImage();// Load image path when the app starts
   }
 
   @override
@@ -231,7 +232,7 @@ class _ProfileState extends State<Profile> {
                             right: Get.width * 0.7,
                             child: IconButton(
                                 onPressed: () {
-                                  Get.to( Editprofile(username: widget.username, email: widget.email,));
+                                  Get.off(Editprofile(username: widget.username, email: widget.email,));
                                 },
                                 icon: Icon(
                                   Icons.edit,
@@ -240,6 +241,9 @@ class _ProfileState extends State<Profile> {
                       ],
                     ),
                   ),
+                ),
+                SizedBox(
+                  height: Get.height * 0.01,
                 ),
                 Container(
                   width: Get.width * .95,
@@ -253,18 +257,20 @@ class _ProfileState extends State<Profile> {
                       ]),
                   child: Column(
                     children: [
-                      Container(
-                        alignment: Alignment.topRight,
-                        child: const Padding(
-                          padding: EdgeInsets.all(8.0),
-                          child: Text(
-                            textDirection: TextDirection.rtl,
-                            'مهام اليوم',
-                            style: TextStyle(
-                                letterSpacing: .6,
-                                fontWeight: FontWeight.bold,
-                                fontSize: 16,
-                                color: Colors.black),
+                      Expanded(
+                        child: Container(
+                          alignment: Alignment.topRight,
+                          child: const Padding(
+                            padding: EdgeInsets.all(5.0),
+                            child: Text(
+                              textDirection: TextDirection.rtl,
+                              'مهام اليوم',
+                              style: TextStyle(
+                                  letterSpacing: .6,
+                                  fontWeight: FontWeight.bold,
+                                  fontSize: 16,
+                                  color: Colors.black),
+                            ),
                           ),
                         ),
                       ),

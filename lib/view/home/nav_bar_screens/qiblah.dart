@@ -1,3 +1,4 @@
+import 'package:firebase_auth/firebase_auth.dart';
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_qiblah/flutter_qiblah.dart';
@@ -6,10 +7,13 @@ import 'package:persistent_bottom_nav_bar/persistent_bottom_nav_bar.dart';
 import 'package:prayer_app/qiblah/qiblah_compass.dart';
 import 'package:prayer_app/qiblah/qiblah_maps.dart';
 import '../../../qiblah/loading_indicator.dart';
+import '../../auth/sign_in_view.dart';
 import '../profile.dart';
 import '../settings.dart';
 
 class Qiblah extends StatefulWidget {
+  const Qiblah({super.key});
+
   @override
   _QiblahState createState() => _QiblahState();
 }
@@ -51,13 +55,20 @@ class _QiblahState extends State<Qiblah> {
                             GestureDetector(
                               onTap: () async {
                                 final userData = await getUserData();
-                                PersistentNavBarNavigator.pushNewScreen(
-                                  context,
-                                  screen:  Profile(username: '${userData['username']}',
-                                    email: '${userData['email']}',),
-                                  withNavBar: true, // OPTIONAL VALUE. True by default.
-                                  pageTransitionAnimation: PageTransitionAnimation.cupertino,
-                                );
+                                if(FirebaseAuth.instance.currentUser == null){
+                                  Get.snackbar("لا يمكن الدخول الي الصفحه الشخصيه", "للدخول الي الصفحه الشخصيه برجاء تسجيل الدخول",
+                                      colorText: Colors.white,snackPosition: SnackPosition.BOTTOM,
+                                      backgroundColor: Colors.blue[900]);
+                                  Get.to(SignInView());
+                                }else{
+                                  PersistentNavBarNavigator.pushNewScreen(
+                                    context,
+                                    screen:  Profile(username: '${userData['username']}',
+                                      email: '${userData['email']}',),
+                                    withNavBar: true, // OPTIONAL VALUE. True by default.
+                                    pageTransitionAnimation: PageTransitionAnimation.cupertino,
+                                  );
+                                }
                               },
                               child: CircleAvatar(
                                 radius: 20,
