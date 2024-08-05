@@ -48,6 +48,7 @@ class _StartUpState extends State<StartUp> {
       'email': email,
     };
   }
+
   final DatabaseHelper dbHelper = DatabaseHelper();
   PrayerCurrent? prayerCurrent;
   DateTime selectedDate = DateTime.now();
@@ -55,28 +56,30 @@ class _StartUpState extends State<StartUp> {
   String _formatDate(DateTime date) {
     return "${date.year}-${date.month.toString().padLeft(2, '0')}-${date.day.toString().padLeft(2, '0')}";
   }
+
   void _savePrayerDataCurrent() async {
     if (prayerCurrent != null) {
       await dbHelper.insertPrayerCurrent(prayerCurrent!);
     }
   }
+
   void _getPrayerDataCurrent() async {
     prayerCurrent = await dbHelper.getPrayerCurrent(_formatDate(selectedDate));
     prayerCurrent ??= PrayerCurrent(
-        day: formattedDate,
-        prayer1: false,
-        prayer2: false,
-        prayer3: false,
-        prayer4: false,
-        prayer5: false,
-        prayer6: false,
-        prayer7: false,
-        prayer8: false,
-        prayer9: false,
-        prayer10: false,
-        prayer11: false,
-        calculation: 0,
-      );
+      day: formattedDate,
+      prayer1: false,
+      prayer2: false,
+      prayer3: false,
+      prayer4: false,
+      prayer5: false,
+      prayer6: false,
+      prayer7: false,
+      prayer8: false,
+      prayer9: false,
+      prayer10: false,
+      prayer11: false,
+      calculation: 0,
+    );
     setState(() {});
   }
 
@@ -168,6 +171,7 @@ class _StartUpState extends State<StartUp> {
     salahMin.add(int.parse(
         DateFormat.jm().format(getPrayerTime().isha).substring(2, 4)));
   }
+
   void _updateCalculation(BuildContext context) {
     final provider = Provider.of<PrayerProvider>(context, listen: false);
     final prayer = provider.prayerCurrentData!;
@@ -198,7 +202,8 @@ class _StartUpState extends State<StartUp> {
     // _getPrayerDataCurrent();
 
     final bool value = context.watch<BoolNotifier>().value1;
-    Duration timeLeft = _prayerTimeCalculator.timeLeftForNextPrayer(_nextPrayerTime);
+    Duration timeLeft =
+        _prayerTimeCalculator.timeLeftForNextPrayer(_nextPrayerTime);
     return Scaffold(
       appBar: PreferredSize(
           preferredSize: Size(double.infinity, Get.height * .23),
@@ -222,7 +227,7 @@ class _StartUpState extends State<StartUp> {
               ),
               Padding(
                 padding:
-                    const EdgeInsets.symmetric(vertical: 35, horizontal: 5),
+                    const EdgeInsets.symmetric(vertical: 40, horizontal: 10),
                 child: Column(
                   mainAxisAlignment: MainAxisAlignment.spaceAround,
                   children: [
@@ -234,21 +239,41 @@ class _StartUpState extends State<StartUp> {
                             GestureDetector(
                               onTap: () async {
                                 final userData = await getUserData();
-                                if(FirebaseAuth.instance.currentUser == null){
-                                  Get.snackbar("لا يمكن الدخول الي الصفحه الشخصيه", "للدخول الي الصفحه الشخصيه برجاء تسجيل الدخول",
-                                      colorText: Colors.white,snackPosition: SnackPosition.BOTTOM,
-                                      backgroundColor: Colors.blue[900]);
-                                  Get.to(SignInView());
-                                }else{
+                                if (FirebaseAuth.instance.currentUser == null) {
+                                  Get.defaultDialog(
+                                      content: GestureDetector(
+                                        onTap: () {
+                                          Get.to(SignInView());
+                                        },
+                                        child: Container(
+                                          alignment: Alignment.center,
+                                          width: 200,
+                                          height: 50,
+                                          color: buttonColor,
+                                          child: Text(
+                                            'تسجيل الدخول',
+                                            style: TextStyle(
+                                                color: Colors.white,
+                                                fontSize: 18),
+                                          ),
+                                        ),
+                                      ),
+                                      title:
+                                          '"لا يمكن الدخول الي الصفحه الشخصيه", "للدخول الي الصفحه الشخصيه برجاء تسجيل الدخول"',
+                                      backgroundColor: Colors.white);
+                                } else {
                                   PersistentNavBarNavigator.pushNewScreen(
                                     context,
-                                    screen:  Profile(username: '${userData['username']}',
-                                      email: '${userData['email']}',),
-                                    withNavBar: true, // OPTIONAL VALUE. True by default.
-                                    pageTransitionAnimation: PageTransitionAnimation.cupertino,
+                                    screen: Profile(
+                                      username: '${userData['username']}',
+                                      email: '${userData['email']}',
+                                    ),
+                                    withNavBar:
+                                        true, // OPTIONAL VALUE. True by default.
+                                    pageTransitionAnimation:
+                                        PageTransitionAnimation.cupertino,
                                   );
                                 }
-
                               },
                               child: CircleAvatar(
                                 radius: 15,
@@ -270,8 +295,10 @@ class _StartUpState extends State<StartUp> {
                             PersistentNavBarNavigator.pushNewScreen(
                               context,
                               screen: const Settings(),
-                              withNavBar: true, // OPTIONAL VALUE. True by default.
-                              pageTransitionAnimation: PageTransitionAnimation.cupertino,
+                              withNavBar:
+                                  true, // OPTIONAL VALUE. True by default.
+                              pageTransitionAnimation:
+                                  PageTransitionAnimation.cupertino,
                             );
                           },
                           child: CircleAvatar(
@@ -294,7 +321,7 @@ class _StartUpState extends State<StartUp> {
                       child: Text(
                         'الأذان القادم صلاه ${salahName[_prayerTimeCalculator.salahCalc]}',
                         style: TextStyle(
-                            fontSize: 23,
+                            fontSize: 20,
                             fontWeight: FontWeight.w800,
                             color: Colors.white),
                       ),
@@ -302,7 +329,7 @@ class _StartUpState extends State<StartUp> {
                     Text(
                       '${_prayerTimeCalculator.formatDuration(timeLeft)}',
                       style: TextStyle(
-                          fontSize: 30,
+                          fontSize: 23,
                           color: Colors.white,
                           fontWeight: FontWeight.bold),
                     )
@@ -311,377 +338,505 @@ class _StartUpState extends State<StartUp> {
               ),
             ],
           )),
-      body: Consumer<PrayerProvider>(
-        builder: (context, provider, child) {
-          final prayer = provider.prayerCurrentData ?? PrayerCurrent(
-            day: _formatDate(selectedDate),
-            prayer1: false,
-            prayer2: false,
-            prayer3: false,
-            prayer4: false,
-            prayer5: false,
-            prayer6: false,
-            prayer7: false,
-            prayer8: false,
-            prayer9: false,
-            prayer10: false,
-            prayer11: false,
-            calculation: 0,
-          );
-          return Stack(
-            children: [
-              Container(
-                height: MediaQuery.of(context).size.height,
-                width: MediaQuery.of(context).size.width,
-                //  margin: EdgeInsets.only(left: 2, top: 5, bottom: 5, right: 2),
-                decoration: BoxDecoration(
-                  image: DecorationImage(
-                      image: AssetImage('images/back ground.jpeg'),
-                      fit: BoxFit.cover),
-                  borderRadius: BorderRadius.circular(1),
-                  color: Colors.white,
-                ),
+      body: Consumer<PrayerProvider>(builder: (context, provider, child) {
+        final prayer = provider.prayerCurrentData ??
+            PrayerCurrent(
+              day: _formatDate(selectedDate),
+              prayer1: false,
+              prayer2: false,
+              prayer3: false,
+              prayer4: false,
+              prayer5: false,
+              prayer6: false,
+              prayer7: false,
+              prayer8: false,
+              prayer9: false,
+              prayer10: false,
+              prayer11: false,
+              calculation: 0,
+            );
+        return Stack(
+          children: [
+            Container(
+              height: MediaQuery.of(context).size.height,
+              width: MediaQuery.of(context).size.width,
+              //  margin: EdgeInsets.only(left: 2, top: 5, bottom: 5, right: 2),
+              decoration: BoxDecoration(
+                image: DecorationImage(
+                    image: AssetImage('images/back ground.jpeg'),
+                    fit: BoxFit.cover),
+                borderRadius: BorderRadius.circular(1),
+                color: Colors.white,
               ),
-              SingleChildScrollView(
-                child: Column(
-                  children: [
-                    Container(
-                      margin: EdgeInsets.symmetric(horizontal: 10),
-                      alignment: Alignment.topRight,
-                      child: Text(
-                        'الصلوات اليومية',
-                        style: TextStyle(
-                            letterSpacing: .6,
-                            fontWeight: FontWeight.bold,
-                            fontSize: 20,
-                            color: Colors.black),
-                      ),
+            ),
+            SingleChildScrollView(
+              child: Column(
+                children: [
+                  Container(
+                    margin: EdgeInsets.symmetric(horizontal: 10),
+                    alignment: Alignment.topRight,
+                    child: Text(
+                      'الصلوات اليومية',
+                      style: TextStyle(
+                          letterSpacing: .6,
+                          fontWeight: FontWeight.bold,
+                          fontSize: 20,
+                          color: Colors.black),
                     ),
-                    value == true
-                        ? Container(
-                            child: Row(
-                              mainAxisAlignment: MainAxisAlignment.spaceAround,
-                              children: [
-                                Container(
-                                  child: TextButton(
-                                    onPressed: () {
-                                      context.read<BoolNotifier>().setValue1(false);
-                                    },
-                                    child: Text(
-                                      'اعادة التشغيل',
-                                      textDirection: TextDirection.rtl,
-                                      style: TextStyle(
+                  ),
+                  value == true
+                      ? Container(
+                          child: Row(
+                            mainAxisAlignment: MainAxisAlignment.spaceAround,
+                            children: [
+                              Container(
+                                child: TextButton(
+                                  onPressed: () {
+                                    context
+                                        .read<BoolNotifier>()
+                                        .setValue1(false);
+                                  },
+                                  child: Text(
+                                    'اعادة التشغيل',
+                                    textDirection: TextDirection.rtl,
+                                    style: TextStyle(
+                                        color: buttonColor,
+                                        fontSize: 12,
+                                        fontWeight: FontWeight.bold),
+                                  ),
+                                ),
+                                alignment: Alignment.center,
+                                width: Get.width * .23,
+                                height: Get.height * .043,
+                                decoration: BoxDecoration(
+                                    color: Colors.white,
+                                    borderRadius: BorderRadius.circular(3),
+                                    boxShadow: [
+                                      BoxShadow(
                                           color: buttonColor,
-                                          fontSize: 12,
-                                          fontWeight: FontWeight.bold),
+                                          blurRadius: 1,
+                                          spreadRadius: .5)
+                                    ]),
+                              ),
+                              Column(
+                                mainAxisAlignment: MainAxisAlignment.center,
+                                children: [
+                                  Container(
+                                    alignment: Alignment.topRight,
+                                    child: Text(
+                                      'تم تفعيل وضع ايقاف الصلاه والصيام',
+                                      style: TextStyle(
+                                          letterSpacing: .6,
+                                          fontWeight: FontWeight.bold,
+                                          fontSize: 16,
+                                          color: Colors.black),
                                     ),
                                   ),
-                                  alignment: Alignment.center,
-                                  width: Get.width * .23,
-                                  height: Get.height * .043,
-                                  decoration: BoxDecoration(
-                                      color: Colors.white,
-                                      borderRadius: BorderRadius.circular(3),
-                                      boxShadow: [
-                                        BoxShadow(
-                                            color: buttonColor,
-                                            blurRadius: 1,
-                                            spreadRadius: .5)
-                                      ]),
-                                ),
-                                Column(
-                                  mainAxisAlignment: MainAxisAlignment.center,
-                                  children: [
-                                    Container(
-                                      alignment: Alignment.topRight,
-                                      child: Text(
-                                        'تم تفعيل وضع ايقاف الصلاه والصيام',
-                                        style: TextStyle(
-                                            letterSpacing: .6,
-                                            fontWeight: FontWeight.bold,
-                                            fontSize: 16,
-                                            color: Colors.black),
-                                      ),
-                                    ),
-                                  ],
-                                )
-                              ],
-                            ),
-                            width: Get.width * .95,
-                            height: Get.height * .1,
-                            decoration: BoxDecoration(
-                                color: Colors.white,
-                                borderRadius: BorderRadius.circular(5),
-                                boxShadow: [
-                                  BoxShadow(
-                                      color: Colors.grey,
-                                      blurRadius: 2,
-                                      spreadRadius: .5)
-                                ]),
-                          )
-                        : Column(
-                            children: [
-                              SlahBox(
-                                  'الفجر',
-                                  (intl.DateFormat.jm()
-                                          .format(getPrayerTime().fajr))
-                                      .replaceAll('AM', "ص"),"images/Illustrator.png",Checkbox(
+                                ],
+                              )
+                            ],
+                          ),
+                          width: Get.width * .95,
+                          height: Get.height * .1,
+                          decoration: BoxDecoration(
+                              color: Colors.white,
+                              borderRadius: BorderRadius.circular(5),
+                              boxShadow: [
+                                BoxShadow(
+                                    color: Colors.grey,
+                                    blurRadius: 2,
+                                    spreadRadius: .5)
+                              ]),
+                        )
+                      : Column(
+                          children: [
+                            SlahBox(
+                              'الفجر',
+                              (intl.DateFormat.jm()
+                                      .format(getPrayerTime().fajr))
+                                  .replaceAll('AM', "ص"),
+                              "images/Illustrator.png",
+                              Checkbox(
                                   activeColor: buttonColor,
                                   checkColor: Colors.white,
                                   value: prayer.prayer2,
                                   onChanged: (value) {
-                                    if(FirebaseAuth.instance.currentUser == null){
-                                      Get.snackbar("لا يمكن تخزين البيانات", "لتخزين البيانات برجاء تسجيل الدخول",
-                                          colorText: Colors.white,snackPosition: SnackPosition.BOTTOM,
-                                          backgroundColor: Colors.blue[900]);
-                                      Get.to(SignInView());
-                                    }else{
+                                    if (FirebaseAuth.instance.currentUser ==
+                                        null) {
+                                      Get.defaultDialog(
+                                          content: GestureDetector(
+                                            onTap: () {
+                                              Get.to(SignInView());
+                                            },
+                                            child: Container(
+                                              alignment: Alignment.center,
+                                              width: 200,
+                                              height: 50,
+                                              color: buttonColor,
+                                              child: Text(
+                                                'تسجيل الدخول',
+                                                style: TextStyle(
+                                                    color: Colors.white,
+                                                    fontSize: 18),
+                                              ),
+                                            ),
+                                          ),
+                                          title:
+                                              '"لا يمكن حفظ المعلومات", "لحفظ المعلومات برجاء تسجيل الدخول"',
+                                          backgroundColor: Colors.white);
+                                    } else {
                                       prayer.prayer2 = value!;
                                       _updateCalculation(context);
                                     }
-
-                                  }),),
-                              SlahBox(
-                                  'الظهر',
-                                  (intl.DateFormat.jm()
-                                          .format(getPrayerTime().dhuhr))
-                                      .replaceAll('PM', "م"),"images/1.png",Checkbox(
+                                  }),
+                            ),
+                            SlahBox(
+                              'الظهر',
+                              (intl.DateFormat.jm()
+                                      .format(getPrayerTime().dhuhr))
+                                  .replaceAll('PM', "م"),
+                              "images/1.png",
+                              Checkbox(
                                   activeColor: buttonColor,
                                   checkColor: Colors.white,
                                   value: prayer.prayer5,
                                   onChanged: (value) {
-                                    if(FirebaseAuth.instance.currentUser == null){
-                                      Get.snackbar("لا يمكن تخزين البيانات", "لتخزين البيانات برجاء تسجيل الدخول",
-                                          colorText: Colors.white,snackPosition: SnackPosition.BOTTOM,
-                                          backgroundColor: Colors.blue[900]);
-                                      Get.to(SignInView());
-                                    }else{
+                                    if (FirebaseAuth.instance.currentUser ==
+                                        null) {
+                                      Get.defaultDialog(
+                                          content: GestureDetector(
+                                            onTap: () {
+                                              Get.to(SignInView());
+                                            },
+                                            child: Container(
+                                              alignment: Alignment.center,
+                                              width: 200,
+                                              height: 50,
+                                              color: buttonColor,
+                                              child: Text(
+                                                'تسجيل الدخول',
+                                                style: TextStyle(
+                                                    color: Colors.white,
+                                                    fontSize: 18),
+                                              ),
+                                            ),
+                                          ),
+                                          title:
+                                          '"لا يمكن حفظ المعلومات", "لحفظ المعلومات برجاء تسجيل الدخول"',
+                                          backgroundColor: Colors.white);
+                                    } else {
                                       prayer.prayer5 = value!;
                                       _updateCalculation(context);
                                     }
-                                  }),),
-                              SlahBox(
-                                  'العصر',
-                                  (intl.DateFormat.jm().format(getPrayerTime().asr))
-                                      .replaceAll('PM', "م"),"images/Union (1).png",Checkbox(
+                                  }),
+                            ),
+                            SlahBox(
+                              'العصر',
+                              (intl.DateFormat.jm().format(getPrayerTime().asr))
+                                  .replaceAll('PM', "م"),
+                              "images/Union (1).png",
+                              Checkbox(
                                   activeColor: buttonColor,
                                   checkColor: Colors.white,
                                   value: prayer.prayer6,
                                   onChanged: (value) {
-                                    if(FirebaseAuth.instance.currentUser == null){
-                                      Get.snackbar("لا يمكن تخزين البيانات", "لتخزين البيانات برجاء تسجيل الدخول",
-                                          colorText: Colors.white,snackPosition: SnackPosition.BOTTOM,
-                                          backgroundColor: Colors.blue[900]);
-                                      Get.to(SignInView());
-                                    }else{
+                                    if (FirebaseAuth.instance.currentUser ==
+                                        null) {
+                                      Get.defaultDialog(
+                                          content: GestureDetector(
+                                            onTap: () {
+                                              Get.to(SignInView());
+                                            },
+                                            child: Container(
+                                              alignment: Alignment.center,
+                                              width: 200,
+                                              height: 50,
+                                              color: buttonColor,
+                                              child: Text(
+                                                'تسجيل الدخول',
+                                                style: TextStyle(
+                                                    color: Colors.white,
+                                                    fontSize: 18),
+                                              ),
+                                            ),
+                                          ),
+                                          title:
+                                          '"لا يمكن حفظ المعلومات", "لحفظ المعلومات برجاء تسجيل الدخول"',
+                                          backgroundColor: Colors.white);
+                                    } else {
                                       prayer.prayer6 = value!;
                                       _updateCalculation(context);
                                     }
-                                  }),),
-                              SlahBox(
-                                  'المغرب',
-                                  (intl.DateFormat.jm()
-                                          .format(getPrayerTime().maghrib))
-                                      .replaceAll('PM', "م"),"images/Illustrator (2).png",Checkbox(
-                                  activeColor: buttonColor,
-                                  checkColor: Colors.white,
-                                  value: prayer.prayer8,
-                                  onChanged: (value) {
-                                    if(FirebaseAuth.instance.currentUser == null){
-                                      Get.snackbar("لا يمكن تخزين البيانات", "لتخزين البيانات برجاء تسجيل الدخول",
-                                          colorText: Colors.white,snackPosition: SnackPosition.BOTTOM,
-                                          backgroundColor: Colors.blue[900]);
-                                      Get.to(SignInView());
-                                    }else{
-                                      prayer.prayer8 = value!;
-                                      _updateCalculation(context);
-                                    }
-                                  })),
-                              SlahBox(
-                                  'العشاء',
-                                  (intl.DateFormat.jm()
-                                          .format(getPrayerTime().isha))
-                                      .replaceAll('PM', "م"),"images/Illustrator (1).png",Checkbox(
-                                  activeColor: buttonColor,
-                                  checkColor: Colors.white,
-                                  value: prayer.prayer10,
-                                  onChanged: (value) {
-                                    if(FirebaseAuth.instance.currentUser == null){
-                                      Get.snackbar("لا يمكن تخزين البيانات", "لتخزين البيانات برجاء تسجيل الدخول",
-                                          colorText: Colors.white,snackPosition: SnackPosition.BOTTOM,
-                                          backgroundColor: Colors.blue[900]);
-                                      Get.to(SignInView());
-                                    }else{
-                                      prayer.prayer10 = value!;
-                                      _updateCalculation(context);
-                                    }
-                                  })),
-                            ],
-                          ),
-                    SizedBox(
-                      height: Get.height * 0.03,
-                    ),
-                    TextButton(
-                      onPressed: () {},
-                      child: TextButton(
-                        onPressed: () {
-                          if(FirebaseAuth.instance.currentUser == null){
-                            Get.snackbar("لا يمكن عرض اهداف اليوم", "لعرض اهداف اليوم برجاء تسجيل الدخول",
-                                colorText: Colors.white,snackPosition: SnackPosition.BOTTOM,
-                                backgroundColor: Colors.blue[900]);
-                            Get.to(SignInView());
-                          }else{
-                            PersistentNavBarNavigator.pushNewScreen(
-                              context,
-                              screen: const DailyGoals(),
-                              withNavBar: true, // OPTIONAL VALUE. True by default.
-                              pageTransitionAnimation: PageTransitionAnimation.cupertino,
-                            );
-                          }
-
-                        },
-                        child: Text(
-                          textDirection: TextDirection.rtl,
-                          'عرض باقي اهداف اليوم',
-                          style: TextStyle(
-                            fontSize: 20,
-                            fontWeight: FontWeight.bold,
-                            color: buttonColor,
-                            decoration: TextDecoration.underline,
-                          ),
+                                  }),
+                            ),
+                            SlahBox(
+                                'المغرب',
+                                (intl.DateFormat.jm()
+                                        .format(getPrayerTime().maghrib))
+                                    .replaceAll('PM', "م"),
+                                "images/Illustrator (2).png",
+                                Checkbox(
+                                    activeColor: buttonColor,
+                                    checkColor: Colors.white,
+                                    value: prayer.prayer8,
+                                    onChanged: (value) {
+                                      if (FirebaseAuth.instance.currentUser ==
+                                          null) {
+                                        Get.defaultDialog(
+                                            content: GestureDetector(
+                                              onTap: () {
+                                                Get.to(SignInView());
+                                              },
+                                              child: Container(
+                                                alignment: Alignment.center,
+                                                width: 200,
+                                                height: 50,
+                                                color: buttonColor,
+                                                child: Text(
+                                                  'تسجيل الدخول',
+                                                  style: TextStyle(
+                                                      color: Colors.white,
+                                                      fontSize: 18),
+                                                ),
+                                              ),
+                                            ),
+                                            title:
+                                            '"لا يمكن حفظ المعلومات", "لحفظ المعلومات برجاء تسجيل الدخول"',
+                                            backgroundColor: Colors.white);
+                                      }else {
+                                        prayer.prayer8 = value!;
+                                        _updateCalculation(context);
+                                      }
+                                    })),
+                            SlahBox(
+                                'العشاء',
+                                (intl.DateFormat.jm()
+                                        .format(getPrayerTime().isha))
+                                    .replaceAll('PM', "م"),
+                                "images/Illustrator (1).png",
+                                Checkbox(
+                                    activeColor: buttonColor,
+                                    checkColor: Colors.white,
+                                    value: prayer.prayer10,
+                                    onChanged: (value) {
+                                      if (FirebaseAuth.instance.currentUser ==
+                                          null) {
+                                        Get.defaultDialog(
+                                            content: GestureDetector(
+                                              onTap: () {
+                                                Get.to(SignInView());
+                                              },
+                                              child: Container(
+                                                alignment: Alignment.center,
+                                                width: 200,
+                                                height: 50,
+                                                color: buttonColor,
+                                                child: Text(
+                                                  'تسجيل الدخول',
+                                                  style: TextStyle(
+                                                      color: Colors.white,
+                                                      fontSize: 18),
+                                                ),
+                                              ),
+                                            ),
+                                            title:
+                                            '"لا يمكن حفظ المعلومات", "لحفظ المعلومات برجاء تسجيل الدخول"',
+                                            backgroundColor: Colors.white);
+                                      }else {
+                                        prayer.prayer10 = value!;
+                                        _updateCalculation(context);
+                                      }
+                                    })),
+                          ],
                         ),
-                      ),
-                    ),
-                    Container(
-                      margin: EdgeInsets.all(15),
-                      alignment: Alignment.topRight,
+                  SizedBox(
+                    height: Get.height * 0.03,
+                  ),
+                  TextButton(
+                    onPressed: () {},
+                    child: TextButton(
+                      onPressed: () {
+                        if (FirebaseAuth.instance.currentUser ==
+                            null) {
+                          Get.defaultDialog(
+                              content: GestureDetector(
+                                onTap: () {
+                                  Get.to(SignInView());
+                                },
+                                child: Container(
+                                  alignment: Alignment.center,
+                                  width: 200,
+                                  height: 50,
+                                  color: buttonColor,
+                                  child: Text(
+                                    'تسجيل الدخول',
+                                    style: TextStyle(
+                                        color: Colors.white,
+                                        fontSize: 18),
+                                  ),
+                                ),
+                              ),
+                              title:
+                              '"لا يمكن عرض الاهداف", "لحفظ المعلومات برجاء تسجيل الدخول"',
+                              backgroundColor: Colors.white);
+                        } else {
+                          PersistentNavBarNavigator.pushNewScreen(
+                            context,
+                            screen: const DailyGoals(),
+                            withNavBar:
+                                true, // OPTIONAL VALUE. True by default.
+                            pageTransitionAnimation:
+                                PageTransitionAnimation.cupertino,
+                          );
+                        }
+                      },
                       child: Text(
                         textDirection: TextDirection.rtl,
-                        'يمكنك ايضا تصفح باقي المزايا',
+                        'عرض باقي اهداف اليوم',
                         style: TextStyle(
-                          fontSize: 17,
-                          color: Colors.black,
+                          fontSize: 20,
+                          fontWeight: FontWeight.bold,
+                          color: buttonColor,
+                          decoration: TextDecoration.underline,
                         ),
                       ),
                     ),
-                    Row(
-                      mainAxisAlignment: MainAxisAlignment.spaceAround,
-                      children: [
-                        GestureDetector(
-                          onTap: () {
-                            PersistentNavBarNavigator.pushNewScreen(
-                              context,
-                              screen:  Qiblah(),
-                              withNavBar: true, // OPTIONAL VALUE. True by default.
-                              pageTransitionAnimation: PageTransitionAnimation.cupertino,
-                            );
-                          },
-                          child: Container(
-                            child: Column(
-                              children: [
-                                Image.asset("images/Group (1).png"),
-                                Text(
-                                  'القبلة',
-                                  style: TextStyle(
-                                      fontSize: 16, fontWeight: FontWeight.bold),
-                                )
-                              ],
-                              mainAxisAlignment: MainAxisAlignment.spaceAround,
-                            ),
-                            width: Get.width * .28,
-                            height: Get.height * .1,
-                            decoration: BoxDecoration(
-                                color: Colors.white,
-                                borderRadius: BorderRadius.circular(5),
-                                boxShadow: [
-                                  BoxShadow(
-                                      color: Colors.grey,
-                                      blurRadius: 2,
-                                      spreadRadius: .5)
-                                ]),
+                  ),
+                  Container(
+                    margin: EdgeInsets.all(15),
+                    alignment: Alignment.topRight,
+                    child: Text(
+                      textDirection: TextDirection.rtl,
+                      'يمكنك ايضا تصفح باقي المزايا',
+                      style: TextStyle(
+                        fontSize: 17,
+                        color: Colors.black,
+                      ),
+                    ),
+                  ),
+                  Row(
+                    mainAxisAlignment: MainAxisAlignment.spaceAround,
+                    children: [
+                      GestureDetector(
+                        onTap: () {
+                          PersistentNavBarNavigator.pushNewScreen(
+                            context,
+                            screen: Qiblah(),
+                            withNavBar:
+                                true, // OPTIONAL VALUE. True by default.
+                            pageTransitionAnimation:
+                                PageTransitionAnimation.cupertino,
+                          );
+                        },
+                        child: Container(
+                          child: Column(
+                            children: [
+                              Image.asset("images/Group (1).png"),
+                              Text(
+                                'القبلة',
+                                style: TextStyle(
+                                    fontSize: 16, fontWeight: FontWeight.bold),
+                              )
+                            ],
+                            mainAxisAlignment: MainAxisAlignment.spaceAround,
                           ),
+                          width: Get.width * .28,
+                          height: Get.height * .1,
+                          decoration: BoxDecoration(
+                              color: Colors.white,
+                              borderRadius: BorderRadius.circular(5),
+                              boxShadow: [
+                                BoxShadow(
+                                    color: Colors.grey,
+                                    blurRadius: 2,
+                                    spreadRadius: .5)
+                              ]),
                         ),
-                        GestureDetector(
-                          onTap: () {
-                            PersistentNavBarNavigator.pushNewScreen(
-                              context,
-                              screen: const Roqua(),
-                              withNavBar: true, // OPTIONAL VALUE. True by default.
-                              pageTransitionAnimation: PageTransitionAnimation.cupertino,
-                            );
-                          },
-                          child: Container(
-                            child: Column(
-                              children: [
-                                Image.asset("images/Group.png"),
-                                Text(
-                                  'الرقيه الشرعيه',
-                                  style: TextStyle(
-                                      fontSize: 16, fontWeight: FontWeight.bold),
-                                )
-                              ],
-                              mainAxisAlignment: MainAxisAlignment.spaceAround,
-                            ),
-                            width: Get.width * .28,
-                            height: Get.height * .1,
-                            decoration: BoxDecoration(
-                                color: Colors.white,
-                                borderRadius: BorderRadius.circular(5),
-                                boxShadow: [
-                                  BoxShadow(
-                                      color: Colors.grey,
-                                      blurRadius: 2,
-                                      spreadRadius: .5)
-                                ]),
+                      ),
+                      GestureDetector(
+                        onTap: () {
+                          PersistentNavBarNavigator.pushNewScreen(
+                            context,
+                            screen: const Roqua(),
+                            withNavBar:
+                                true, // OPTIONAL VALUE. True by default.
+                            pageTransitionAnimation:
+                                PageTransitionAnimation.cupertino,
+                          );
+                        },
+                        child: Container(
+                          child: Column(
+                            children: [
+                              Image.asset("images/Group.png"),
+                              Text(
+                                'الرقيه الشرعيه',
+                                style: TextStyle(
+                                    fontSize: 16, fontWeight: FontWeight.bold),
+                              )
+                            ],
+                            mainAxisAlignment: MainAxisAlignment.spaceAround,
                           ),
+                          width: Get.width * .28,
+                          height: Get.height * .1,
+                          decoration: BoxDecoration(
+                              color: Colors.white,
+                              borderRadius: BorderRadius.circular(5),
+                              boxShadow: [
+                                BoxShadow(
+                                    color: Colors.grey,
+                                    blurRadius: 2,
+                                    spreadRadius: .5)
+                              ]),
                         ),
-                        GestureDetector(
-                          onTap: () {
-                            PersistentNavBarNavigator.pushNewScreen(
-                              context,
-                              screen:  SibhaView(),
-                              withNavBar: true, // OPTIONAL VALUE. True by default.
-                              pageTransitionAnimation: PageTransitionAnimation.cupertino,
-                            );
-                          },
-                          child: Container(
-                            child: Column(
-                              children: [
-                                Image.asset("images/noto_prayer-beads.png"),
-                                Text(
-                                  'السبحة',
-                                  style: TextStyle(
-                                      fontSize: 16, fontWeight: FontWeight.bold),
-                                )
-                              ],
-                              mainAxisAlignment: MainAxisAlignment.spaceAround,
-                            ),
-                            width: Get.width * .28,
-                            height: Get.height * .1,
-                            decoration: BoxDecoration(
-                                color: Colors.white,
-                                borderRadius: BorderRadius.circular(5),
-                                boxShadow: [
-                                  BoxShadow(
-                                      color: Colors.grey,
-                                      blurRadius: 2,
-                                      spreadRadius: .5)
-                                ]),
+                      ),
+                      GestureDetector(
+                        onTap: () {
+                          PersistentNavBarNavigator.pushNewScreen(
+                            context,
+                            screen: SibhaView(),
+                            withNavBar:
+                                true, // OPTIONAL VALUE. True by default.
+                            pageTransitionAnimation:
+                                PageTransitionAnimation.cupertino,
+                          );
+                        },
+                        child: Container(
+                          child: Column(
+                            children: [
+                              Image.asset("images/noto_prayer-beads.png"),
+                              Text(
+                                'السبحة',
+                                style: TextStyle(
+                                    fontSize: 16, fontWeight: FontWeight.bold),
+                              )
+                            ],
+                            mainAxisAlignment: MainAxisAlignment.spaceAround,
                           ),
+                          width: Get.width * .28,
+                          height: Get.height * .1,
+                          decoration: BoxDecoration(
+                              color: Colors.white,
+                              borderRadius: BorderRadius.circular(5),
+                              boxShadow: [
+                                BoxShadow(
+                                    color: Colors.grey,
+                                    blurRadius: 2,
+                                    spreadRadius: .5)
+                              ]),
                         ),
-                      ],
-                    )
-                  ],
-                ),
+                      ),
+                    ],
+                  )
+                ],
               ),
-            ],
-          );
-        }
-      ),
+            ),
+          ],
+        );
+      }),
     );
   }
 
-  Widget SlahBox(text, time,icn,chkbox) {
+  Widget SlahBox(text, time, icn, chkbox) {
     return Container(
       margin: EdgeInsets.only(bottom: 12),
       padding: EdgeInsets.symmetric(horizontal: 10),
@@ -718,9 +873,7 @@ class _StartUpState extends State<StartUp> {
               SizedBox(
                 width: Get.width * .02,
               ),
-              Image.asset(
-                icn
-              )
+              Image.asset(icn)
             ],
           )
         ],

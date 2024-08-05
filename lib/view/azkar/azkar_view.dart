@@ -120,7 +120,7 @@ class _AzkarState extends State<Azkar> {
             ListView(
               children: <Widget>[
                 Padding(
-                  padding: const EdgeInsets.all(15.0),
+                  padding: const EdgeInsets.symmetric(horizontal: 25,vertical: 40),
                   child: Row(
                     mainAxisAlignment: MainAxisAlignment.spaceBetween,
                     children: [

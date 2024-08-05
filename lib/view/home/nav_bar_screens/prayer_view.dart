@@ -282,11 +282,29 @@ class _PrayerState extends State<Prayer> with TickerProviderStateMixin {
                               GestureDetector(
                                 onTap: () async {
                                   final userData = await getUserData();
-                                  if(FirebaseAuth.instance.currentUser == null){
-                                    Get.snackbar("لا يمكن الدخول الي الصفحه الشخصيه", "للدخول الي الصفحه الشخصيه برجاء تسجيل الدخول",
-                                        colorText: Colors.white,snackPosition: SnackPosition.BOTTOM,
-                                        backgroundColor: Colors.blue[900]);
-                                    Get.to(SignInView());
+                                  if (FirebaseAuth.instance.currentUser ==
+                                      null) {
+                                    Get.defaultDialog(
+                                        content: GestureDetector(
+                                          onTap: () {
+                                            Get.to(SignInView());
+                                          },
+                                          child: Container(
+                                            alignment: Alignment.center,
+                                            width: 200,
+                                            height: 50,
+                                            color: buttonColor,
+                                            child: Text(
+                                              'تسجيل الدخول',
+                                              style: TextStyle(
+                                                  color: Colors.white,
+                                                  fontSize: 18),
+                                            ),
+                                          ),
+                                        ),
+                                        title:
+                                        '"لا يمكن حفظ المعلومات", "لحفظ المعلومات برجاء تسجيل الدخول"',
+                                        backgroundColor: Colors.white);
                                   }else{
                                     PersistentNavBarNavigator.pushNewScreen(
                                       context,
@@ -437,11 +455,29 @@ class _PrayerState extends State<Prayer> with TickerProviderStateMixin {
                                         ? false
                                         : prayerData!.prayer1,
                                     onChanged: (value) {
-                                      if(FirebaseAuth.instance.currentUser == null){
-                                        Get.snackbar("لا يمكن تخزين البيانات", "لتخزين البيانات برجاء تسجيل الدخول",
-                                            colorText: Colors.white,snackPosition: SnackPosition.BOTTOM,
-                                            backgroundColor: Colors.blue[900]);
-                                        Get.to(SignInView());
+                                      if (FirebaseAuth.instance.currentUser ==
+                                          null) {
+                                        Get.defaultDialog(
+                                            content: GestureDetector(
+                                              onTap: () {
+                                                Get.to(SignInView());
+                                              },
+                                              child: Container(
+                                                alignment: Alignment.center,
+                                                width: 200,
+                                                height: 50,
+                                                color: buttonColor,
+                                                child: Text(
+                                                  'تسجيل الدخول',
+                                                  style: TextStyle(
+                                                      color: Colors.white,
+                                                      fontSize: 18),
+                                                ),
+                                              ),
+                                            ),
+                                            title:
+                                            '"لا يمكن حفظ المعلومات", "لحفظ المعلومات برجاء تسجيل الدخول"',
+                                            backgroundColor: Colors.white);
                                       }else{
                                         setState(() {
                                           prayerData!.prayer1 = value!;
@@ -456,11 +492,29 @@ class _PrayerState extends State<Prayer> with TickerProviderStateMixin {
                                         ? false
                                         : prayerData!.prayer2,
                                     onChanged: (value) {
-                                      if(FirebaseAuth.instance.currentUser == null){
-                                        Get.snackbar("لا يمكن تخزين البيانات", "لتخزين البيانات برجاء تسجيل الدخول",
-                                            colorText: Colors.white,snackPosition: SnackPosition.BOTTOM,
-                                            backgroundColor: Colors.blue[900]);
-                                        Get.to(SignInView());
+                                      if (FirebaseAuth.instance.currentUser ==
+                                          null) {
+                                        Get.defaultDialog(
+                                            content: GestureDetector(
+                                              onTap: () {
+                                                Get.to(SignInView());
+                                              },
+                                              child: Container(
+                                                alignment: Alignment.center,
+                                                width: 200,
+                                                height: 50,
+                                                color: buttonColor,
+                                                child: Text(
+                                                  'تسجيل الدخول',
+                                                  style: TextStyle(
+                                                      color: Colors.white,
+                                                      fontSize: 18),
+                                                ),
+                                              ),
+                                            ),
+                                            title:
+                                            '"لا يمكن حفظ المعلومات", "لحفظ المعلومات برجاء تسجيل الدخول"',
+                                            backgroundColor: Colors.white);
                                       }else{
                                         setState(() {
                                           prayerData!.prayer2 = value!;
@@ -476,11 +530,29 @@ class _PrayerState extends State<Prayer> with TickerProviderStateMixin {
                                         ? false
                                         : prayerData!.prayer3,
                                     onChanged: (value) {
-                                      if(FirebaseAuth.instance.currentUser == null){
-                                        Get.snackbar("لا يمكن تخزين البيانات", "لتخزين البيانات برجاء تسجيل الدخول",
-                                            colorText: Colors.white,snackPosition: SnackPosition.BOTTOM,
-                                            backgroundColor: Colors.blue[900]);
-                                        Get.to(SignInView());
+                                      if (FirebaseAuth.instance.currentUser ==
+                                          null) {
+                                        Get.defaultDialog(
+                                            content: GestureDetector(
+                                              onTap: () {
+                                                Get.to(SignInView());
+                                              },
+                                              child: Container(
+                                                alignment: Alignment.center,
+                                                width: 200,
+                                                height: 50,
+                                                color: buttonColor,
+                                                child: Text(
+                                                  'تسجيل الدخول',
+                                                  style: TextStyle(
+                                                      color: Colors.white,
+                                                      fontSize: 18),
+                                                ),
+                                              ),
+                                            ),
+                                            title:
+                                            '"لا يمكن حفظ المعلومات", "لحفظ المعلومات برجاء تسجيل الدخول"',
+                                            backgroundColor: Colors.white);
                                       }else{
                                         setState(() {
                                           prayerData!.prayer3 = value!;
@@ -495,11 +567,29 @@ class _PrayerState extends State<Prayer> with TickerProviderStateMixin {
                                         ? false
                                         : prayerData!.prayer4,
                                     onChanged: (value) {
-                                      if(FirebaseAuth.instance.currentUser == null){
-                                        Get.snackbar("لا يمكن تخزين البيانات", "لتخزين البيانات برجاء تسجيل الدخول",
-                                            colorText: Colors.white,snackPosition: SnackPosition.BOTTOM,
-                                            backgroundColor: Colors.blue[900]);
-                                        Get.to(SignInView());
+                                      if (FirebaseAuth.instance.currentUser ==
+                                          null) {
+                                        Get.defaultDialog(
+                                            content: GestureDetector(
+                                              onTap: () {
+                                                Get.to(SignInView());
+                                              },
+                                              child: Container(
+                                                alignment: Alignment.center,
+                                                width: 200,
+                                                height: 50,
+                                                color: buttonColor,
+                                                child: Text(
+                                                  'تسجيل الدخول',
+                                                  style: TextStyle(
+                                                      color: Colors.white,
+                                                      fontSize: 18),
+                                                ),
+                                              ),
+                                            ),
+                                            title:
+                                            '"لا يمكن حفظ المعلومات", "لحفظ المعلومات برجاء تسجيل الدخول"',
+                                            backgroundColor: Colors.white);
                                       }else{
                                         setState(() {
                                           prayerData!.prayer4 = value!;
@@ -514,11 +604,29 @@ class _PrayerState extends State<Prayer> with TickerProviderStateMixin {
                                         ? false
                                         : prayerData!.prayer5,
                                     onChanged: (value) {
-                                      if(FirebaseAuth.instance.currentUser == null){
-                                        Get.snackbar("لا يمكن تخزين البيانات", "لتخزين البيانات برجاء تسجيل الدخول",
-                                            colorText: Colors.white,snackPosition: SnackPosition.BOTTOM,
-                                            backgroundColor: Colors.blue[900]);
-                                        Get.to(SignInView());
+                                      if (FirebaseAuth.instance.currentUser ==
+                                          null) {
+                                        Get.defaultDialog(
+                                            content: GestureDetector(
+                                              onTap: () {
+                                                Get.to(SignInView());
+                                              },
+                                              child: Container(
+                                                alignment: Alignment.center,
+                                                width: 200,
+                                                height: 50,
+                                                color: buttonColor,
+                                                child: Text(
+                                                  'تسجيل الدخول',
+                                                  style: TextStyle(
+                                                      color: Colors.white,
+                                                      fontSize: 18),
+                                                ),
+                                              ),
+                                            ),
+                                            title:
+                                            '"لا يمكن حفظ المعلومات", "لحفظ المعلومات برجاء تسجيل الدخول"',
+                                            backgroundColor: Colors.white);
                                       }else{
                                         setState(() {
                                           prayerData!.prayer5 = value!;
@@ -626,11 +734,29 @@ class _PrayerState extends State<Prayer> with TickerProviderStateMixin {
                                               checkColor: Colors.white,
                                               value: prayer.prayer1,
                                               onChanged: (value) {
-                                                if(FirebaseAuth.instance.currentUser == null){
-                                                  Get.snackbar("لا يمكن تخزين البيانات", "لتخزين البيانات برجاء تسجيل الدخول",
-                                                      colorText: Colors.white,snackPosition: SnackPosition.BOTTOM,
-                                                      backgroundColor: Colors.blue[900]);
-                                                  Get.to(SignInView());
+                                                if (FirebaseAuth.instance.currentUser ==
+                                                    null) {
+                                                  Get.defaultDialog(
+                                                      content: GestureDetector(
+                                                        onTap: () {
+                                                          Get.to(SignInView());
+                                                        },
+                                                        child: Container(
+                                                          alignment: Alignment.center,
+                                                          width: 200,
+                                                          height: 50,
+                                                          color: buttonColor,
+                                                          child: Text(
+                                                            'تسجيل الدخول',
+                                                            style: TextStyle(
+                                                                color: Colors.white,
+                                                                fontSize: 18),
+                                                          ),
+                                                        ),
+                                                      ),
+                                                      title:
+                                                      '"لا يمكن حفظ المعلومات", "لحفظ المعلومات برجاء تسجيل الدخول"',
+                                                      backgroundColor: Colors.white);
                                                 }else{
                                                   prayer.prayer1 = value!;
                                                 }
@@ -650,11 +776,29 @@ class _PrayerState extends State<Prayer> with TickerProviderStateMixin {
                                               checkColor: Colors.white,
                                               value: prayer.prayer2,
                                               onChanged: (value) {
-                                                if(FirebaseAuth.instance.currentUser == null){
-                                                  Get.snackbar("لا يمكن تخزين البيانات", "لتخزين البيانات برجاء تسجيل الدخول",
-                                                      colorText: Colors.white,snackPosition: SnackPosition.BOTTOM,
-                                                      backgroundColor: Colors.blue[900]);
-                                                  Get.to(SignInView());
+                                                if (FirebaseAuth.instance.currentUser ==
+                                                    null) {
+                                                  Get.defaultDialog(
+                                                      content: GestureDetector(
+                                                        onTap: () {
+                                                          Get.to(SignInView());
+                                                        },
+                                                        child: Container(
+                                                          alignment: Alignment.center,
+                                                          width: 200,
+                                                          height: 50,
+                                                          color: buttonColor,
+                                                          child: Text(
+                                                            'تسجيل الدخول',
+                                                            style: TextStyle(
+                                                                color: Colors.white,
+                                                                fontSize: 18),
+                                                          ),
+                                                        ),
+                                                      ),
+                                                      title:
+                                                      '"لا يمكن حفظ المعلومات", "لحفظ المعلومات برجاء تسجيل الدخول"',
+                                                      backgroundColor: Colors.white);
                                                 }else{
                                                   prayer.prayer2 = value!;
                                                   _updateCalculation(context);
@@ -698,11 +842,29 @@ class _PrayerState extends State<Prayer> with TickerProviderStateMixin {
                                               checkColor: Colors.white,
                                               value: prayer.prayer3,
                                               onChanged: (value) {
-                                                if(FirebaseAuth.instance.currentUser == null){
-                                                  Get.snackbar("لا يمكن تخزين البيانات", "لتخزين البيانات برجاء تسجيل الدخول",
-                                                      colorText: Colors.white,snackPosition: SnackPosition.BOTTOM,
-                                                      backgroundColor: Colors.blue[900]);
-                                                  Get.to(SignInView());
+                                                if (FirebaseAuth.instance.currentUser ==
+                                                    null) {
+                                                  Get.defaultDialog(
+                                                      content: GestureDetector(
+                                                        onTap: () {
+                                                          Get.to(SignInView());
+                                                        },
+                                                        child: Container(
+                                                          alignment: Alignment.center,
+                                                          width: 200,
+                                                          height: 50,
+                                                          color: buttonColor,
+                                                          child: Text(
+                                                            'تسجيل الدخول',
+                                                            style: TextStyle(
+                                                                color: Colors.white,
+                                                                fontSize: 18),
+                                                          ),
+                                                        ),
+                                                      ),
+                                                      title:
+                                                      '"لا يمكن حفظ المعلومات", "لحفظ المعلومات برجاء تسجيل الدخول"',
+                                                      backgroundColor: Colors.white);
                                                 }else{
                                                   prayer.prayer3 = value!;
                                                 }
@@ -748,11 +910,29 @@ class _PrayerState extends State<Prayer> with TickerProviderStateMixin {
                                               checkColor: Colors.white,
                                               value: prayer.prayer4,
                                               onChanged: (value) {
-                                                if(FirebaseAuth.instance.currentUser == null){
-                                                  Get.snackbar("لا يمكن تخزين البيانات", "لتخزين البيانات برجاء تسجيل الدخول",
-                                                      colorText: Colors.white,snackPosition: SnackPosition.BOTTOM,
-                                                      backgroundColor: Colors.blue[900]);
-                                                  Get.to(SignInView());
+                                                if (FirebaseAuth.instance.currentUser ==
+                                                    null) {
+                                                  Get.defaultDialog(
+                                                      content: GestureDetector(
+                                                        onTap: () {
+                                                          Get.to(SignInView());
+                                                        },
+                                                        child: Container(
+                                                          alignment: Alignment.center,
+                                                          width: 200,
+                                                          height: 50,
+                                                          color: buttonColor,
+                                                          child: Text(
+                                                            'تسجيل الدخول',
+                                                            style: TextStyle(
+                                                                color: Colors.white,
+                                                                fontSize: 18),
+                                                          ),
+                                                        ),
+                                                      ),
+                                                      title:
+                                                      '"لا يمكن حفظ المعلومات", "لحفظ المعلومات برجاء تسجيل الدخول"',
+                                                      backgroundColor: Colors.white);
                                                 }else{
                                                   prayer.prayer4 = value!;
                                                 }
@@ -771,11 +951,29 @@ class _PrayerState extends State<Prayer> with TickerProviderStateMixin {
                                               checkColor: Colors.white,
                                               value: prayer.prayer5,
                                               onChanged: (value) {
-                                                if(FirebaseAuth.instance.currentUser == null){
-                                                  Get.snackbar("لا يمكن تخزين البيانات", "لتخزين البيانات برجاء تسجيل الدخول",
-                                                      colorText: Colors.white,snackPosition: SnackPosition.BOTTOM,
-                                                      backgroundColor: Colors.blue[900]);
-                                                  Get.to(SignInView());
+                                                if (FirebaseAuth.instance.currentUser ==
+                                                    null) {
+                                                  Get.defaultDialog(
+                                                      content: GestureDetector(
+                                                        onTap: () {
+                                                          Get.to(SignInView());
+                                                        },
+                                                        child: Container(
+                                                          alignment: Alignment.center,
+                                                          width: 200,
+                                                          height: 50,
+                                                          color: buttonColor,
+                                                          child: Text(
+                                                            'تسجيل الدخول',
+                                                            style: TextStyle(
+                                                                color: Colors.white,
+                                                                fontSize: 18),
+                                                          ),
+                                                        ),
+                                                      ),
+                                                      title:
+                                                      '"لا يمكن حفظ المعلومات", "لحفظ المعلومات برجاء تسجيل الدخول"',
+                                                      backgroundColor: Colors.white);
                                                 }else{
                                                   prayer.prayer5 = value!;
                                                   _updateCalculation(context);
@@ -828,11 +1026,29 @@ class _PrayerState extends State<Prayer> with TickerProviderStateMixin {
                                               checkColor: Colors.white,
                                               value: prayer.prayer6,
                                               onChanged: (value) {
-                                                if(FirebaseAuth.instance.currentUser == null){
-                                                  Get.snackbar("لا يمكن تخزين البيانات", "لتخزين البيانات برجاء تسجيل الدخول",
-                                                      colorText: Colors.white,snackPosition: SnackPosition.BOTTOM,
-                                                      backgroundColor: Colors.blue[900]);
-                                                  Get.to(SignInView());
+                                                if (FirebaseAuth.instance.currentUser ==
+                                                    null) {
+                                                  Get.defaultDialog(
+                                                      content: GestureDetector(
+                                                        onTap: () {
+                                                          Get.to(SignInView());
+                                                        },
+                                                        child: Container(
+                                                          alignment: Alignment.center,
+                                                          width: 200,
+                                                          height: 50,
+                                                          color: buttonColor,
+                                                          child: Text(
+                                                            'تسجيل الدخول',
+                                                            style: TextStyle(
+                                                                color: Colors.white,
+                                                                fontSize: 18),
+                                                          ),
+                                                        ),
+                                                      ),
+                                                      title:
+                                                      '"لا يمكن حفظ المعلومات", "لحفظ المعلومات برجاء تسجيل الدخول"',
+                                                      backgroundColor: Colors.white);
                                                 }else{
                                                   prayer.prayer6 = value!;
                                                   _updateCalculation(context);
@@ -886,11 +1102,29 @@ class _PrayerState extends State<Prayer> with TickerProviderStateMixin {
                                               checkColor: Colors.white,
                                               value: prayer.prayer7,
                                               onChanged: (value) {
-                                                if(FirebaseAuth.instance.currentUser == null){
-                                                  Get.snackbar("لا يمكن تخزين البيانات", "لتخزين البيانات برجاء تسجيل الدخول",
-                                                      colorText: Colors.white,snackPosition: SnackPosition.BOTTOM,
-                                                      backgroundColor: Colors.blue[900]);
-                                                  Get.to(SignInView());
+                                                if (FirebaseAuth.instance.currentUser ==
+                                                    null) {
+                                                  Get.defaultDialog(
+                                                      content: GestureDetector(
+                                                        onTap: () {
+                                                          Get.to(SignInView());
+                                                        },
+                                                        child: Container(
+                                                          alignment: Alignment.center,
+                                                          width: 200,
+                                                          height: 50,
+                                                          color: buttonColor,
+                                                          child: Text(
+                                                            'تسجيل الدخول',
+                                                            style: TextStyle(
+                                                                color: Colors.white,
+                                                                fontSize: 18),
+                                                          ),
+                                                        ),
+                                                      ),
+                                                      title:
+                                                      '"لا يمكن حفظ المعلومات", "لحفظ المعلومات برجاء تسجيل الدخول"',
+                                                      backgroundColor: Colors.white);
                                                 }else{
                                                   prayer.prayer7 = value!;
                                                 }
@@ -910,11 +1144,29 @@ class _PrayerState extends State<Prayer> with TickerProviderStateMixin {
                                               checkColor: Colors.white,
                                               value: prayer.prayer8,
                                               onChanged: (value) {
-                                                if(FirebaseAuth.instance.currentUser == null){
-                                                  Get.snackbar("لا يمكن تخزين البيانات", "لتخزين البيانات برجاء تسجيل الدخول",
-                                                      colorText: Colors.white,snackPosition: SnackPosition.BOTTOM,
-                                                      backgroundColor: Colors.blue[900]);
-                                                  Get.to(SignInView());
+                                                if (FirebaseAuth.instance.currentUser ==
+                                                    null) {
+                                                  Get.defaultDialog(
+                                                      content: GestureDetector(
+                                                        onTap: () {
+                                                          Get.to(SignInView());
+                                                        },
+                                                        child: Container(
+                                                          alignment: Alignment.center,
+                                                          width: 200,
+                                                          height: 50,
+                                                          color: buttonColor,
+                                                          child: Text(
+                                                            'تسجيل الدخول',
+                                                            style: TextStyle(
+                                                                color: Colors.white,
+                                                                fontSize: 18),
+                                                          ),
+                                                        ),
+                                                      ),
+                                                      title:
+                                                      '"لا يمكن حفظ المعلومات", "لحفظ المعلومات برجاء تسجيل الدخول"',
+                                                      backgroundColor: Colors.white);
                                                 }else{
                                                   prayer.prayer8 = value!;
                                                   _updateCalculation(context);
@@ -967,11 +1219,29 @@ class _PrayerState extends State<Prayer> with TickerProviderStateMixin {
                                               checkColor: Colors.white,
                                               value: prayer.prayer9,
                                               onChanged: (value) {
-                                                if(FirebaseAuth.instance.currentUser == null){
-                                                  Get.snackbar("لا يمكن تخزين البيانات", "لتخزين البيانات برجاء تسجيل الدخول",
-                                                      colorText: Colors.white,snackPosition: SnackPosition.BOTTOM,
-                                                      backgroundColor: Colors.blue[900]);
-                                                  Get.to(SignInView());
+                                                if (FirebaseAuth.instance.currentUser ==
+                                                    null) {
+                                                  Get.defaultDialog(
+                                                      content: GestureDetector(
+                                                        onTap: () {
+                                                          Get.to(SignInView());
+                                                        },
+                                                        child: Container(
+                                                          alignment: Alignment.center,
+                                                          width: 200,
+                                                          height: 50,
+                                                          color: buttonColor,
+                                                          child: Text(
+                                                            'تسجيل الدخول',
+                                                            style: TextStyle(
+                                                                color: Colors.white,
+                                                                fontSize: 18),
+                                                          ),
+                                                        ),
+                                                      ),
+                                                      title:
+                                                      '"لا يمكن حفظ المعلومات", "لحفظ المعلومات برجاء تسجيل الدخول"',
+                                                      backgroundColor: Colors.white);
                                                 }else{
                                                   prayer.prayer9 = value!;
                                                 }
@@ -991,11 +1261,29 @@ class _PrayerState extends State<Prayer> with TickerProviderStateMixin {
                                               checkColor: Colors.white,
                                               value: prayer.prayer10,
                                               onChanged: (value) {
-                                                if(FirebaseAuth.instance.currentUser == null){
-                                                  Get.snackbar("لا يمكن تخزين البيانات", "لتخزين البيانات برجاء تسجيل الدخول",
-                                                      colorText: Colors.white,snackPosition: SnackPosition.BOTTOM,
-                                                      backgroundColor: Colors.blue[900]);
-                                                  Get.to(SignInView());
+                                                if (FirebaseAuth.instance.currentUser ==
+                                                    null) {
+                                                  Get.defaultDialog(
+                                                      content: GestureDetector(
+                                                        onTap: () {
+                                                          Get.to(SignInView());
+                                                        },
+                                                        child: Container(
+                                                          alignment: Alignment.center,
+                                                          width: 200,
+                                                          height: 50,
+                                                          color: buttonColor,
+                                                          child: Text(
+                                                            'تسجيل الدخول',
+                                                            style: TextStyle(
+                                                                color: Colors.white,
+                                                                fontSize: 18),
+                                                          ),
+                                                        ),
+                                                      ),
+                                                      title:
+                                                      '"لا يمكن حفظ المعلومات", "لحفظ المعلومات برجاء تسجيل الدخول"',
+                                                      backgroundColor: Colors.white);
                                                 }else{
                                                   prayer.prayer10 = value!;
                                                   _updateCalculation(context);
@@ -1048,11 +1336,29 @@ class _PrayerState extends State<Prayer> with TickerProviderStateMixin {
                                               checkColor: Colors.white,
                                               value: prayer.prayer11,
                                               onChanged: (value) {
-                                                if(FirebaseAuth.instance.currentUser == null){
-                                                  Get.snackbar("لا يمكن تخزين البيانات", "لتخزين البيانات برجاء تسجيل الدخول",
-                                                      colorText: Colors.white,snackPosition: SnackPosition.BOTTOM,
-                                                      backgroundColor: Colors.blue[900]);
-                                                  Get.to(SignInView());
+                                                if (FirebaseAuth.instance.currentUser ==
+                                                    null) {
+                                                  Get.defaultDialog(
+                                                      content: GestureDetector(
+                                                        onTap: () {
+                                                          Get.to(SignInView());
+                                                        },
+                                                        child: Container(
+                                                          alignment: Alignment.center,
+                                                          width: 200,
+                                                          height: 50,
+                                                          color: buttonColor,
+                                                          child: Text(
+                                                            'تسجيل الدخول',
+                                                            style: TextStyle(
+                                                                color: Colors.white,
+                                                                fontSize: 18),
+                                                          ),
+                                                        ),
+                                                      ),
+                                                      title:
+                                                      '"لا يمكن حفظ المعلومات", "لحفظ المعلومات برجاء تسجيل الدخول"',
+                                                      backgroundColor: Colors.white);
                                                 }else{
                                                   prayer.prayer11 = value!;
                                                 }
