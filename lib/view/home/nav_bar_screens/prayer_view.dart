@@ -1,6 +1,4 @@
 import 'dart:async';
-
-import 'package:adhan/adhan.dart';
 import 'package:firebase_auth/firebase_auth.dart';
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
@@ -9,6 +7,8 @@ import 'package:get/get.dart';
 import 'package:get/get_core/src/get_main.dart';
 import 'package:intl/intl.dart' hide TextDirection;
 import 'package:linear_progress_bar/linear_progress_bar.dart';
+import 'package:http/http.dart' as http;
+import 'dart:convert';
 import 'package:persistent_bottom_nav_bar/persistent_bottom_nav_bar.dart';
 import 'package:prayer_app/view/home/nav_bar_screens/prayer_model/PrayerTimeCalculator.dart';
 import 'package:prayer_app/view/home/nav_bar_screens/prayer_model/prayerModel.dart';
@@ -21,7 +21,36 @@ import '../../../constants.dart';
 import '../../../provider/prayer_provider.dart';
 import '../../auth/sign_in_view.dart';
 import '../profile.dart';
+class PrayerTimes {
+  final DateTime fajr;
+  final DateTime dhuhr;
+  final DateTime asr;
+  final DateTime maghrib;
+  final DateTime isha;
 
+  PrayerTimes({required this.fajr, required this.dhuhr, required this.asr, required this.maghrib, required this.isha});
+
+  factory PrayerTimes.fromJson(Map<String, dynamic> json) {
+    // Assuming the date is for the current day
+    DateTime now = DateTime.now();
+    String currentDate = "${now.year}-${now.month.toString().padLeft(2, '0')}-${now.day.toString().padLeft(2, '0')}";
+    DateTime parseTime(String time) {
+      // Assuming the API returns time in HH:mm format without timezone info
+      // Parse it and then adjust to the local time zone
+      DateTime dateTime = DateTime.parse("$currentDate $time:00");
+      return dateTime.toLocal();  // Convert to local time if needed
+    }
+
+    return PrayerTimes(
+      fajr: parseTime(json['Fajr']),
+      dhuhr: parseTime(json['Dhuhr']),
+      asr: parseTime(json['Asr']),
+      maghrib: parseTime(json['Maghrib']),
+      isha: parseTime(json['Isha']),
+    );
+  }
+
+}
 class Prayer extends StatefulWidget {
   const Prayer({super.key});
 
@@ -29,9 +58,6 @@ class Prayer extends StatefulWidget {
   State<Prayer> createState() => _PrayerState();
 }
 
-late PrayerTimeCalculator _prayerTimeCalculator;
-late DateTime _nextPrayerTime;
-late Timer _timer;
 
 class _PrayerState extends State<Prayer> with TickerProviderStateMixin {
   Future<Map<String, String?>> getUserData() async {
@@ -44,9 +70,10 @@ class _PrayerState extends State<Prayer> with TickerProviderStateMixin {
       'email': email,
     };
   }
-  int nxtDay = 0;
+  String _formatTime(DateTime dateTime) {
+    return DateFormat('hh:mm a').format(dateTime);
+  }
   final DatabaseHelper dbHelper = DatabaseHelper();
-  PrayerModel? prayerData;
   DateTime selectedDate = DateTime.now().subtract(const Duration(days:1));
   String formattedDate = DateFormat('yyyy-MM-dd').format(DateTime.now());
    List<int> salahHours = [];
@@ -54,101 +81,108 @@ class _PrayerState extends State<Prayer> with TickerProviderStateMixin {
    List<String> salahName = ["الفجر","الضهر", "العصر","المغرب","العشاء"];
   PrayerCurrent? prayerCurrent;
   late TabController _controller;
+  Timer? _timer;
+  Duration _timeRemaining = Duration();
+  String _nextPrayer = "";
+  PrayerTimes? _prayerTimes;
+  Future<void> _fetchPrayerTimes() async {
+    final response = await http.get(Uri.parse('https://api.aladhan.com/v1/timingsByCity?city=Cairo&country=Egypt&method=5'));
+
+    if (response.statusCode == 200) {
+      final data = json.decode(response.body)['data']['timings'];
+      setState(() {
+        _prayerTimes = PrayerTimes.fromJson(data);
+        _startCountdown();
+      });
+    } else {
+      throw Exception('Failed to load prayer times');
+    }
+  }
+
+  void _startCountdown() {
+    DateTime now = DateTime.now();
+    DateTime? nextPrayerTime;
+
+    if (now.isBefore(_prayerTimes!.fajr)) {
+      nextPrayerTime = _prayerTimes!.fajr;
+      _nextPrayer = "الفجر";
+    } else if (now.isBefore(_prayerTimes!.dhuhr)) {
+      nextPrayerTime = _prayerTimes!.dhuhr;
+      _nextPrayer = "الظهر";
+    } else if (now.isBefore(_prayerTimes!.asr)) {
+      nextPrayerTime = _prayerTimes!.asr;
+      _nextPrayer = "العصر";
+    } else if (now.isBefore(_prayerTimes!.maghrib)) {
+      nextPrayerTime = _prayerTimes!.maghrib;
+      _nextPrayer = "المغرب";
+    } else if (now.isBefore(_prayerTimes!.isha)) {
+      nextPrayerTime = _prayerTimes!.isha;
+      _nextPrayer = "العشاء";
+    } else {
+      nextPrayerTime = _prayerTimes!.fajr.add(const Duration(days: 1));
+      _nextPrayer = "الفجر";
+    }
+    // Check if the adjusted time is still in the future
+    if (now.isAfter(nextPrayerTime)) {
+      // If the adjusted time has passed, skip to the next prayer
+      _skipToNextPrayer(now);
+    } else {
+      _setTimer(nextPrayerTime, now);
+    }
+  }
+
+  void _skipToNextPrayer(DateTime now) {
+    // Loop through prayers and find the first one that's in the future
+    DateTime? nextPrayerTime;
+
+    if (now.isBefore(_prayerTimes!.dhuhr)) {
+      nextPrayerTime = _prayerTimes!.dhuhr;
+      _nextPrayer = "الظهر";
+    } else if (now.isBefore(_prayerTimes!.asr)) {
+      nextPrayerTime = _prayerTimes!.asr;
+      _nextPrayer = "العصر";
+    } else if (now.isBefore(_prayerTimes!.maghrib)) {
+      nextPrayerTime = _prayerTimes!.maghrib;
+      _nextPrayer = "المغرب";
+    } else if (now.isBefore(_prayerTimes!.isha)) {
+      nextPrayerTime = _prayerTimes!.isha;
+      _nextPrayer = "العشاء";
+    } else {
+      nextPrayerTime = _prayerTimes!.fajr.add(Duration(days: 1));
+      _nextPrayer = "الفجر";
+    }
+
+    _setTimer(nextPrayerTime, now);
+  }
+
+  void _setTimer(DateTime nextPrayerTime, DateTime now) {
+    setState(() {
+      _timeRemaining = nextPrayerTime.difference(now);
+    });
+
+    _timer = Timer.periodic(Duration(seconds: 1), (Timer timer) {
+      setState(() {
+        _timeRemaining = nextPrayerTime.difference(DateTime.now());
+        if (_timeRemaining.isNegative) {
+          _timer!.cancel();
+          _fetchPrayerTimes();
+        }
+      });
+    });
+  }
   @override
   void initState(){
     super.initState();
-    _salah();
-    _getPrayerData();
     _getPrayerDataCurrent();
-    _prayerTimeCalculator = PrayerTimeCalculator();
-    _nextPrayerTime = DateTime(
-      _prayerTimeCalculator.currentTime.year,
-      _prayerTimeCalculator.currentTime.month,
-      _prayerTimeCalculator.currentTime.day,
-      salahHours[_prayerTimeCalculator.salahCalc],
-      salahMin[_prayerTimeCalculator.salahCalc],
-    );
-    // if (_prayerTimeCalculator.currentTime.isAfter(_nextPrayerTime)&& _nextPrayerTime.difference(DateTime.now()).isNegative) {
-    //   _nextPrayerTime = _nextPrayerTime.add(Duration(days: 1));
-    // }
-    nxtDay = 0;
-    _startTimer();
+    _fetchPrayerTimes();
     _controller = TabController(
         initialIndex: 1, length: 2, vsync: this);
   }
   @override
   void dispose() {
     _controller.dispose();
-    _timer.cancel();
+    _timer?.cancel();
     super.dispose();
-  }
-  PrayerTimes getPrayerTime(){
-    final myCoordinates = Coordinates(30.033333, 31.233334);
-    final params = CalculationMethod.egyptian.getParameters();
-    params.madhab = Madhab.shafi;
-    final prayerTimes = PrayerTimes.today(myCoordinates, params);
-    return prayerTimes;
-  }
-  void _startTimer() {
-    _timer = Timer.periodic(Duration(seconds: 1), (timer) {
-      setState(() {
-        _prayerTimeCalculator.updateCurrentTime();
-      });
-      Duration difference = _nextPrayerTime.difference(DateTime.now());
-      if (difference.isNegative || difference.inSeconds == 0 || difference.inHours >= 7) {
-        _timer.cancel();
-        if(_prayerTimeCalculator.salahCalc == 4){
-          setState(() {
-            _prayerTimeCalculator.salahCalc = 0;
-          });
-
-        }else if(_prayerTimeCalculator.salahCalc == 0 && _prayerTimeCalculator.currentTime.isAfter(_nextPrayerTime)){
-          nxtDay++;
-        }
-        else{
-          setState(() {
-            _prayerTimeCalculator.salahCalc++;
-          });
-
-        }
-        _nextPrayerTime = DateTime(
-          _prayerTimeCalculator.currentTime.year,
-          _prayerTimeCalculator.currentTime.month,
-          _prayerTimeCalculator.currentTime.day + nxtDay,
-          salahHours[_prayerTimeCalculator.salahCalc],
-          salahMin[_prayerTimeCalculator.salahCalc],
-        );
-        nxtDay = 0;
-        _startTimer();
-      }
-
-    });
-  }
-  void _salah(){
-    salahHours.add(int.parse(DateFormat.jm().format(getPrayerTime().fajr)[0]));
-    salahHours.add(int.parse(DateFormat.jm().format(getPrayerTime().dhuhr)[0]) + 12);
-    salahHours.add(int.parse(DateFormat.jm().format(getPrayerTime().asr)[0]) + 12);
-    salahHours.add(int.parse(DateFormat.jm().format(getPrayerTime().maghrib)[0]) + 12);
-    salahHours.add(int.parse(DateFormat.jm().format(getPrayerTime().isha)[0]) + 12);
-    salahMin.add(int.parse(DateFormat.jm().format(getPrayerTime().fajr).substring(2,4)));
-    salahMin.add(int.parse(DateFormat.jm().format(getPrayerTime().dhuhr).substring(3,4)));
-    salahMin.add(int.parse(DateFormat.jm().format(getPrayerTime().asr).substring(2,4)));
-    salahMin.add(int.parse(DateFormat.jm().format(getPrayerTime().maghrib).substring(2,4)));
-    salahMin.add(int.parse(DateFormat.jm().format(getPrayerTime().isha).substring(2,4)));
-  }
-  void _getPrayerData() async {
-    prayerData = await dbHelper.getPrayer(_formatDate(selectedDate));
-    if (prayerData == null) {
-      prayerData = PrayerModel(
-        day: _formatDate(selectedDate),
-        prayer1: false,
-        prayer2: false,
-        prayer3: false,
-        prayer4: false,
-        prayer5: false,
-      );
-    }
-    setState(() {});
   }
   void _getPrayerDataCurrent() async {
     prayerCurrent = await dbHelper.getPrayerCurrent(_formatDate(selectedDate));
@@ -172,11 +206,6 @@ class _PrayerState extends State<Prayer> with TickerProviderStateMixin {
   void _savePrayerDataCurrent() async {
     if (prayerCurrent != null) {
       await dbHelper.insertPrayerCurrent(prayerCurrent!);
-    }
-  }
-  void _savePrayerData() async {
-    if (prayerData != null) {
-      await dbHelper.insertPrayer(prayerData!);
     }
   }
   String _formatDate(DateTime date) {
@@ -216,7 +245,7 @@ class _PrayerState extends State<Prayer> with TickerProviderStateMixin {
       setState(() {
         selectedDate = picked;
       });
-      _getPrayerData();
+      _getPrayerDataCurrent();
     }
   }
   void _updateCalculation(BuildContext context) {
@@ -239,8 +268,6 @@ class _PrayerState extends State<Prayer> with TickerProviderStateMixin {
   }
   @override
   Widget build(BuildContext context) {
-     // _getPrayerDataCurrent();
-    Duration timeLeft = _prayerTimeCalculator.timeLeftForNextPrayer(_nextPrayerTime);
     return Scaffold(
         body: Consumer<PrayerProvider>(
           builder: (context, provider, child) {
@@ -370,20 +397,23 @@ class _PrayerState extends State<Prayer> with TickerProviderStateMixin {
                         Column(
                           mainAxisAlignment: MainAxisAlignment.start,
                           children: [
-                            Text(
-                              'الأذان القادم صلاه ${salahName[_prayerTimeCalculator
-                                  .salahCalc]}',
-                              style: TextStyle(fontSize: 25,
-                                  color: Colors.white),
+                            _prayerTimes == null ? const  CircularProgressIndicator() :Container(
+                              alignment: Alignment.center,
+                              child:  Text(
+                                'الأذان القادم صلاه $_nextPrayer',
+                                style: TextStyle(
+                                    fontSize: 20,
+                                    fontWeight: FontWeight.w800,
+                                    color: Colors.white),
+                              ),
                             ),
-                            Text(
-                              '${_prayerTimeCalculator.formatDuration(
-                                  timeLeft)}',
+                            _prayerTimes == null ? const  CircularProgressIndicator() :Text(
+                              '${_timeRemaining.inHours.remainder(24).toString().padLeft(2, '0')}:${_timeRemaining.inMinutes.remainder(60).toString().padLeft(2, '0')}:${_timeRemaining.inSeconds.remainder(60).toString().padLeft(2, '0')}',
                               style: TextStyle(
-                                  fontSize: 30,
+                                  fontSize: 23,
                                   color: Colors.white,
                                   fontWeight: FontWeight.bold),
-                            ),
+                            )
                           ],
                         ),
                       ],
@@ -445,15 +475,15 @@ class _PrayerState extends State<Prayer> with TickerProviderStateMixin {
                                     ],
                                   ),
                                 ),
-                                prayerData == null
+                                prayerCurrent == null
                                     ? const Center(
                                     child: CircularProgressIndicator())
                                     : customSalah("الفجر", Checkbox(
                                   //tristate: true,
                                     activeColor: Colors.blue[900],
-                                    value: prayerData == null
+                                    value: prayerCurrent == null
                                         ? false
-                                        : prayerData!.prayer1,
+                                        : prayerCurrent!.prayer2,
                                     onChanged: (value) {
                                       if (FirebaseAuth.instance.currentUser ==
                                           null) {
@@ -480,17 +510,17 @@ class _PrayerState extends State<Prayer> with TickerProviderStateMixin {
                                             backgroundColor: Colors.white);
                                       }else{
                                         setState(() {
-                                          prayerData!.prayer1 = value!;
+                                          prayerCurrent!.prayer2 = value!;
                                         });
-                                        _savePrayerData();
+                                        _savePrayerDataCurrent();
                                       }
                                     })),
                                 customSalah("الضهر", Checkbox(
                                   //tristate: true,
                                     activeColor: Colors.blue[900],
-                                    value: prayerData == null
+                                    value: prayerCurrent == null
                                         ? false
-                                        : prayerData!.prayer2,
+                                        : prayerCurrent!.prayer5,
                                     onChanged: (value) {
                                       if (FirebaseAuth.instance.currentUser ==
                                           null) {
@@ -517,18 +547,18 @@ class _PrayerState extends State<Prayer> with TickerProviderStateMixin {
                                             backgroundColor: Colors.white);
                                       }else{
                                         setState(() {
-                                          prayerData!.prayer2 = value!;
+                                          prayerCurrent!.prayer5 = value!;
                                         });
-                                        _savePrayerData();
+                                        _savePrayerDataCurrent();
                                       }
 
                                     })),
                                 customSalah("العصر", Checkbox(
                                   //tristate: true,
                                     activeColor: Colors.blue[900],
-                                    value: prayerData == null
+                                    value: prayerCurrent == null
                                         ? false
-                                        : prayerData!.prayer3,
+                                        : prayerCurrent!.prayer6,
                                     onChanged: (value) {
                                       if (FirebaseAuth.instance.currentUser ==
                                           null) {
@@ -555,17 +585,17 @@ class _PrayerState extends State<Prayer> with TickerProviderStateMixin {
                                             backgroundColor: Colors.white);
                                       }else{
                                         setState(() {
-                                          prayerData!.prayer3 = value!;
+                                          prayerCurrent!.prayer6 = value!;
                                         });
-                                        _savePrayerData();
+                                        _savePrayerDataCurrent();
                                       }
                                     })),
                                 customSalah("المغرب", Checkbox(
                                   //tristate: true,
                                     activeColor: Colors.blue[900],
-                                    value: prayerData == null
+                                    value: prayerCurrent == null
                                         ? false
-                                        : prayerData!.prayer4,
+                                        : prayerCurrent!.prayer8,
                                     onChanged: (value) {
                                       if (FirebaseAuth.instance.currentUser ==
                                           null) {
@@ -592,17 +622,17 @@ class _PrayerState extends State<Prayer> with TickerProviderStateMixin {
                                             backgroundColor: Colors.white);
                                       }else{
                                         setState(() {
-                                          prayerData!.prayer4 = value!;
+                                          prayerCurrent!.prayer8 = value!;
                                         });
-                                        _savePrayerData();
+                                        _savePrayerDataCurrent();
                                       }
                                     })),
                                 customSalah("العشاء", Checkbox(
                                   //tristate: true,
                                     activeColor: Colors.blue[900],
-                                    value: prayerData == null
+                                    value: prayerCurrent == null
                                         ? false
-                                        : prayerData!.prayer5,
+                                        : prayerCurrent!.prayer10,
                                     onChanged: (value) {
                                       if (FirebaseAuth.instance.currentUser ==
                                           null) {
@@ -629,9 +659,9 @@ class _PrayerState extends State<Prayer> with TickerProviderStateMixin {
                                             backgroundColor: Colors.white);
                                       }else{
                                         setState(() {
-                                          prayerData!.prayer5 = value!;
+                                          prayerCurrent!.prayer10 = value!;
                                         });
-                                        _savePrayerData();
+                                        _savePrayerDataCurrent();
                                       }
                                     })),
                               ],

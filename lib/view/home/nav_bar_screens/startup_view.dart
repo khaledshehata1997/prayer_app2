@@ -1,34 +1,61 @@
 import 'dart:async';
-
-import 'package:adhan/adhan.dart';
 import 'package:firebase_auth/firebase_auth.dart';
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter/widgets.dart';
-import 'package:flutter_islamic_icons/flutter_islamic_icons.dart';
 import 'package:get/get.dart';
+import 'package:adhan/adhan.dart';
+import 'package:http/http.dart' as http;
+import 'dart:convert';
 import 'package:get/get_core/src/get_main.dart';
 import 'package:intl/intl.dart' hide TextDirection;
 import 'package:persistent_bottom_nav_bar/persistent_bottom_nav_bar.dart';
 import 'package:prayer_app/view/auth/sign_in_view.dart';
 import 'package:prayer_app/view/home/dailyGoals.dart';
-import 'package:prayer_app/view/home/nav_bar_screens/prayer_model/PrayerTimeCalculator.dart';
-import 'package:prayer_app/view/home/nav_bar_screens/prayer_model/prayerModel.dart';
 import 'package:prayer_app/view/home/nav_bar_screens/prayer_model/prayerModelCurrent.dart';
 import 'package:prayer_app/view/home/nav_bar_screens/prayer_model/sqlite/database_helper.dart';
 import 'package:prayer_app/view/home/nav_bar_screens/qiblah.dart';
 import 'package:intl/intl.dart' as intl;
-import 'package:prayer_app/view/home/nav_bar_screens/quran/core/utils/assets_manager.dart';
 import 'package:prayer_app/view/home/profile.dart';
 import 'package:prayer_app/view/home/settings.dart';
 import 'package:provider/provider.dart';
 import 'package:shared_preferences/shared_preferences.dart';
-
 import '../../../constants.dart';
 import '../../../provider/boolNotifier.dart';
 import '../../../provider/prayer_provider.dart';
 import '../../roqua_view.dart';
 import '../../sibha/sibha_view.dart';
+
+class PrayerTimes {
+  final DateTime fajr;
+  final DateTime dhuhr;
+  final DateTime asr;
+  final DateTime maghrib;
+  final DateTime isha;
+
+  PrayerTimes({required this.fajr, required this.dhuhr, required this.asr, required this.maghrib, required this.isha});
+
+  factory PrayerTimes.fromJson(Map<String, dynamic> json) {
+    // Assuming the date is for the current day
+    DateTime now = DateTime.now();
+    String currentDate = "${now.year}-${now.month.toString().padLeft(2, '0')}-${now.day.toString().padLeft(2, '0')}";
+    DateTime parseTime(String time) {
+      // Assuming the API returns time in HH:mm format without timezone info
+      // Parse it and then adjust to the local time zone
+      DateTime dateTime = DateTime.parse("$currentDate $time:00");
+      return dateTime.toLocal();  // Convert to local time if needed
+    }
+
+    return PrayerTimes(
+      fajr: parseTime(json['Fajr']),
+      dhuhr: parseTime(json['Dhuhr']),
+      asr: parseTime(json['Asr']),
+      maghrib: parseTime(json['Maghrib']),
+      isha: parseTime(json['Isha']),
+    );
+  }
+
+}
 
 class StartUp extends StatefulWidget {
   const StartUp({super.key});
@@ -48,21 +75,27 @@ class _StartUpState extends State<StartUp> {
       'email': email,
     };
   }
-
+  // PrayerTimes getPrayerTime() {
+  //   final myCoordinates = Coordinates(30.033333, 31.233334);
+  //   final params = CalculationMethod.egyptian.getParameters();
+  //   params.madhab = Madhab.shafi;
+  //   final prayerTimes = PrayerTimes.today(myCoordinates, params);
+  //   return prayerTimes;
+  // }
+  String _formatTime(DateTime dateTime) {
+    return DateFormat('hh:mm a').format(dateTime);
+  }
   final DatabaseHelper dbHelper = DatabaseHelper();
   PrayerCurrent? prayerCurrent;
+  Timer? _timer;
+  Duration _timeRemaining = Duration();
+  String _nextPrayer = "";
+  PrayerTimes? _prayerTimes;
   DateTime selectedDate = DateTime.now();
   String formattedDate = DateFormat('yyyy-MM-dd').format(DateTime.now());
   String _formatDate(DateTime date) {
     return "${date.year}-${date.month.toString().padLeft(2, '0')}-${date.day.toString().padLeft(2, '0')}";
   }
-
-  void _savePrayerDataCurrent() async {
-    if (prayerCurrent != null) {
-      await dbHelper.insertPrayerCurrent(prayerCurrent!);
-    }
-  }
-
   void _getPrayerDataCurrent() async {
     prayerCurrent = await dbHelper.getPrayerCurrent(_formatDate(selectedDate));
     prayerCurrent ??= PrayerCurrent(
@@ -83,95 +116,99 @@ class _StartUpState extends State<StartUp> {
     setState(() {});
   }
 
-  List<String> salahName = ["الفجر", "الضهر", "العصر", "المغرب", "العشاء"];
-  late PrayerTimeCalculator _prayerTimeCalculator;
-  late DateTime _nextPrayerTime;
-  late Timer _timer;
-  int nxtDay = 0;
-  List<int> salahHours = [];
-  List<int> salahMin = [];
+  Future<void> _fetchPrayerTimes() async {
+    final response = await http.get(Uri.parse('https://api.aladhan.com/v1/timingsByCity?city=Cairo&country=Egypt&method=5'));
+
+    if (response.statusCode == 200) {
+      final data = json.decode(response.body)['data']['timings'];
+      setState(() {
+        _prayerTimes = PrayerTimes.fromJson(data);
+        _startCountdown();
+      });
+    } else {
+      throw Exception('Failed to load prayer times');
+    }
+  }
+
+  void _startCountdown() {
+    DateTime now = DateTime.now();
+    DateTime? nextPrayerTime;
+
+    if (now.isBefore(_prayerTimes!.fajr)) {
+      nextPrayerTime = _prayerTimes!.fajr;
+      _nextPrayer = "الفجر";
+    } else if (now.isBefore(_prayerTimes!.dhuhr)) {
+      nextPrayerTime = _prayerTimes!.dhuhr;
+      _nextPrayer = "الظهر";
+    } else if (now.isBefore(_prayerTimes!.asr)) {
+      nextPrayerTime = _prayerTimes!.asr;
+      _nextPrayer = "العصر";
+    } else if (now.isBefore(_prayerTimes!.maghrib)) {
+      nextPrayerTime = _prayerTimes!.maghrib;
+      _nextPrayer = "المغرب";
+    } else if (now.isBefore(_prayerTimes!.isha)) {
+      nextPrayerTime = _prayerTimes!.isha;
+      _nextPrayer = "العشاء";
+    } else {
+      nextPrayerTime = _prayerTimes!.fajr.add(const Duration(days: 1));
+      _nextPrayer = "الفجر";
+    }
+
+    // Check if the adjusted time is still in the future
+    if (now.isAfter(nextPrayerTime)) {
+      // If the adjusted time has passed, skip to the next prayer
+      _skipToNextPrayer(now);
+    } else {
+      _setTimer(nextPrayerTime, now);
+    }
+  }
+
+  void _skipToNextPrayer(DateTime now) {
+    // Loop through prayers and find the first one that's in the future
+    DateTime? nextPrayerTime;
+
+    if (now.isBefore(_prayerTimes!.dhuhr)) {
+      nextPrayerTime = _prayerTimes!.dhuhr;
+      _nextPrayer = "الضهر";
+    } else if (now.isBefore(_prayerTimes!.asr)) {
+      nextPrayerTime = _prayerTimes!.asr;
+      _nextPrayer = "العصر";
+    } else if (now.isBefore(_prayerTimes!.maghrib)) {
+      nextPrayerTime = _prayerTimes!.maghrib;
+      _nextPrayer = "المغرب";
+    } else if (now.isBefore(_prayerTimes!.isha)) {
+      nextPrayerTime = _prayerTimes!.isha;
+      _nextPrayer = "العشاء";
+    } else {
+      nextPrayerTime = _prayerTimes!.fajr.add(Duration(days: 1));
+      _nextPrayer = "الفجر";
+    }
+
+    _setTimer(nextPrayerTime, now);
+  }
+
+  void _setTimer(DateTime nextPrayerTime, DateTime now) {
+    setState(() {
+      _timeRemaining = nextPrayerTime.difference(now);
+    });
+
+    _timer = Timer.periodic(Duration(seconds: 1), (Timer timer) {
+      setState(() {
+        _timeRemaining = nextPrayerTime.difference(DateTime.now());
+        if (_timeRemaining.isNegative) {
+          _timer!.cancel();
+          _fetchPrayerTimes();
+        }
+      });
+    });
+  }
 
   @override
   void initState() {
     super.initState();
     _getPrayerDataCurrent();
-    _salah();
-    _prayerTimeCalculator = PrayerTimeCalculator();
-    _nextPrayerTime = DateTime(
-      _prayerTimeCalculator.currentTime.year,
-      _prayerTimeCalculator.currentTime.month,
-      _prayerTimeCalculator.currentTime.day,
-      salahHours[_prayerTimeCalculator.salahCalc],
-      salahMin[_prayerTimeCalculator.salahCalc],
-    );
-    _startTimer();
+    _fetchPrayerTimes();
   }
-
-  void _startTimer() {
-    _timer = Timer.periodic(Duration(seconds: 1), (timer) {
-      setState(() {
-        _prayerTimeCalculator.updateCurrentTime();
-      });
-      Duration difference = _nextPrayerTime.difference(DateTime.now());
-      if (difference.isNegative ||
-          difference.inSeconds == 0 ||
-          difference.inHours >= 7) {
-        _timer.cancel();
-        if (_prayerTimeCalculator.salahCalc == 4) {
-          setState(() {
-            _prayerTimeCalculator.salahCalc = 0;
-          });
-        } else if (_prayerTimeCalculator.salahCalc == 0 &&
-            _prayerTimeCalculator.currentTime.isAfter(_nextPrayerTime)) {
-          nxtDay++;
-        } else {
-          setState(() {
-            _prayerTimeCalculator.salahCalc++;
-          });
-        }
-        _nextPrayerTime = DateTime(
-          _prayerTimeCalculator.currentTime.year,
-          _prayerTimeCalculator.currentTime.month,
-          _prayerTimeCalculator.currentTime.day + nxtDay,
-          salahHours[_prayerTimeCalculator.salahCalc],
-          salahMin[_prayerTimeCalculator.salahCalc],
-        );
-        nxtDay = 0;
-        _startTimer();
-      }
-    });
-  }
-
-  PrayerTimes getPrayerTime() {
-    final myCoordinates = Coordinates(30.033333, 31.233334);
-    final params = CalculationMethod.egyptian.getParameters();
-    params.madhab = Madhab.shafi;
-    final prayerTimes = PrayerTimes.today(myCoordinates, params);
-    return prayerTimes;
-  }
-
-  void _salah() {
-    salahHours.add(int.parse(DateFormat.jm().format(getPrayerTime().fajr)[0]));
-    salahHours
-        .add(int.parse(DateFormat.jm().format(getPrayerTime().dhuhr)[0]) + 12);
-    salahHours
-        .add(int.parse(DateFormat.jm().format(getPrayerTime().asr)[0]) + 12);
-    salahHours.add(
-        int.parse(DateFormat.jm().format(getPrayerTime().maghrib)[0]) + 12);
-    salahHours
-        .add(int.parse(DateFormat.jm().format(getPrayerTime().isha)[0]) + 12);
-    salahMin.add(int.parse(
-        DateFormat.jm().format(getPrayerTime().fajr).substring(2, 4)));
-    salahMin.add(int.parse(
-        DateFormat.jm().format(getPrayerTime().dhuhr).substring(3, 4)));
-    salahMin.add(
-        int.parse(DateFormat.jm().format(getPrayerTime().asr).substring(2, 4)));
-    salahMin.add(int.parse(
-        DateFormat.jm().format(getPrayerTime().maghrib).substring(2, 4)));
-    salahMin.add(int.parse(
-        DateFormat.jm().format(getPrayerTime().isha).substring(2, 4)));
-  }
-
   void _updateCalculation(BuildContext context) {
     final provider = Provider.of<PrayerProvider>(context, listen: false);
     final prayer = provider.prayerCurrentData!;
@@ -193,17 +230,14 @@ class _StartUpState extends State<StartUp> {
 
   @override
   void dispose() {
-    _timer.cancel();
+    _timer?.cancel();
     super.dispose();
   }
 
   @override
   Widget build(BuildContext context) {
-    // _getPrayerDataCurrent();
 
     final bool value = context.watch<BoolNotifier>().value1;
-    Duration timeLeft =
-        _prayerTimeCalculator.timeLeftForNextPrayer(_nextPrayerTime);
     return Scaffold(
       appBar: PreferredSize(
           preferredSize: Size(double.infinity, Get.height * .23),
@@ -316,22 +350,26 @@ class _StartUpState extends State<StartUp> {
                     SizedBox(
                       height: 5,
                     ),
-                    Container(
-                      alignment: Alignment.center,
-                      child: Text(
-                        'الأذان القادم صلاه ${salahName[_prayerTimeCalculator.salahCalc]}',
-                        style: TextStyle(
-                            fontSize: 20,
-                            fontWeight: FontWeight.w800,
-                            color: Colors.white),
+                    _prayerTimes == null ? const Expanded(child:CircularProgressIndicator()) :Expanded(
+                      child: Container(
+                        alignment: Alignment.center,
+                        child:  Text(
+                        'الأذان القادم صلاه $_nextPrayer',
+                          style: TextStyle(
+                              fontSize: 20,
+                              fontWeight: FontWeight.w800,
+                              color: Colors.white),
+                        ),
                       ),
                     ),
-                    Text(
-                      '${_prayerTimeCalculator.formatDuration(timeLeft)}',
-                      style: TextStyle(
-                          fontSize: 23,
-                          color: Colors.white,
-                          fontWeight: FontWeight.bold),
+                    _prayerTimes == null ? const Expanded(child:CircularProgressIndicator()) :Expanded(
+                      child: Text(
+                        '${_timeRemaining.inHours.remainder(24).toString().padLeft(2, '0')}:${_timeRemaining.inMinutes.remainder(60).toString().padLeft(2, '0')}:${_timeRemaining.inSeconds.remainder(60).toString().padLeft(2, '0')}',
+                        style: TextStyle(
+                            fontSize: 23,
+                            color: Colors.white,
+                            fontWeight: FontWeight.bold),
+                      ),
                     )
                   ],
                 ),
@@ -452,9 +490,8 @@ class _StartUpState extends State<StartUp> {
                           children: [
                             SlahBox(
                               'الفجر',
-                              (intl.DateFormat.jm()
-                                      .format(getPrayerTime().fajr))
-                                  .replaceAll('AM', "ص"),
+                              _prayerTimes == null ? "" :
+                              _formatTime(_prayerTimes!.fajr).replaceAll('AM', "ص"),
                               "images/Illustrator.png",
                               Checkbox(
                                   activeColor: buttonColor,
@@ -492,9 +529,8 @@ class _StartUpState extends State<StartUp> {
                             ),
                             SlahBox(
                               'الظهر',
-                              (intl.DateFormat.jm()
-                                      .format(getPrayerTime().dhuhr))
-                                  .replaceAll('PM', "م"),
+                              _prayerTimes == null ? "" :
+                              _formatTime(_prayerTimes!.dhuhr).replaceAll('PM', "م"),
                               "images/1.png",
                               Checkbox(
                                   activeColor: buttonColor,
@@ -532,8 +568,8 @@ class _StartUpState extends State<StartUp> {
                             ),
                             SlahBox(
                               'العصر',
-                              (intl.DateFormat.jm().format(getPrayerTime().asr))
-                                  .replaceAll('PM', "م"),
+                              _prayerTimes == null ? "" :
+                              _formatTime(_prayerTimes!.asr).replaceAll('PM', "م"),
                               "images/Union (1).png",
                               Checkbox(
                                   activeColor: buttonColor,
@@ -571,9 +607,8 @@ class _StartUpState extends State<StartUp> {
                             ),
                             SlahBox(
                                 'المغرب',
-                                (intl.DateFormat.jm()
-                                        .format(getPrayerTime().maghrib))
-                                    .replaceAll('PM', "م"),
+                                _prayerTimes == null ? "" :
+                                _formatTime(_prayerTimes!.maghrib).replaceAll('PM', "م"),
                                 "images/Illustrator (2).png",
                                 Checkbox(
                                     activeColor: buttonColor,
@@ -610,9 +645,8 @@ class _StartUpState extends State<StartUp> {
                                     })),
                             SlahBox(
                                 'العشاء',
-                                (intl.DateFormat.jm()
-                                        .format(getPrayerTime().isha))
-                                    .replaceAll('PM', "م"),
+                                _prayerTimes == null ? "":
+                                _formatTime(_prayerTimes!.isha).replaceAll('PM', "م"),
                                 "images/Illustrator (1).png",
                                 Checkbox(
                                     activeColor: buttonColor,

@@ -268,7 +268,7 @@ class _SettingsState extends State<Settings> {
                           IconButton(
                               onPressed: () {
                                 if(FirebaseAuth.instance.currentUser == null){
-                                  Get.snackbar("لا يمكن الدخول الي الصفحه الشخصيه", "للدخول الي الصفحه الشخصيه برجاء تسجيل الدخول",
+                                  Get.snackbar("لا يمكن تسجيل الخروج", "قم بتسجيل الدخول اولا",
                                       colorText: Colors.white,snackPosition: SnackPosition.BOTTOM,
                                       backgroundColor: Colors.blue[900]);
                                   Get.to(SignInView());
