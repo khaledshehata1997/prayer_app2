@@ -139,7 +139,7 @@ class _QiblahState extends State<Qiblah> {
                               child: Text(
                                 'فَوَلِّ وَجْهَكَ شَطْرَ الْمَسْجِدِ الْحَرَامِ ۚ\n وَحَيْثُ مَا كُنتُمْ فَوَلُّوا وُجُوهَكُمْ شَطْرَهُ',
                                 style: TextStyle(
-                                    fontSize: 19,
+                                    fontSize: 15,
                                     fontWeight: FontWeight.bold,
                                     color: Colors.white),
                                 textDirection: TextDirection.rtl,

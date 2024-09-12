@@ -25,6 +25,8 @@ import 'package:prayer_app/view/home/nav_bar_screens/quran/fehres/data/bloc/sura
 import 'package:prayer_app/view/home/nav_bar_screens/quran/fehres/data/bloc/surah_detail/surah_detail_cubit.dart';
 import 'package:prayer_app/view/home/nav_bar_screens/quran/observer.dart';
 import 'package:firebase_core/firebase_core.dart';
+import 'package:google_fonts/google_fonts.dart';
+
 bool isLogin = false;
 void main()async{
 
@@ -61,9 +63,10 @@ void main()async{
 }
 
 class MyApp extends StatelessWidget {
-  const MyApp({super.key});
+   MyApp({super.key});
   @override
   Widget build(BuildContext context) {
+    final textTheme = Theme.of(context).textTheme;
     return  MultiBlocProvider(
         providers: [
           Provider(create: (context) => PrayerProvider()),
@@ -77,6 +80,11 @@ class MyApp extends StatelessWidget {
     ],
       child: ScreenUtilInit(
         child: GetMaterialApp(
+          theme: ThemeData(
+            textTheme: GoogleFonts.latoTextTheme(textTheme).copyWith(
+              bodyMedium: GoogleFonts.almarai(textStyle: textTheme.bodyMedium),
+            ),
+          ),
         debugShowCheckedModeBanner: false,
          home: isLogin == false ? const SplashView() : const HomeView(),
         //   home: ActivateSuccess(),

@@ -309,30 +309,30 @@ class _PrayerState extends State<Prayer> with TickerProviderStateMixin {
                               GestureDetector(
                                 onTap: () async {
                                   final userData = await getUserData();
-                                  if (FirebaseAuth.instance.currentUser ==
-                                      null) {
-                                    Get.defaultDialog(
-                                        content: GestureDetector(
-                                          onTap: () {
-                                            Get.to(SignInView());
-                                          },
-                                          child: Container(
-                                            alignment: Alignment.center,
-                                            width: 200,
-                                            height: 50,
-                                            color: buttonColor,
-                                            child: Text(
-                                              'تسجيل الدخول',
-                                              style: TextStyle(
-                                                  color: Colors.white,
-                                                  fontSize: 18),
-                                            ),
-                                          ),
-                                        ),
-                                        title:
-                                        '"لا يمكن حفظ المعلومات", "لحفظ المعلومات برجاء تسجيل الدخول"',
-                                        backgroundColor: Colors.white);
-                                  }else{
+                                  // if (FirebaseAuth.instance.currentUser ==
+                                  //     null) {
+                                  //   Get.defaultDialog(
+                                  //       content: GestureDetector(
+                                  //         onTap: () {
+                                  //           Get.to(SignInView());
+                                  //         },
+                                  //         child: Container(
+                                  //           alignment: Alignment.center,
+                                  //           width: 200,
+                                  //           height: 50,
+                                  //           color: buttonColor,
+                                  //           child: Text(
+                                  //             'تسجيل الدخول',
+                                  //             style: TextStyle(
+                                  //                 color: Colors.white,
+                                  //                 fontSize: 18),
+                                  //           ),
+                                  //         ),
+                                  //       ),
+                                  //       title:
+                                  //       '"لا يمكن حفظ المعلومات", "لحفظ المعلومات برجاء تسجيل الدخول"',
+                                  //       backgroundColor: Colors.white);
+                                  // }else{
                                     PersistentNavBarNavigator.pushNewScreen(
                                       context,
                                       screen:  Profile(username: '${userData['username']}',
@@ -340,7 +340,7 @@ class _PrayerState extends State<Prayer> with TickerProviderStateMixin {
                                       withNavBar: true, // OPTIONAL VALUE. True by default.
                                       pageTransitionAnimation: PageTransitionAnimation.cupertino,
                                     );
-                                  }
+
                                 },
                                 child: CircleAvatar(
                                   radius: 20,
@@ -402,7 +402,7 @@ class _PrayerState extends State<Prayer> with TickerProviderStateMixin {
                               child:  Text(
                                 'الأذان القادم صلاه $_nextPrayer',
                                 style: TextStyle(
-                                    fontSize: 20,
+                                    fontSize: 18,
                                     fontWeight: FontWeight.w800,
                                     color: Colors.white),
                               ),
@@ -410,7 +410,7 @@ class _PrayerState extends State<Prayer> with TickerProviderStateMixin {
                             _prayerTimes == null ? const  CircularProgressIndicator() :Text(
                               '${_timeRemaining.inHours.remainder(24).toString().padLeft(2, '0')}:${_timeRemaining.inMinutes.remainder(60).toString().padLeft(2, '0')}:${_timeRemaining.inSeconds.remainder(60).toString().padLeft(2, '0')}',
                               style: TextStyle(
-                                  fontSize: 23,
+                                  fontSize: 21,
                                   color: Colors.white,
                                   fontWeight: FontWeight.bold),
                             )
@@ -478,192 +478,245 @@ class _PrayerState extends State<Prayer> with TickerProviderStateMixin {
                                 prayerCurrent == null
                                     ? const Center(
                                     child: CircularProgressIndicator())
-                                    : customSalah("الفجر", Checkbox(
-                                  //tristate: true,
-                                    activeColor: Colors.blue[900],
-                                    value: prayerCurrent == null
-                                        ? false
-                                        : prayerCurrent!.prayer2,
-                                    onChanged: (value) {
-                                      if (FirebaseAuth.instance.currentUser ==
-                                          null) {
-                                        Get.defaultDialog(
-                                            content: GestureDetector(
-                                              onTap: () {
-                                                Get.to(SignInView());
-                                              },
-                                              child: Container(
-                                                alignment: Alignment.center,
-                                                width: 200,
-                                                height: 50,
-                                                color: buttonColor,
-                                                child: Text(
-                                                  'تسجيل الدخول',
-                                                  style: TextStyle(
-                                                      color: Colors.white,
-                                                      fontSize: 18),
-                                                ),
-                                              ),
-                                            ),
-                                            title:
-                                            '"لا يمكن حفظ المعلومات", "لحفظ المعلومات برجاء تسجيل الدخول"',
-                                            backgroundColor: Colors.white);
-                                      }else{
-                                        setState(() {
-                                          prayerCurrent!.prayer2 = value!;
-                                        });
-                                        _savePrayerDataCurrent();
-                                      }
-                                    })),
-                                customSalah("الضهر", Checkbox(
+                                    : customSalah("الفجر",
+                                    Transform.scale(
+                                      scale: 1.3,
+                                      child: Checkbox(
+                                      shape: RoundedRectangleBorder(
+                                        borderRadius: BorderRadius.circular(2.0),
+                                      ),
+                                      side: MaterialStateBorderSide.resolveWith(
+                                            (states) => BorderSide(width: 1.0, color:buttonColor),
+                                      ),
+                                                                        //tristate: true,
+                                      activeColor: Colors.blue[900],
+                                      value: prayerCurrent == null
+                                          ? false
+                                          : prayerCurrent!.prayer2,
+                                      onChanged: (value) {
+                                        // if (FirebaseAuth.instance.currentUser ==
+                                        //     null) {
+                                        //   Get.defaultDialog(
+                                        //       content: GestureDetector(
+                                        //         onTap: () {
+                                        //           Get.to(SignInView());
+                                        //         },
+                                        //         child: Container(
+                                        //           alignment: Alignment.center,
+                                        //           width: 200,
+                                        //           height: 50,
+                                        //           color: buttonColor,
+                                        //           child: Text(
+                                        //             'تسجيل الدخول',
+                                        //             style: TextStyle(
+                                        //                 color: Colors.white,
+                                        //                 fontSize: 18),
+                                        //           ),
+                                        //         ),
+                                        //       ),
+                                        //       title:
+                                        //       '"لا يمكن حفظ المعلومات", "لحفظ المعلومات برجاء تسجيل الدخول"',
+                                        //       backgroundColor: Colors.white);
+                                        // }else{
+                                          setState(() {
+                                            prayerCurrent!.prayer2 = value!;
+                                          });
+                                          _savePrayerDataCurrent();
+
+                                      }),
+                                    )),
+                                customSalah("الضهر",
+
+            Transform.scale(
+            scale: 1.3,
+            child:
+                                    Checkbox(
+                                    shape: RoundedRectangleBorder(
+                                      borderRadius: BorderRadius.circular(2.0),
+                                    ),
+                                    side: MaterialStateBorderSide.resolveWith(
+                                          (states) => BorderSide(width: 1.0, color:buttonColor),
+                                    ),
                                   //tristate: true,
                                     activeColor: Colors.blue[900],
                                     value: prayerCurrent == null
                                         ? false
                                         : prayerCurrent!.prayer5,
                                     onChanged: (value) {
-                                      if (FirebaseAuth.instance.currentUser ==
-                                          null) {
-                                        Get.defaultDialog(
-                                            content: GestureDetector(
-                                              onTap: () {
-                                                Get.to(SignInView());
-                                              },
-                                              child: Container(
-                                                alignment: Alignment.center,
-                                                width: 200,
-                                                height: 50,
-                                                color: buttonColor,
-                                                child: Text(
-                                                  'تسجيل الدخول',
-                                                  style: TextStyle(
-                                                      color: Colors.white,
-                                                      fontSize: 18),
-                                                ),
-                                              ),
-                                            ),
-                                            title:
-                                            '"لا يمكن حفظ المعلومات", "لحفظ المعلومات برجاء تسجيل الدخول"',
-                                            backgroundColor: Colors.white);
-                                      }else{
+                                      // if (FirebaseAuth.instance.currentUser ==
+                                      //     null) {
+                                      //   Get.defaultDialog(
+                                      //       content: GestureDetector(
+                                      //         onTap: () {
+                                      //           Get.to(SignInView());
+                                      //         },
+                                      //         child: Container(
+                                      //           alignment: Alignment.center,
+                                      //           width: 200,
+                                      //           height: 50,
+                                      //           color: buttonColor,
+                                      //           child: Text(
+                                      //             'تسجيل الدخول',
+                                      //             style: TextStyle(
+                                      //                 color: Colors.white,
+                                      //                 fontSize: 18),
+                                      //           ),
+                                      //         ),
+                                      //       ),
+                                      //       title:
+                                      //       '"لا يمكن حفظ المعلومات", "لحفظ المعلومات برجاء تسجيل الدخول"',
+                                      //       backgroundColor: Colors.white);
+                                      // }else{
                                         setState(() {
                                           prayerCurrent!.prayer5 = value!;
                                         });
                                         _savePrayerDataCurrent();
-                                      }
 
-                                    })),
-                                customSalah("العصر", Checkbox(
+
+                                    }))),
+                                customSalah("العصر",
+
+
+            Transform.scale(
+            scale: 1.3,
+            child:
+                                    Checkbox(
+                                    shape: RoundedRectangleBorder(
+                                      borderRadius: BorderRadius.circular(2.0),
+                                    ),
+                                    side: MaterialStateBorderSide.resolveWith(
+                                          (states) => BorderSide(width: 1.0, color:buttonColor),
+                                    ),
                                   //tristate: true,
                                     activeColor: Colors.blue[900],
                                     value: prayerCurrent == null
                                         ? false
                                         : prayerCurrent!.prayer6,
                                     onChanged: (value) {
-                                      if (FirebaseAuth.instance.currentUser ==
-                                          null) {
-                                        Get.defaultDialog(
-                                            content: GestureDetector(
-                                              onTap: () {
-                                                Get.to(SignInView());
-                                              },
-                                              child: Container(
-                                                alignment: Alignment.center,
-                                                width: 200,
-                                                height: 50,
-                                                color: buttonColor,
-                                                child: Text(
-                                                  'تسجيل الدخول',
-                                                  style: TextStyle(
-                                                      color: Colors.white,
-                                                      fontSize: 18),
-                                                ),
-                                              ),
-                                            ),
-                                            title:
-                                            '"لا يمكن حفظ المعلومات", "لحفظ المعلومات برجاء تسجيل الدخول"',
-                                            backgroundColor: Colors.white);
-                                      }else{
+                                      // if (FirebaseAuth.instance.currentUser ==
+                                      //     null) {
+                                      //   Get.defaultDialog(
+                                      //       content: GestureDetector(
+                                      //         onTap: () {
+                                      //           Get.to(SignInView());
+                                      //         },
+                                      //         child: Container(
+                                      //           alignment: Alignment.center,
+                                      //           width: 200,
+                                      //           height: 50,
+                                      //           color: buttonColor,
+                                      //           child: Text(
+                                      //             'تسجيل الدخول',
+                                      //             style: TextStyle(
+                                      //                 color: Colors.white,
+                                      //                 fontSize: 18),
+                                      //           ),
+                                      //         ),
+                                      //       ),
+                                      //       title:
+                                      //       '"لا يمكن حفظ المعلومات", "لحفظ المعلومات برجاء تسجيل الدخول"',
+                                      //       backgroundColor: Colors.white);
+                                      // }else{
                                         setState(() {
                                           prayerCurrent!.prayer6 = value!;
                                         });
                                         _savePrayerDataCurrent();
-                                      }
-                                    })),
-                                customSalah("المغرب", Checkbox(
+
+                                    }))),
+                                customSalah("المغرب",
+            Transform.scale(
+            scale: 1.3,
+            child:
+                                    Checkbox(
+                                    shape: RoundedRectangleBorder(
+                                      borderRadius: BorderRadius.circular(2.0),
+                                    ),
+                                    side: MaterialStateBorderSide.resolveWith(
+                                          (states) => BorderSide(width: 1.0, color:buttonColor),
+                                    ),
                                   //tristate: true,
                                     activeColor: Colors.blue[900],
                                     value: prayerCurrent == null
                                         ? false
                                         : prayerCurrent!.prayer8,
                                     onChanged: (value) {
-                                      if (FirebaseAuth.instance.currentUser ==
-                                          null) {
-                                        Get.defaultDialog(
-                                            content: GestureDetector(
-                                              onTap: () {
-                                                Get.to(SignInView());
-                                              },
-                                              child: Container(
-                                                alignment: Alignment.center,
-                                                width: 200,
-                                                height: 50,
-                                                color: buttonColor,
-                                                child: Text(
-                                                  'تسجيل الدخول',
-                                                  style: TextStyle(
-                                                      color: Colors.white,
-                                                      fontSize: 18),
-                                                ),
-                                              ),
-                                            ),
-                                            title:
-                                            '"لا يمكن حفظ المعلومات", "لحفظ المعلومات برجاء تسجيل الدخول"',
-                                            backgroundColor: Colors.white);
-                                      }else{
+                                      // if (FirebaseAuth.instance.currentUser ==
+                                      //     null) {
+                                      //   Get.defaultDialog(
+                                      //       content: GestureDetector(
+                                      //         onTap: () {
+                                      //           Get.to(SignInView());
+                                      //         },
+                                      //         child: Container(
+                                      //           alignment: Alignment.center,
+                                      //           width: 200,
+                                      //           height: 50,
+                                      //           color: buttonColor,
+                                      //           child: Text(
+                                      //             'تسجيل الدخول',
+                                      //             style: TextStyle(
+                                      //                 color: Colors.white,
+                                      //                 fontSize: 18),
+                                      //           ),
+                                      //         ),
+                                      //       ),
+                                      //       title:
+                                      //       '"لا يمكن حفظ المعلومات", "لحفظ المعلومات برجاء تسجيل الدخول"',
+                                      //       backgroundColor: Colors.white);
+                                      // }else{
                                         setState(() {
                                           prayerCurrent!.prayer8 = value!;
                                         });
                                         _savePrayerDataCurrent();
-                                      }
-                                    })),
-                                customSalah("العشاء", Checkbox(
+
+                                    }))),
+                                customSalah("العشاء",
+            Transform.scale(
+            scale: 1.3,
+            child:
+                                    Checkbox(
+                                    shape: RoundedRectangleBorder(
+                                      borderRadius: BorderRadius.circular(2.0),
+                                    ),
+                                    side: MaterialStateBorderSide.resolveWith(
+                                          (states) => BorderSide(width: 1.0, color:buttonColor),
+                                    ),
                                   //tristate: true,
                                     activeColor: Colors.blue[900],
                                     value: prayerCurrent == null
                                         ? false
                                         : prayerCurrent!.prayer10,
                                     onChanged: (value) {
-                                      if (FirebaseAuth.instance.currentUser ==
-                                          null) {
-                                        Get.defaultDialog(
-                                            content: GestureDetector(
-                                              onTap: () {
-                                                Get.to(SignInView());
-                                              },
-                                              child: Container(
-                                                alignment: Alignment.center,
-                                                width: 200,
-                                                height: 50,
-                                                color: buttonColor,
-                                                child: Text(
-                                                  'تسجيل الدخول',
-                                                  style: TextStyle(
-                                                      color: Colors.white,
-                                                      fontSize: 18),
-                                                ),
-                                              ),
-                                            ),
-                                            title:
-                                            '"لا يمكن حفظ المعلومات", "لحفظ المعلومات برجاء تسجيل الدخول"',
-                                            backgroundColor: Colors.white);
-                                      }else{
+                                      // if (FirebaseAuth.instance.currentUser ==
+                                      //     null) {
+                                      //   Get.defaultDialog(
+                                      //       content: GestureDetector(
+                                      //         onTap: () {
+                                      //           Get.to(SignInView());
+                                      //         },
+                                      //         child: Container(
+                                      //           alignment: Alignment.center,
+                                      //           width: 200,
+                                      //           height: 50,
+                                      //           color: buttonColor,
+                                      //           child: Text(
+                                      //             'تسجيل الدخول',
+                                      //             style: TextStyle(
+                                      //                 color: Colors.white,
+                                      //                 fontSize: 18),
+                                      //           ),
+                                      //         ),
+                                      //       ),
+                                      //       title:
+                                      //       '"لا يمكن حفظ المعلومات", "لحفظ المعلومات برجاء تسجيل الدخول"',
+                                      //       backgroundColor: Colors.white);
+                                      // }else{
                                         setState(() {
                                           prayerCurrent!.prayer10 = value!;
                                         });
                                         _savePrayerDataCurrent();
-                                      }
-                                    })),
+
+                                    }))),
                               ],
                             ),
                             SingleChildScrollView(
@@ -759,39 +812,47 @@ class _PrayerState extends State<Prayer> with TickerProviderStateMixin {
                                           .spaceBetween,
                                       children: [
                                         Row(children: [
-                                          Checkbox(
+            Transform.scale(
+            scale: 1.3,
+            child: Checkbox(
+                                              shape: RoundedRectangleBorder(
+                                                borderRadius: BorderRadius.circular(2.0),
+                                              ),
+                                              side: MaterialStateBorderSide.resolveWith(
+                                                    (states) => BorderSide(width: 1.0, color:buttonColor),
+                                              ),
                                               activeColor: buttonColor,
                                               checkColor: Colors.white,
                                               value: prayer.prayer1,
                                               onChanged: (value) {
-                                                if (FirebaseAuth.instance.currentUser ==
-                                                    null) {
-                                                  Get.defaultDialog(
-                                                      content: GestureDetector(
-                                                        onTap: () {
-                                                          Get.to(SignInView());
-                                                        },
-                                                        child: Container(
-                                                          alignment: Alignment.center,
-                                                          width: 200,
-                                                          height: 50,
-                                                          color: buttonColor,
-                                                          child: Text(
-                                                            'تسجيل الدخول',
-                                                            style: TextStyle(
-                                                                color: Colors.white,
-                                                                fontSize: 18),
-                                                          ),
-                                                        ),
-                                                      ),
-                                                      title:
-                                                      '"لا يمكن حفظ المعلومات", "لحفظ المعلومات برجاء تسجيل الدخول"',
-                                                      backgroundColor: Colors.white);
-                                                }else{
+                                                // if (FirebaseAuth.instance.currentUser ==
+                                                //     null) {
+                                                //   Get.defaultDialog(
+                                                //       content: GestureDetector(
+                                                //         onTap: () {
+                                                //           Get.to(SignInView());
+                                                //         },
+                                                //         child: Container(
+                                                //           alignment: Alignment.center,
+                                                //           width: 200,
+                                                //           height: 50,
+                                                //           color: buttonColor,
+                                                //           child: Text(
+                                                //             'تسجيل الدخول',
+                                                //             style: TextStyle(
+                                                //                 color: Colors.white,
+                                                //                 fontSize: 18),
+                                                //           ),
+                                                //         ),
+                                                //       ),
+                                                //       title:
+                                                //       '"لا يمكن حفظ المعلومات", "لحفظ المعلومات برجاء تسجيل الدخول"',
+                                                //       backgroundColor: Colors.white);
+                                                // }else{
                                                   prayer.prayer1 = value!;
-                                                }
 
-                                              }),
+
+                                              })),
                                           Text(
                                             'النافله',
                                             style: TextStyle(
@@ -801,40 +862,48 @@ class _PrayerState extends State<Prayer> with TickerProviderStateMixin {
                                           ),
                                         ]),
                                         Row(children: [
-                                          Checkbox(
+                                        Transform.scale(
+                                        scale: 1.3,
+            child: Checkbox(
+                                              shape: RoundedRectangleBorder(
+                                                borderRadius: BorderRadius.circular(2.0),
+                                              ),
+                                              side: MaterialStateBorderSide.resolveWith(
+                                                    (states) => BorderSide(width: 1.0, color:buttonColor),
+                                              ),
                                               activeColor: buttonColor,
                                               checkColor: Colors.white,
                                               value: prayer.prayer2,
                                               onChanged: (value) {
-                                                if (FirebaseAuth.instance.currentUser ==
-                                                    null) {
-                                                  Get.defaultDialog(
-                                                      content: GestureDetector(
-                                                        onTap: () {
-                                                          Get.to(SignInView());
-                                                        },
-                                                        child: Container(
-                                                          alignment: Alignment.center,
-                                                          width: 200,
-                                                          height: 50,
-                                                          color: buttonColor,
-                                                          child: Text(
-                                                            'تسجيل الدخول',
-                                                            style: TextStyle(
-                                                                color: Colors.white,
-                                                                fontSize: 18),
-                                                          ),
-                                                        ),
-                                                      ),
-                                                      title:
-                                                      '"لا يمكن حفظ المعلومات", "لحفظ المعلومات برجاء تسجيل الدخول"',
-                                                      backgroundColor: Colors.white);
-                                                }else{
+                                                // if (FirebaseAuth.instance.currentUser ==
+                                                //     null) {
+                                                //   Get.defaultDialog(
+                                                //       content: GestureDetector(
+                                                //         onTap: () {
+                                                //           Get.to(SignInView());
+                                                //         },
+                                                //         child: Container(
+                                                //           alignment: Alignment.center,
+                                                //           width: 200,
+                                                //           height: 50,
+                                                //           color: buttonColor,
+                                                //           child: Text(
+                                                //             'تسجيل الدخول',
+                                                //             style: TextStyle(
+                                                //                 color: Colors.white,
+                                                //                 fontSize: 18),
+                                                //           ),
+                                                //         ),
+                                                //       ),
+                                                //       title:
+                                                //       '"لا يمكن حفظ المعلومات", "لحفظ المعلومات برجاء تسجيل الدخول"',
+                                                //       backgroundColor: Colors.white);
+                                                // }else{
                                                   prayer.prayer2 = value!;
                                                   _updateCalculation(context);
-                                                }
+
                                               }
-                                              ),
+                                              )),
                                           Text(
                                             'الفرض',
                                             style: TextStyle(
@@ -867,39 +936,47 @@ class _PrayerState extends State<Prayer> with TickerProviderStateMixin {
                                           .spaceBetween,
                                       children: [
                                         Row(children: [
-                                          Checkbox(
+            Transform.scale(
+            scale: 1.3,
+            child:Checkbox(
+                                              shape: RoundedRectangleBorder(
+                                                borderRadius: BorderRadius.circular(2.0),
+                                              ),
+                                              side: MaterialStateBorderSide.resolveWith(
+                                                    (states) => BorderSide(width: 1.0, color:buttonColor),
+                                              ),
                                               activeColor: buttonColor,
                                               checkColor: Colors.white,
                                               value: prayer.prayer3,
                                               onChanged: (value) {
-                                                if (FirebaseAuth.instance.currentUser ==
-                                                    null) {
-                                                  Get.defaultDialog(
-                                                      content: GestureDetector(
-                                                        onTap: () {
-                                                          Get.to(SignInView());
-                                                        },
-                                                        child: Container(
-                                                          alignment: Alignment.center,
-                                                          width: 200,
-                                                          height: 50,
-                                                          color: buttonColor,
-                                                          child: Text(
-                                                            'تسجيل الدخول',
-                                                            style: TextStyle(
-                                                                color: Colors.white,
-                                                                fontSize: 18),
-                                                          ),
-                                                        ),
-                                                      ),
-                                                      title:
-                                                      '"لا يمكن حفظ المعلومات", "لحفظ المعلومات برجاء تسجيل الدخول"',
-                                                      backgroundColor: Colors.white);
-                                                }else{
+                                                // if (FirebaseAuth.instance.currentUser ==
+                                                //     null) {
+                                                //   Get.defaultDialog(
+                                                //       content: GestureDetector(
+                                                //         onTap: () {
+                                                //           Get.to(SignInView());
+                                                //         },
+                                                //         child: Container(
+                                                //           alignment: Alignment.center,
+                                                //           width: 200,
+                                                //           height: 50,
+                                                //           color: buttonColor,
+                                                //           child: Text(
+                                                //             'تسجيل الدخول',
+                                                //             style: TextStyle(
+                                                //                 color: Colors.white,
+                                                //                 fontSize: 18),
+                                                //           ),
+                                                //         ),
+                                                //       ),
+                                                //       title:
+                                                //       '"لا يمكن حفظ المعلومات", "لحفظ المعلومات برجاء تسجيل الدخول"',
+                                                //       backgroundColor: Colors.white);
+                                                // }else{
                                                   prayer.prayer3 = value!;
-                                                }
+
                                               }),
-                                        ]),
+            )]),
                                         Row(
                                           children: [
                                             Text(
@@ -935,38 +1012,46 @@ class _PrayerState extends State<Prayer> with TickerProviderStateMixin {
                                           .spaceBetween,
                                       children: [
                                         Row(children: [
-                                          Checkbox(
+            Transform.scale(
+            scale: 1.3,
+            child:Checkbox(
+                                              shape: RoundedRectangleBorder(
+                                                borderRadius: BorderRadius.circular(2.0),
+                                              ),
+                                              side: MaterialStateBorderSide.resolveWith(
+                                                    (states) => BorderSide(width: 1.0, color:buttonColor),
+                                              ),
                                               activeColor: buttonColor,
                                               checkColor: Colors.white,
                                               value: prayer.prayer4,
                                               onChanged: (value) {
-                                                if (FirebaseAuth.instance.currentUser ==
-                                                    null) {
-                                                  Get.defaultDialog(
-                                                      content: GestureDetector(
-                                                        onTap: () {
-                                                          Get.to(SignInView());
-                                                        },
-                                                        child: Container(
-                                                          alignment: Alignment.center,
-                                                          width: 200,
-                                                          height: 50,
-                                                          color: buttonColor,
-                                                          child: Text(
-                                                            'تسجيل الدخول',
-                                                            style: TextStyle(
-                                                                color: Colors.white,
-                                                                fontSize: 18),
-                                                          ),
-                                                        ),
-                                                      ),
-                                                      title:
-                                                      '"لا يمكن حفظ المعلومات", "لحفظ المعلومات برجاء تسجيل الدخول"',
-                                                      backgroundColor: Colors.white);
-                                                }else{
+                                                // if (FirebaseAuth.instance.currentUser ==
+                                                //     null) {
+                                                //   Get.defaultDialog(
+                                                //       content: GestureDetector(
+                                                //         onTap: () {
+                                                //           Get.to(SignInView());
+                                                //         },
+                                                //         child: Container(
+                                                //           alignment: Alignment.center,
+                                                //           width: 200,
+                                                //           height: 50,
+                                                //           color: buttonColor,
+                                                //           child: Text(
+                                                //             'تسجيل الدخول',
+                                                //             style: TextStyle(
+                                                //                 color: Colors.white,
+                                                //                 fontSize: 18),
+                                                //           ),
+                                                //         ),
+                                                //       ),
+                                                //       title:
+                                                //       '"لا يمكن حفظ المعلومات", "لحفظ المعلومات برجاء تسجيل الدخول"',
+                                                //       backgroundColor: Colors.white);
+                                                // }else{
                                                   prayer.prayer4 = value!;
-                                                }
-                                              }),
+
+                                              })),
                                           Text(
                                             'النافلة',
                                             style: TextStyle(
@@ -976,39 +1061,47 @@ class _PrayerState extends State<Prayer> with TickerProviderStateMixin {
                                           ),
                                         ]),
                                         Row(children: [
-                                          Checkbox(
+                                        Transform.scale(
+                                        scale: 1.3,
+            child: Checkbox(
+                                              shape: RoundedRectangleBorder(
+                                                borderRadius: BorderRadius.circular(2.0),
+                                              ),
+                                              side: MaterialStateBorderSide.resolveWith(
+                                                    (states) => BorderSide(width: 1.0, color:buttonColor),
+                                              ),
                                               activeColor: buttonColor,
                                               checkColor: Colors.white,
                                               value: prayer.prayer5,
                                               onChanged: (value) {
-                                                if (FirebaseAuth.instance.currentUser ==
-                                                    null) {
-                                                  Get.defaultDialog(
-                                                      content: GestureDetector(
-                                                        onTap: () {
-                                                          Get.to(SignInView());
-                                                        },
-                                                        child: Container(
-                                                          alignment: Alignment.center,
-                                                          width: 200,
-                                                          height: 50,
-                                                          color: buttonColor,
-                                                          child: Text(
-                                                            'تسجيل الدخول',
-                                                            style: TextStyle(
-                                                                color: Colors.white,
-                                                                fontSize: 18),
-                                                          ),
-                                                        ),
-                                                      ),
-                                                      title:
-                                                      '"لا يمكن حفظ المعلومات", "لحفظ المعلومات برجاء تسجيل الدخول"',
-                                                      backgroundColor: Colors.white);
-                                                }else{
+                                                // if (FirebaseAuth.instance.currentUser ==
+                                                //     null) {
+                                                //   Get.defaultDialog(
+                                                //       content: GestureDetector(
+                                                //         onTap: () {
+                                                //           Get.to(SignInView());
+                                                //         },
+                                                //         child: Container(
+                                                //           alignment: Alignment.center,
+                                                //           width: 200,
+                                                //           height: 50,
+                                                //           color: buttonColor,
+                                                //           child: Text(
+                                                //             'تسجيل الدخول',
+                                                //             style: TextStyle(
+                                                //                 color: Colors.white,
+                                                //                 fontSize: 18),
+                                                //           ),
+                                                //         ),
+                                                //       ),
+                                                //       title:
+                                                //       '"لا يمكن حفظ المعلومات", "لحفظ المعلومات برجاء تسجيل الدخول"',
+                                                //       backgroundColor: Colors.white);
+                                                // }else{
                                                   prayer.prayer5 = value!;
                                                   _updateCalculation(context);
-                                                }
-                                              }),
+
+                                              })),
                                           Text(
                                             'الفرض',
                                             style: TextStyle(
@@ -1051,39 +1144,47 @@ class _PrayerState extends State<Prayer> with TickerProviderStateMixin {
                                           .spaceBetween,
                                       children: [
                                         Row(children: [
-                                          Checkbox(
+            Transform.scale(
+            scale: 1.3,
+            child:  Checkbox(
+                                              shape: RoundedRectangleBorder(
+                                                borderRadius: BorderRadius.circular(2.0),
+                                              ),
+                                              side: MaterialStateBorderSide.resolveWith(
+                                                    (states) => BorderSide(width: 1.0, color:buttonColor),
+                                              ),
                                               activeColor: buttonColor,
                                               checkColor: Colors.white,
                                               value: prayer.prayer6,
                                               onChanged: (value) {
-                                                if (FirebaseAuth.instance.currentUser ==
-                                                    null) {
-                                                  Get.defaultDialog(
-                                                      content: GestureDetector(
-                                                        onTap: () {
-                                                          Get.to(SignInView());
-                                                        },
-                                                        child: Container(
-                                                          alignment: Alignment.center,
-                                                          width: 200,
-                                                          height: 50,
-                                                          color: buttonColor,
-                                                          child: Text(
-                                                            'تسجيل الدخول',
-                                                            style: TextStyle(
-                                                                color: Colors.white,
-                                                                fontSize: 18),
-                                                          ),
-                                                        ),
-                                                      ),
-                                                      title:
-                                                      '"لا يمكن حفظ المعلومات", "لحفظ المعلومات برجاء تسجيل الدخول"',
-                                                      backgroundColor: Colors.white);
-                                                }else{
+                                                // if (FirebaseAuth.instance.currentUser ==
+                                                //     null) {
+                                                //   Get.defaultDialog(
+                                                //       content: GestureDetector(
+                                                //         onTap: () {
+                                                //           Get.to(SignInView());
+                                                //         },
+                                                //         child: Container(
+                                                //           alignment: Alignment.center,
+                                                //           width: 200,
+                                                //           height: 50,
+                                                //           color: buttonColor,
+                                                //           child: Text(
+                                                //             'تسجيل الدخول',
+                                                //             style: TextStyle(
+                                                //                 color: Colors.white,
+                                                //                 fontSize: 18),
+                                                //           ),
+                                                //         ),
+                                                //       ),
+                                                //       title:
+                                                //       '"لا يمكن حفظ المعلومات", "لحفظ المعلومات برجاء تسجيل الدخول"',
+                                                //       backgroundColor: Colors.white);
+                                                // }else{
                                                   prayer.prayer6 = value!;
                                                   _updateCalculation(context);
-                                                }
-                                              }),
+
+                                              })),
                                           Text(
                                             'الفرض',
                                             style: TextStyle(
@@ -1127,39 +1228,47 @@ class _PrayerState extends State<Prayer> with TickerProviderStateMixin {
                                           .spaceBetween,
                                       children: [
                                         Row(children: [
-                                          Checkbox(
+            Transform.scale(
+            scale: 1.3,
+            child: Checkbox(
+                                              shape: RoundedRectangleBorder(
+                                                borderRadius: BorderRadius.circular(2.0),
+                                              ),
+                                              side: MaterialStateBorderSide.resolveWith(
+                                                    (states) => BorderSide(width: 1.0, color:buttonColor),
+                                              ),
                                               activeColor: buttonColor,
                                               checkColor: Colors.white,
                                               value: prayer.prayer7,
                                               onChanged: (value) {
-                                                if (FirebaseAuth.instance.currentUser ==
-                                                    null) {
-                                                  Get.defaultDialog(
-                                                      content: GestureDetector(
-                                                        onTap: () {
-                                                          Get.to(SignInView());
-                                                        },
-                                                        child: Container(
-                                                          alignment: Alignment.center,
-                                                          width: 200,
-                                                          height: 50,
-                                                          color: buttonColor,
-                                                          child: Text(
-                                                            'تسجيل الدخول',
-                                                            style: TextStyle(
-                                                                color: Colors.white,
-                                                                fontSize: 18),
-                                                          ),
-                                                        ),
-                                                      ),
-                                                      title:
-                                                      '"لا يمكن حفظ المعلومات", "لحفظ المعلومات برجاء تسجيل الدخول"',
-                                                      backgroundColor: Colors.white);
-                                                }else{
+                                                // if (FirebaseAuth.instance.currentUser ==
+                                                //     null) {
+                                                //   Get.defaultDialog(
+                                                //       content: GestureDetector(
+                                                //         onTap: () {
+                                                //           Get.to(SignInView());
+                                                //         },
+                                                //         child: Container(
+                                                //           alignment: Alignment.center,
+                                                //           width: 200,
+                                                //           height: 50,
+                                                //           color: buttonColor,
+                                                //           child: Text(
+                                                //             'تسجيل الدخول',
+                                                //             style: TextStyle(
+                                                //                 color: Colors.white,
+                                                //                 fontSize: 18),
+                                                //           ),
+                                                //         ),
+                                                //       ),
+                                                //       title:
+                                                //       '"لا يمكن حفظ المعلومات", "لحفظ المعلومات برجاء تسجيل الدخول"',
+                                                //       backgroundColor: Colors.white);
+                                                // }else{
                                                   prayer.prayer7 = value!;
-                                                }
 
-                                              }),
+
+                                              })),
                                           Text(
                                             'النافلة',
                                             style: TextStyle(
@@ -1169,39 +1278,47 @@ class _PrayerState extends State<Prayer> with TickerProviderStateMixin {
                                           ),
                                         ]),
                                         Row(children: [
-                                          Checkbox(
+                                        Transform.scale(
+                                        scale: 1.3,
+            child: Checkbox(
+                                              shape: RoundedRectangleBorder(
+                                                borderRadius: BorderRadius.circular(2.0),
+                                              ),
+                                              side: MaterialStateBorderSide.resolveWith(
+                                                    (states) => BorderSide(width: 1.0, color:buttonColor),
+                                              ),
                                               activeColor: buttonColor,
                                               checkColor: Colors.white,
                                               value: prayer.prayer8,
                                               onChanged: (value) {
-                                                if (FirebaseAuth.instance.currentUser ==
-                                                    null) {
-                                                  Get.defaultDialog(
-                                                      content: GestureDetector(
-                                                        onTap: () {
-                                                          Get.to(SignInView());
-                                                        },
-                                                        child: Container(
-                                                          alignment: Alignment.center,
-                                                          width: 200,
-                                                          height: 50,
-                                                          color: buttonColor,
-                                                          child: Text(
-                                                            'تسجيل الدخول',
-                                                            style: TextStyle(
-                                                                color: Colors.white,
-                                                                fontSize: 18),
-                                                          ),
-                                                        ),
-                                                      ),
-                                                      title:
-                                                      '"لا يمكن حفظ المعلومات", "لحفظ المعلومات برجاء تسجيل الدخول"',
-                                                      backgroundColor: Colors.white);
-                                                }else{
+                                                // if (FirebaseAuth.instance.currentUser ==
+                                                //     null) {
+                                                //   Get.defaultDialog(
+                                                //       content: GestureDetector(
+                                                //         onTap: () {
+                                                //           Get.to(SignInView());
+                                                //         },
+                                                //         child: Container(
+                                                //           alignment: Alignment.center,
+                                                //           width: 200,
+                                                //           height: 50,
+                                                //           color: buttonColor,
+                                                //           child: Text(
+                                                //             'تسجيل الدخول',
+                                                //             style: TextStyle(
+                                                //                 color: Colors.white,
+                                                //                 fontSize: 18),
+                                                //           ),
+                                                //         ),
+                                                //       ),
+                                                //       title:
+                                                //       '"لا يمكن حفظ المعلومات", "لحفظ المعلومات برجاء تسجيل الدخول"',
+                                                //       backgroundColor: Colors.white);
+                                                // }else{
                                                   prayer.prayer8 = value!;
                                                   _updateCalculation(context);
-                                                }
-                                              }),
+
+                                              }),),
                                           Text(
                                             'الفرض',
                                             style: TextStyle(
@@ -1244,39 +1361,47 @@ class _PrayerState extends State<Prayer> with TickerProviderStateMixin {
                                           .spaceBetween,
                                       children: [
                                         Row(children: [
-                                          Checkbox(
+            Transform.scale(
+            scale: 1.3,
+            child: Checkbox(
+                                              shape: RoundedRectangleBorder(
+                                                borderRadius: BorderRadius.circular(2.0),
+                                              ),
+                                              side: MaterialStateBorderSide.resolveWith(
+                                                    (states) => BorderSide(width: 1.0, color:buttonColor),
+                                              ),
                                               activeColor: buttonColor,
                                               checkColor: Colors.white,
                                               value: prayer.prayer9,
                                               onChanged: (value) {
-                                                if (FirebaseAuth.instance.currentUser ==
-                                                    null) {
-                                                  Get.defaultDialog(
-                                                      content: GestureDetector(
-                                                        onTap: () {
-                                                          Get.to(SignInView());
-                                                        },
-                                                        child: Container(
-                                                          alignment: Alignment.center,
-                                                          width: 200,
-                                                          height: 50,
-                                                          color: buttonColor,
-                                                          child: Text(
-                                                            'تسجيل الدخول',
-                                                            style: TextStyle(
-                                                                color: Colors.white,
-                                                                fontSize: 18),
-                                                          ),
-                                                        ),
-                                                      ),
-                                                      title:
-                                                      '"لا يمكن حفظ المعلومات", "لحفظ المعلومات برجاء تسجيل الدخول"',
-                                                      backgroundColor: Colors.white);
-                                                }else{
+                                                // if (FirebaseAuth.instance.currentUser ==
+                                                //     null) {
+                                                //   Get.defaultDialog(
+                                                //       content: GestureDetector(
+                                                //         onTap: () {
+                                                //           Get.to(SignInView());
+                                                //         },
+                                                //         child: Container(
+                                                //           alignment: Alignment.center,
+                                                //           width: 200,
+                                                //           height: 50,
+                                                //           color: buttonColor,
+                                                //           child: Text(
+                                                //             'تسجيل الدخول',
+                                                //             style: TextStyle(
+                                                //                 color: Colors.white,
+                                                //                 fontSize: 18),
+                                                //           ),
+                                                //         ),
+                                                //       ),
+                                                //       title:
+                                                //       '"لا يمكن حفظ المعلومات", "لحفظ المعلومات برجاء تسجيل الدخول"',
+                                                //       backgroundColor: Colors.white);
+                                                // }else{
                                                   prayer.prayer9 = value!;
-                                                }
 
-                                              }),
+
+                                              })),
                                           Text(
                                             'النافلة',
                                             style: TextStyle(
@@ -1286,39 +1411,47 @@ class _PrayerState extends State<Prayer> with TickerProviderStateMixin {
                                           ),
                                         ]),
                                         Row(children: [
-                                          Checkbox(
+                                        Transform.scale(
+                                        scale: 1.3,
+            child: Checkbox(
+                                              shape: RoundedRectangleBorder(
+                                                borderRadius: BorderRadius.circular(2.0),
+                                              ),
+                                              side: MaterialStateBorderSide.resolveWith(
+                                                    (states) => BorderSide(width: 1.0, color:buttonColor),
+                                              ),
                                               activeColor: buttonColor,
                                               checkColor: Colors.white,
                                               value: prayer.prayer10,
                                               onChanged: (value) {
-                                                if (FirebaseAuth.instance.currentUser ==
-                                                    null) {
-                                                  Get.defaultDialog(
-                                                      content: GestureDetector(
-                                                        onTap: () {
-                                                          Get.to(SignInView());
-                                                        },
-                                                        child: Container(
-                                                          alignment: Alignment.center,
-                                                          width: 200,
-                                                          height: 50,
-                                                          color: buttonColor,
-                                                          child: Text(
-                                                            'تسجيل الدخول',
-                                                            style: TextStyle(
-                                                                color: Colors.white,
-                                                                fontSize: 18),
-                                                          ),
-                                                        ),
-                                                      ),
-                                                      title:
-                                                      '"لا يمكن حفظ المعلومات", "لحفظ المعلومات برجاء تسجيل الدخول"',
-                                                      backgroundColor: Colors.white);
-                                                }else{
+                                                // if (FirebaseAuth.instance.currentUser ==
+                                                //     null) {
+                                                //   Get.defaultDialog(
+                                                //       content: GestureDetector(
+                                                //         onTap: () {
+                                                //           Get.to(SignInView());
+                                                //         },
+                                                //         child: Container(
+                                                //           alignment: Alignment.center,
+                                                //           width: 200,
+                                                //           height: 50,
+                                                //           color: buttonColor,
+                                                //           child: Text(
+                                                //             'تسجيل الدخول',
+                                                //             style: TextStyle(
+                                                //                 color: Colors.white,
+                                                //                 fontSize: 18),
+                                                //           ),
+                                                //         ),
+                                                //       ),
+                                                //       title:
+                                                //       '"لا يمكن حفظ المعلومات", "لحفظ المعلومات برجاء تسجيل الدخول"',
+                                                //       backgroundColor: Colors.white);
+                                                // }else{
                                                   prayer.prayer10 = value!;
                                                   _updateCalculation(context);
-                                                }
-                                              }),
+
+                                              })),
                                           Text(
                                             'الفرض',
                                             style: TextStyle(
@@ -1361,40 +1494,48 @@ class _PrayerState extends State<Prayer> with TickerProviderStateMixin {
                                           .spaceBetween,
                                       children: [
                                         Row(children: [
-                                          Checkbox(
+            Transform.scale(
+            scale: 1.3,
+            child: Checkbox(
+                                              shape: RoundedRectangleBorder(
+                                                borderRadius: BorderRadius.circular(2.0),
+                                              ),
+                                              side: MaterialStateBorderSide.resolveWith(
+                                                    (states) => BorderSide(width: 1.0, color:buttonColor),
+                                              ),
                                               activeColor: buttonColor,
                                               checkColor: Colors.white,
                                               value: prayer.prayer11,
                                               onChanged: (value) {
-                                                if (FirebaseAuth.instance.currentUser ==
-                                                    null) {
-                                                  Get.defaultDialog(
-                                                      content: GestureDetector(
-                                                        onTap: () {
-                                                          Get.to(SignInView());
-                                                        },
-                                                        child: Container(
-                                                          alignment: Alignment.center,
-                                                          width: 200,
-                                                          height: 50,
-                                                          color: buttonColor,
-                                                          child: Text(
-                                                            'تسجيل الدخول',
-                                                            style: TextStyle(
-                                                                color: Colors.white,
-                                                                fontSize: 18),
-                                                          ),
-                                                        ),
-                                                      ),
-                                                      title:
-                                                      '"لا يمكن حفظ المعلومات", "لحفظ المعلومات برجاء تسجيل الدخول"',
-                                                      backgroundColor: Colors.white);
-                                                }else{
+                                                // if (FirebaseAuth.instance.currentUser ==
+                                                //     null) {
+                                                //   Get.defaultDialog(
+                                                //       content: GestureDetector(
+                                                //         onTap: () {
+                                                //           Get.to(SignInView());
+                                                //         },
+                                                //         child: Container(
+                                                //           alignment: Alignment.center,
+                                                //           width: 200,
+                                                //           height: 50,
+                                                //           color: buttonColor,
+                                                //           child: Text(
+                                                //             'تسجيل الدخول',
+                                                //             style: TextStyle(
+                                                //                 color: Colors.white,
+                                                //                 fontSize: 18),
+                                                //           ),
+                                                //         ),
+                                                //       ),
+                                                //       title:
+                                                //       '"لا يمكن حفظ المعلومات", "لحفظ المعلومات برجاء تسجيل الدخول"',
+                                                //       backgroundColor: Colors.white);
+                                                // }else{
                                                   prayer.prayer11 = value!;
-                                                }
+
 
                                               }),
-                                        ]),
+            )]),
                                         Row(
                                           children: [
                                             Text(
@@ -1454,7 +1595,7 @@ class _PrayerState extends State<Prayer> with TickerProviderStateMixin {
       ),
     );
   }
-  Widget customSalah(text,Checkbox chkBox){
+  Widget customSalah(text,var chkBox){
     return Container(
       margin: const EdgeInsets.only(bottom: 12),
       padding: const EdgeInsets.symmetric(horizontal: 10),

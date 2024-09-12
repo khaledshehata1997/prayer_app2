@@ -78,7 +78,8 @@ dependencies:
   persistent_bottom_nav_bar: ^6.2.1
   prayers_times: ^0.0.6
   adhan: ^2.0.0+1
-
+  change_app_package_name:
+  win32:
 
 dev_dependencies:
   flutter_test:
@@ -141,7 +142,7 @@ flutter:
 flutter_launcher_icons:
   android: "launcher_icon"
   ios: true
-  image_path: "images/prayer.png"
+  image_path: "icons/Vector.png"
   min_sdk_android: 21
 flutter_native_splash:
   # This package generates native code to customize Flutter's default white native splash screen
@@ -202,7 +203,7 @@ flutter_native_splash:
   # 640 pixels in diameter.
   # App icon without an icon background: This should be 1152×1152 pixels, and fit within a circle
   # 768 pixels in diameter.
-  image: "images/prayer.png"
+  image: "icons/Vector.png"
 
   # Splash screen background color.
   #color: "#42a5f5"

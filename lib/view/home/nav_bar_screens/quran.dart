@@ -123,7 +123,7 @@ class _QuranState extends State<Quran> {
                       Text(
                         'رسول الله صلي الله عليه وسلم قال:',
                         textDirection: TextDirection.rtl,
-                        style: TextStyle(fontSize: 16, color: Colors.white),
+                        style: TextStyle(fontSize: 15, color: Colors.white),
                       ),
                       Padding(
                         padding: const EdgeInsets.all(8.0),
@@ -131,7 +131,7 @@ class _QuranState extends State<Quran> {
                           textDirection: TextDirection.rtl,
                           "اقرؤوا القران فأنه يأتي يوم القيامه شفيعا لأصحابه",
                           style: TextStyle(
-                              fontSize: 17,
+                              fontSize: 15,
                               color: Colors.white,
                               fontWeight: FontWeight.bold),
                         ),

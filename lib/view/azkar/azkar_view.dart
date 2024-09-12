@@ -120,7 +120,7 @@ class _AzkarState extends State<Azkar> {
             ListView(
               children: <Widget>[
                 Padding(
-                  padding: const EdgeInsets.symmetric(horizontal: 25,vertical: 40),
+                  padding: const EdgeInsets.only(left: 30,right: 30,top: 45),
                   child: Row(
                     mainAxisAlignment: MainAxisAlignment.spaceBetween,
                     children: [
@@ -145,7 +145,7 @@ class _AzkarState extends State<Azkar> {
                               }
                             },
                             child: CircleAvatar(
-                              radius: 20,
+                              radius: 25,
                               backgroundColor: Colors.grey.shade400,
                               child: Image.asset(
                                 'icons/img_1.png',
@@ -171,7 +171,7 @@ class _AzkarState extends State<Azkar> {
                               );
                             },
                             child: CircleAvatar(
-                              radius: 20,
+                              radius: 25,
                               child: Image.asset(
                                 'icons/img.png',
                                 width: 20,
@@ -213,7 +213,7 @@ class _AzkarState extends State<Azkar> {
                             child: Text(
                               'لا اله الا انت سبحانك اني كنت من الظالمين',
                               style: TextStyle(
-                                  fontSize: 19,
+                                  fontSize: 17,
                                   fontWeight: FontWeight.bold,
                                   color: Colors.white),
                               textDirection: TextDirection.rtl,

@@ -21,7 +21,7 @@ class Editprofile extends StatefulWidget {
 }
 
 class _EditprofileState extends State<Editprofile> {
-  var myEmail,myName;
+  var myEmail,myName ='';
   File? _imageFile;
   String _imageUrl = '';
   bool isLoading = false;
@@ -171,7 +171,7 @@ class _EditprofileState extends State<Editprofile> {
                           ),
                           CustomTextFormField(
                             onSaved: (val){
-                              myName = val;
+                              myName = val!;
                             },
                             controller: nameController,
                             txt1: "الاسم لا يمكن ان يكون اكبر من 100 حرف",

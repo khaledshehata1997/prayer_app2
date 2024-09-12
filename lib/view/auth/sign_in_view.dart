@@ -69,11 +69,11 @@ class _SignUpViewState extends State<SignInView> {
               child: Column(
                 children: [
                   Container(
-                      margin: EdgeInsets.only(top: 24),
+                      margin: EdgeInsets.only(top: 40),
                       width: Get.width * .35,
                       height: Get.height * .18,
                       alignment: Alignment.center,
-                      child: Image.asset('images/prayer.png')),
+                      child: Image.asset('icons/Vector.png')),
                   SizedBox(height: Get.height*.04),
                   CustomText(
                     text: 'مرحبا بعودتك',
@@ -100,7 +100,7 @@ class _SignUpViewState extends State<SignInView> {
                     txt1: "البريد الألكتروني لا يمكن ان يكون اكبر من 100 حرف",
                     txt2: "البريد الألكتروني لا يمكن ان يكون اقل من 4 احرف",
                   ),
-                  SizedBox(height: Get.height*.05),
+                  SizedBox(height: Get.height*.025),
 
                   CustomText(
                     text: ' كلمة السر',

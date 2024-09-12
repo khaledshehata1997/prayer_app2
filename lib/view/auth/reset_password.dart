@@ -16,19 +16,19 @@ class ResetPasswordView extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     return Scaffold(
-      appBar: AppBar(
-        backgroundColor: Colors.blue[900],
-        centerTitle: true,
-        iconTheme: const IconThemeData(color: Colors.white),
-        title: const Text('إعادة تعيين كلمة السر',style:TextStyle(color: Colors.white),),
-      ),
+      // appBar: AppBar(
+      //   backgroundColor: Colors.blue[900],
+      //   centerTitle: true,
+      //   iconTheme: const IconThemeData(color: Colors.white),
+      //   title: const Text('إعادة تعيين كلمة السر',style:TextStyle(color: Colors.white),),
+      // ),
       body: Padding(
         padding: const EdgeInsets.all(20.0),
         child: Directionality(
           textDirection: TextDirection.rtl,
           child: Column(
             children: [
-              SizedBox(height: 50,),
+              SizedBox(height: 200,),
               CustomTextFormField(
                 txt1: "البريد الألكتروني لا يمكن ان يكون اكبر من 100 حرف",
                 txt2: "البريد الألكتروني لا يمكن ان يكون اقل من 4 احرف",

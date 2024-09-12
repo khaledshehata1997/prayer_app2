@@ -20,9 +20,9 @@ class _CustomTextFormFieldState extends State<CustomTextFormField> {
   @override
   Widget build(BuildContext context) {
     return Container(
-      height: Get.height*.075,
+      height: Get.height*.05,
       child: Padding(
-        padding: EdgeInsets.symmetric(horizontal: 10),
+        padding: EdgeInsets.symmetric(horizontal: 5),
         child: Directionality(
           textDirection: TextDirection.rtl,
           child: TextFormField(

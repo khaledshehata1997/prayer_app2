@@ -101,9 +101,9 @@ class _ProfileState extends State<Profile> {
           SingleChildScrollView(
             child: Column(
               children: [
-                SizedBox(
-                  height: Get.height * 0.05,
-                ),
+                // SizedBox(
+                //   height: Get.height * 0.05,
+                // ),
                 Padding(
                   padding: const EdgeInsets.all(15.0),
                   child: Row(
@@ -205,7 +205,7 @@ class _ProfileState extends State<Profile> {
                         ),
                         Positioned(
                           top: Get.height * 0.3,
-                          left: Get.width * 0.3,
+                          left: Get.width * 0.18,
                           child: Column(
                             children: [
                               Text(
@@ -268,14 +268,14 @@ class _ProfileState extends State<Profile> {
                               style: TextStyle(
                                   letterSpacing: .6,
                                   fontWeight: FontWeight.bold,
-                                  fontSize: 16,
+                                  fontSize: 0,
                                   color: Colors.black),
                             ),
                           ),
                         ),
                       ),
                       CircularPercentIndicator(
-                        radius: 120.0,
+                        radius: 80.0,
                         lineWidth: 13.0,
                         animation: true,
                         percent: (boolNotifier / 10) * 2.5,

@@ -113,20 +113,20 @@ class _SignUpViewState extends State<SignUpView> {
               child: Column(
                 children: [
                   Container(
-                      margin: EdgeInsets.only(top: 24),
+                      margin: EdgeInsets.only(top: 40),
                       width: Get.width * .25,
                       height: Get.height * .1,
                       alignment: Alignment.center,
-                      child: Image.asset('images/prayer.png')),
+                      child: Image.asset('icons/Vector.png')),
                   CustomText(
                     text: 'مرحبا بك',
-                    size: 24,
+                    size: 22,
                     isBold: true,
                     alignment: Alignment.topRight,
                   ),
                   CustomText(
                     text: 'من فضلك قم بادخال البيانات التاليه',
-                    size: 23,
+                    size: 18,
                     isBold: false,
                     alignment: Alignment.topRight,
                   ),

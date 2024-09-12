@@ -29,6 +29,9 @@ class _HomeViewState extends State<HomeView> {
   List<PersistentBottomNavBarItem> _navBarsItems() {
     return [
       PersistentBottomNavBarItem(
+        activeColorPrimary: buttonColor
+        ,
+        inactiveColorPrimary: Colors.grey,
         icon: Icon(Icons.home_outlined, color: Colors.blue[900],),
         contentPadding: 2,
         title: 'رئيسيه',

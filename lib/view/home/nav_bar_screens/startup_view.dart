@@ -5,6 +5,7 @@ import 'package:flutter/material.dart';
 import 'package:flutter/widgets.dart';
 import 'package:get/get.dart';
 import 'package:adhan/adhan.dart';
+import 'package:google_fonts/google_fonts.dart';
 import 'package:http/http.dart' as http;
 import 'dart:convert';
 import 'package:get/get_core/src/get_main.dart';
@@ -273,29 +274,7 @@ class _StartUpState extends State<StartUp> {
                             GestureDetector(
                               onTap: () async {
                                 final userData = await getUserData();
-                                if (FirebaseAuth.instance.currentUser == null) {
-                                  Get.defaultDialog(
-                                      content: GestureDetector(
-                                        onTap: () {
-                                          Get.to(SignInView());
-                                        },
-                                        child: Container(
-                                          alignment: Alignment.center,
-                                          width: 200,
-                                          height: 50,
-                                          color: buttonColor,
-                                          child: Text(
-                                            'تسجيل الدخول',
-                                            style: TextStyle(
-                                                color: Colors.white,
-                                                fontSize: 18),
-                                          ),
-                                        ),
-                                      ),
-                                      title:
-                                          '"لا يمكن الدخول الي الصفحه الشخصيه", "للدخول الي الصفحه الشخصيه برجاء تسجيل الدخول"',
-                                      backgroundColor: Colors.white);
-                                } else {
+
                                   PersistentNavBarNavigator.pushNewScreen(
                                     context,
                                     screen: Profile(
@@ -307,10 +286,10 @@ class _StartUpState extends State<StartUp> {
                                     pageTransitionAnimation:
                                         PageTransitionAnimation.cupertino,
                                   );
-                                }
+
                               },
                               child: CircleAvatar(
-                                radius: 15,
+                                radius: 20,
                                 backgroundColor: Colors.white,
                                 child: Image.asset(
                                   'icons/img_1.png',
@@ -336,7 +315,7 @@ class _StartUpState extends State<StartUp> {
                             );
                           },
                           child: CircleAvatar(
-                            radius: 15,
+                            radius: 20,
                             child: Image.asset(
                               'icons/img.png',
                               width: 20,
@@ -411,7 +390,7 @@ class _StartUpState extends State<StartUp> {
               child: Column(
                 children: [
                   Container(
-                    margin: EdgeInsets.symmetric(horizontal: 10),
+                    margin: EdgeInsets.symmetric(horizontal: 10,vertical:10),
                     alignment: Alignment.topRight,
                     child: Text(
                       'الصلوات اليومية',
@@ -424,6 +403,7 @@ class _StartUpState extends State<StartUp> {
                   ),
                   value == true
                       ? Container(
+
                           child: Row(
                             mainAxisAlignment: MainAxisAlignment.spaceAround,
                             children: [
@@ -493,227 +473,197 @@ class _StartUpState extends State<StartUp> {
                               _prayerTimes == null ? "" :
                               _formatTime(_prayerTimes!.fajr).replaceAll('AM', "ص"),
                               "images/Illustrator.png",
-                              Checkbox(
-                                  activeColor: buttonColor,
-                                  checkColor: Colors.white,
-                                  value: prayer.prayer2,
-                                  onChanged: (value) {
-                                    if (FirebaseAuth.instance.currentUser ==
-                                        null) {
-                                      Get.defaultDialog(
-                                          content: GestureDetector(
-                                            onTap: () {
-                                              Get.to(SignInView());
-                                            },
-                                            child: Container(
-                                              alignment: Alignment.center,
-                                              width: 200,
-                                              height: 50,
-                                              color: buttonColor,
-                                              child: Text(
-                                                'تسجيل الدخول',
-                                                style: TextStyle(
-                                                    color: Colors.white,
-                                                    fontSize: 18),
-                                              ),
-                                            ),
-                                          ),
-                                          title:
-                                              '"لا يمكن حفظ المعلومات", "لحفظ المعلومات برجاء تسجيل الدخول"',
-                                          backgroundColor: Colors.white);
-                                    } else {
-                                      prayer.prayer2 = value!;
-                                      _updateCalculation(context);
-                                    }
-                                  }),
+                              Transform.scale(
+                                scale: 1.3,
+                                child: Checkbox(
+                                    shape: RoundedRectangleBorder(
+                                      borderRadius: BorderRadius.circular(2.0),
+                                    ),
+                                    side: MaterialStateBorderSide.resolveWith(
+                                          (states) => BorderSide(width: 1.0, color:buttonColor),
+                                    ),
+                                    activeColor: buttonColor,
+                                    checkColor: Colors.white,
+                                    value: prayer.prayer2,
+                                    onChanged: (value) {
+
+                                        prayer.prayer2 = value!;
+                                        _updateCalculation(context);
+                                    }),
+                              ),
                             ),
                             SlahBox(
                               'الظهر',
                               _prayerTimes == null ? "" :
                               _formatTime(_prayerTimes!.dhuhr).replaceAll('PM', "م"),
                               "images/1.png",
-                              Checkbox(
+        Transform.scale(
+        scale: 1.3,
+        child:Checkbox(
+            shape: RoundedRectangleBorder(
+              borderRadius: BorderRadius.circular(2.0),
+            ),
+            side: MaterialStateBorderSide.resolveWith(
+                  (states) => BorderSide(width: 1.0, color:buttonColor),
+            ),
                                   activeColor: buttonColor,
                                   checkColor: Colors.white,
                                   value: prayer.prayer5,
                                   onChanged: (value) {
-                                    if (FirebaseAuth.instance.currentUser ==
-                                        null) {
-                                      Get.defaultDialog(
-                                          content: GestureDetector(
-                                            onTap: () {
-                                              Get.to(SignInView());
-                                            },
-                                            child: Container(
-                                              alignment: Alignment.center,
-                                              width: 200,
-                                              height: 50,
-                                              color: buttonColor,
-                                              child: Text(
-                                                'تسجيل الدخول',
-                                                style: TextStyle(
-                                                    color: Colors.white,
-                                                    fontSize: 18),
-                                              ),
-                                            ),
-                                          ),
-                                          title:
-                                          '"لا يمكن حفظ المعلومات", "لحفظ المعلومات برجاء تسجيل الدخول"',
-                                          backgroundColor: Colors.white);
-                                    } else {
+
                                       prayer.prayer5 = value!;
                                       _updateCalculation(context);
-                                    }
+
                                   }),
+                            ),
                             ),
                             SlahBox(
                               'العصر',
                               _prayerTimes == null ? "" :
                               _formatTime(_prayerTimes!.asr).replaceAll('PM', "م"),
-                              "images/Union (1).png",
-                              Checkbox(
+                              "images/Illustrator (1).png",
+        Transform.scale(
+        scale: 1.3,
+        child:  Checkbox(
+            shape: RoundedRectangleBorder(
+              borderRadius: BorderRadius.circular(2.0),
+            ),
+            side: MaterialStateBorderSide.resolveWith(
+                  (states) => BorderSide(width: 1.0, color:buttonColor),
+            ),
                                   activeColor: buttonColor,
                                   checkColor: Colors.white,
                                   value: prayer.prayer6,
                                   onChanged: (value) {
-                                    if (FirebaseAuth.instance.currentUser ==
-                                        null) {
-                                      Get.defaultDialog(
-                                          content: GestureDetector(
-                                            onTap: () {
-                                              Get.to(SignInView());
-                                            },
-                                            child: Container(
-                                              alignment: Alignment.center,
-                                              width: 200,
-                                              height: 50,
-                                              color: buttonColor,
-                                              child: Text(
-                                                'تسجيل الدخول',
-                                                style: TextStyle(
-                                                    color: Colors.white,
-                                                    fontSize: 18),
-                                              ),
-                                            ),
-                                          ),
-                                          title:
-                                          '"لا يمكن حفظ المعلومات", "لحفظ المعلومات برجاء تسجيل الدخول"',
-                                          backgroundColor: Colors.white);
-                                    } else {
+
                                       prayer.prayer6 = value!;
                                       _updateCalculation(context);
-                                    }
+
                                   }),
-                            ),
+                            ),),
                             SlahBox(
                                 'المغرب',
                                 _prayerTimes == null ? "" :
                                 _formatTime(_prayerTimes!.maghrib).replaceAll('PM', "م"),
-                                "images/Illustrator (2).png",
-                                Checkbox(
-                                    activeColor: buttonColor,
+                                "icons/Illustrator.png",
+        Transform.scale(
+        scale: 1.3,
+        child: Checkbox(
+            shape: RoundedRectangleBorder(
+              borderRadius: BorderRadius.circular(2.0),
+            ),
+            side: MaterialStateBorderSide.resolveWith(
+                  (states) => BorderSide(width: 1.0, color:buttonColor),
+            ),        activeColor: buttonColor,
                                     checkColor: Colors.white,
                                     value: prayer.prayer8,
                                     onChanged: (value) {
-                                      if (FirebaseAuth.instance.currentUser ==
-                                          null) {
-                                        Get.defaultDialog(
-                                            content: GestureDetector(
-                                              onTap: () {
-                                                Get.to(SignInView());
-                                              },
-                                              child: Container(
-                                                alignment: Alignment.center,
-                                                width: 200,
-                                                height: 50,
-                                                color: buttonColor,
-                                                child: Text(
-                                                  'تسجيل الدخول',
-                                                  style: TextStyle(
-                                                      color: Colors.white,
-                                                      fontSize: 18),
-                                                ),
-                                              ),
-                                            ),
-                                            title:
-                                            '"لا يمكن حفظ المعلومات", "لحفظ المعلومات برجاء تسجيل الدخول"',
-                                            backgroundColor: Colors.white);
-                                      }else {
+                                      // if (FirebaseAuth.instance.currentUser ==
+                                      //     null) {
+                                      //   Get.defaultDialog(
+                                      //       content: GestureDetector(
+                                      //         onTap: () {
+                                      //           Get.to(SignInView());
+                                      //         },
+                                      //         child: Container(
+                                      //           alignment: Alignment.center,
+                                      //           width: 200,
+                                      //           height: 50,
+                                      //           color: buttonColor,
+                                      //           child: Text(
+                                      //             'تسجيل الدخول',
+                                      //             style: TextStyle(
+                                      //                 color: Colors.white,
+                                      //                 fontSize: 18),
+                                      //           ),
+                                      //         ),
+                                      //       ),
+                                      //       title:
+                                      //       '"لا يمكن حفظ المعلومات", "لحفظ المعلومات برجاء تسجيل الدخول"',
+                                      //       backgroundColor: Colors.white);
+                                      // }else {
                                         prayer.prayer8 = value!;
                                         _updateCalculation(context);
-                                      }
+
                                     })),
+                            ),
                             SlahBox(
                                 'العشاء',
                                 _prayerTimes == null ? "":
                                 _formatTime(_prayerTimes!.isha).replaceAll('PM', "م"),
-                                "images/Illustrator (1).png",
-                                Checkbox(
+                                "images/Illustrator (2).png",
+        Transform.scale(
+        scale: 1.3,
+        child: Checkbox(
+            shape: RoundedRectangleBorder(
+              borderRadius: BorderRadius.circular(2.0),
+            ),
+            side: MaterialStateBorderSide.resolveWith(
+                  (states) => BorderSide(width: 1.0, color:buttonColor),
+            ),
                                     activeColor: buttonColor,
                                     checkColor: Colors.white,
                                     value: prayer.prayer10,
                                     onChanged: (value) {
-                                      if (FirebaseAuth.instance.currentUser ==
-                                          null) {
-                                        Get.defaultDialog(
-                                            content: GestureDetector(
-                                              onTap: () {
-                                                Get.to(SignInView());
-                                              },
-                                              child: Container(
-                                                alignment: Alignment.center,
-                                                width: 200,
-                                                height: 50,
-                                                color: buttonColor,
-                                                child: Text(
-                                                  'تسجيل الدخول',
-                                                  style: TextStyle(
-                                                      color: Colors.white,
-                                                      fontSize: 18),
-                                                ),
-                                              ),
-                                            ),
-                                            title:
-                                            '"لا يمكن حفظ المعلومات", "لحفظ المعلومات برجاء تسجيل الدخول"',
-                                            backgroundColor: Colors.white);
-                                      }else {
+                                      // if (FirebaseAuth.instance.currentUser ==
+                                      //     null) {
+                                      //   Get.defaultDialog(
+                                      //       content: GestureDetector(
+                                      //         onTap: () {
+                                      //           Get.to(SignInView());
+                                      //         },
+                                      //         child: Container(
+                                      //           alignment: Alignment.center,
+                                      //           width: 200,
+                                      //           height: 50,
+                                      //           color: buttonColor,
+                                      //           child: Text(
+                                      //             'تسجيل الدخول',
+                                      //             style: TextStyle(
+                                      //                 color: Colors.white,
+                                      //                 fontSize: 18),
+                                      //           ),
+                                      //         ),
+                                      //       ),
+                                      //       title:
+                                      //       '"لا يمكن حفظ المعلومات", "لحفظ المعلومات برجاء تسجيل الدخول"',
+                                      //       backgroundColor: Colors.white);
+                                      // }else {
                                         prayer.prayer10 = value!;
                                         _updateCalculation(context);
-                                      }
-                                    })),
+
+                                    })),)
                           ],
                         ),
-                  SizedBox(
-                    height: Get.height * 0.03,
-                  ),
+
                   TextButton(
                     onPressed: () {},
                     child: TextButton(
                       onPressed: () {
-                        if (FirebaseAuth.instance.currentUser ==
-                            null) {
-                          Get.defaultDialog(
-                              content: GestureDetector(
-                                onTap: () {
-                                  Get.to(SignInView());
-                                },
-                                child: Container(
-                                  alignment: Alignment.center,
-                                  width: 200,
-                                  height: 50,
-                                  color: buttonColor,
-                                  child: Text(
-                                    'تسجيل الدخول',
-                                    style: TextStyle(
-                                        color: Colors.white,
-                                        fontSize: 18),
-                                  ),
-                                ),
-                              ),
-                              title:
-                              '"لا يمكن عرض الاهداف", "لحفظ المعلومات برجاء تسجيل الدخول"',
-                              backgroundColor: Colors.white);
-                        } else {
+                        // if (FirebaseAuth.instance.currentUser ==
+                        //     null) {
+                        //   Get.defaultDialog(
+                        //       content: GestureDetector(
+                        //         onTap: () {
+                        //           Get.to(SignInView());
+                        //         },
+                        //         child: Container(
+                        //           alignment: Alignment.center,
+                        //           width: 200,
+                        //           height: 50,
+                        //           color: buttonColor,
+                        //           child: Text(
+                        //             'تسجيل الدخول',
+                        //             style: TextStyle(
+                        //                 color: Colors.white,
+                        //                 fontSize: 18),
+                        //           ),
+                        //         ),
+                        //       ),
+                        //       title:
+                        //       '"لا يمكن عرض الاهداف", "لحفظ المعلومات برجاء تسجيل الدخول"',
+                        //       backgroundColor: Colors.white);
+                        // } else {
                           PersistentNavBarNavigator.pushNewScreen(
                             context,
                             screen: const DailyGoals(),
@@ -722,22 +672,24 @@ class _StartUpState extends State<StartUp> {
                             pageTransitionAnimation:
                                 PageTransitionAnimation.cupertino,
                           );
-                        }
+
                       },
                       child: Text(
+
                         textDirection: TextDirection.rtl,
                         'عرض باقي اهداف اليوم',
-                        style: TextStyle(
-                          fontSize: 20,
-                          fontWeight: FontWeight.bold,
-                          color: buttonColor,
+                        style: GoogleFonts.almarai(
                           decoration: TextDecoration.underline,
-                        ),
+                          fontWeight: FontWeight.bold,
+                          fontSize: 24,
+                          color: buttonColor,
+
+                        )
                       ),
                     ),
                   ),
                   Container(
-                    margin: EdgeInsets.all(15),
+                    margin: EdgeInsets.only(left: 10,right: 10,bottom: 10),
                     alignment: Alignment.topRight,
                     child: Text(
                       textDirection: TextDirection.rtl,

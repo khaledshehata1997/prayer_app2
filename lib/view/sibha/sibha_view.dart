@@ -138,9 +138,10 @@ class ChildSibhaView extends State<SibhaView> {
                   )
                   ],
                 ),
+                SizedBox(height: Get.height*.05,),
 
-                SizedBox(height: Get.height*.2,),
-
+                Image.asset('icons/sp7a.png'),
+                SizedBox(height: Get.height*.05,),
                 Text('عدد التسبيحات',style: TextStyle(
                   fontSize: 40,fontWeight: FontWeight.bold
                 ),),
@@ -150,7 +151,7 @@ class ChildSibhaView extends State<SibhaView> {
                   fontSize: 60,fontWeight: FontWeight.bold,
                   color: buttonColor
                 ),),
-                SizedBox(height: Get.height*.08,),
+                SizedBox(height: Get.height*.035,),
                 Row(
                   mainAxisAlignment: MainAxisAlignment.spaceAround,
                   children: [

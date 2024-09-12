@@ -25,21 +25,10 @@ class _SplashViewState extends State<SplashView> {
   Widget build(BuildContext context) {
     return Scaffold(
       body: Container(
+        width: Get.width,
+          height: Get.height,
           color: Colors.white,
-          child: Column(
-            mainAxisAlignment: MainAxisAlignment.center,
-            children: [
-              Image.asset('images/prayer.png'),
-              SizedBox(
-                height: Get.height * .05,
-              ),
-
-              const Text(
-                'جميع الحقوق محفوظه',
-                style: TextStyle(color: Colors.black,fontSize: 20 ),
-              ),
-            ],
-          )),
+          child: Image.asset('icons/Splash.png',fit: BoxFit.cover,)),
     );
   }
 }
