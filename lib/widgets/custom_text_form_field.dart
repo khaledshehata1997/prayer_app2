@@ -1,16 +1,19 @@
 import 'package:flutter/material.dart';
 import 'package:get/get.dart';
 
+import '../constants.dart';
+
 class CustomTextFormField extends StatefulWidget {
  String? hint='';
  var controller;
  var onChanged;
  var scure;
+ var isPassword;
  var txt1;
  var txt2;
  void Function(String?)? onSaved;
 
- CustomTextFormField({this.onChanged,this.controller,this.hint,this.scure=false,this.txt1,this.txt2,this.onSaved});
+ CustomTextFormField({this.onChanged,this.controller,this.hint,this.scure=false,this.txt1,this.txt2,this.onSaved,this.isPassword=false});
 
   @override
   State<CustomTextFormField> createState() => _CustomTextFormFieldState();
@@ -20,9 +23,9 @@ class _CustomTextFormFieldState extends State<CustomTextFormField> {
   @override
   Widget build(BuildContext context) {
     return Container(
-      height: Get.height*.05,
+      height: Get.height*.06,
       child: Padding(
-        padding: EdgeInsets.symmetric(horizontal: 5),
+        padding: const EdgeInsets.symmetric(horizontal: 5),
         child: Directionality(
           textDirection: TextDirection.rtl,
           child: TextFormField(
@@ -40,18 +43,28 @@ class _CustomTextFormFieldState extends State<CustomTextFormField> {
               return null;
             },
             decoration: InputDecoration(
-              suffixIcon: widget.scure==true?GestureDetector(
+              suffixIcon:widget.isPassword?GestureDetector(
                   onTap: (){
                     setState(() {
                       widget.scure=!widget.scure;
                     });
                   },
-                  child: Icon(Icons.remove_red_eye_outlined)):null,
+                  child: widget.scure? const Icon(Icons.visibility_off_outlined):const Icon(Icons.visibility_outlined)):null,
+
+              // suffixIcon:  widget.scure==true?GestureDetector(
+              //     onTap: (){
+              //       setState(() {
+              //         widget.scure=!widget.scure;
+              //       });
+              //     },
+              //     child: const Icon(Icons.visibility_off_outlined)):null,
+                
                 hintText: '${widget.hint}',
                 enabledBorder: OutlineInputBorder(
                     borderRadius: BorderRadius.circular(10)
                 ),
               focusedBorder: OutlineInputBorder(
+                borderSide: BorderSide(color: buttonColor,width: 2),
                   borderRadius: BorderRadius.circular(10)
               ),
             ),

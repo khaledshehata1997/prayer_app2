@@ -29,9 +29,8 @@ class _HomeViewState extends State<HomeView> {
   List<PersistentBottomNavBarItem> _navBarsItems() {
     return [
       PersistentBottomNavBarItem(
-        activeColorPrimary: buttonColor
-        ,
-        inactiveColorPrimary: Colors.grey,
+        // activeColorPrimary: buttonColor,
+        // inactiveColorPrimary: Colors.grey,
         icon: Icon(Icons.home_outlined, color: Colors.blue[900],),
         contentPadding: 2,
         title: 'رئيسيه',
@@ -43,7 +42,7 @@ class _HomeViewState extends State<HomeView> {
         title: 'القران',
       ),
       PersistentBottomNavBarItem(
-        icon: Icon(FlutterIslamicIcons.tasbih2, color: Colors.blue[900],),
+        icon: Icon(FlutterIslamicIcons.tasbih2, color: grayColor,),
         contentPadding: 2,
         title: 'الأذكار',
 

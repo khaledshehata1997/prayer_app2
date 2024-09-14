@@ -60,164 +60,174 @@ class _SignUpViewState extends State<SignInView> {
   Widget build(BuildContext context) {
     return Scaffold(
       body: SafeArea(
-        child: Container(
-          margin: EdgeInsets.only(bottom: 50),
-          width: MediaQuery.of(context).size.width,
-          child: SingleChildScrollView(
-            child: Form(
-              key: formState,
-              child: Column(
-                children: [
-                  Container(
-                      margin: EdgeInsets.only(top: 40),
-                      width: Get.width * .35,
-                      height: Get.height * .18,
+        child: Padding(
+          padding: EdgeInsets.symmetric(horizontal: 5),
+          child: Container(
+            margin: EdgeInsets.only(bottom: 50),
+            width: MediaQuery.of(context).size.width,
+            child: SingleChildScrollView(
+              child: Form(
+                key: formState,
+                child: Column(
+                  children: [
+                    Container(
+                        margin: EdgeInsets.only(top: 40),
+                        width: Get.width * .35,
+                        height: Get.height * .18,
+                        alignment: Alignment.center,
+                        child: Image.asset('icons/Vector.png')),
+                    SizedBox(height: Get.height*.04),
+                    CustomText(
+                      text: 'مرحبا بعودتك',
+                      size: 24,
+                      isBold: true,
                       alignment: Alignment.center,
-                      child: Image.asset('icons/Vector.png')),
-                  SizedBox(height: Get.height*.04),
-                  CustomText(
-                    text: 'مرحبا بعودتك',
-                    size: 24,
-                    isBold: true,
-                    alignment: Alignment.center,
-                  ),
+                    ),
 
-                  SizedBox(height: Get.height*.04),
-                  CustomText(
-                    text: 'البريد الالكتروني',
-                    size: 18,
-                    isBold: false,
-                    alignment: Alignment.topRight,
-                  ),
-                  CustomTextFormField(
-                    controller: email,
-                    onSaved: (val){
-                      myEmail = val!;
-                    },
-                    onChanged: () {},
-                    hint: '',
-                    scure: false,
-                    txt1: "البريد الألكتروني لا يمكن ان يكون اكبر من 100 حرف",
-                    txt2: "البريد الألكتروني لا يمكن ان يكون اقل من 4 احرف",
-                  ),
-                  SizedBox(height: Get.height*.025),
-
-                  CustomText(
-                    text: ' كلمة السر',
-                    size: 18,
-                    isBold: false,
-                    alignment: Alignment.topRight,
-                  ),
-                  CustomTextFormField(
-                    txt1:"كلمة السر لا يمكن ان تكون اكبر من 100 رقم",
-                    txt2: "كلمة السر لا يمكن ان تكون اصغر من 4 ارقام",
-                    controller: pass,
-                    onSaved: (val){
-                      myPassword = val!;
-                    },
-                    onChanged: () {},
-                    hint: '',
-                    scure: true,
-                  ),
-                  GestureDetector(
-                    onTap: (){
-                      Get.to(ResetPasswordView());
-                    },
-                    child: CustomText(
-                      text: ' هل نسيت كلمة السر؟',
+                    SizedBox(height: Get.height*.06),
+                    CustomText(
+                      text: 'البريد الالكتروني',
                       size: 18,
                       isBold: false,
                       alignment: Alignment.topRight,
                     ),
-                  ),
-
-                  GestureDetector(
-                    onTap: () async{
-                      var user =  await signIn();
-                      if(user != null && FirebaseAuth.instance.currentUser!.emailVerified){
-                       Get.offAll(const HomeView());
-                      }else{
-                        _isLoading = false;
-                        setState(() {
-                        });
-                      }
-                    },
-                    child: Container(
-                      alignment: Alignment.center,
-                      child: Text(
-                        ' تسجيل الدخول',
-                        style: TextStyle(
-                            fontSize: 20,
-                            fontWeight: FontWeight.bold,
-                            color: Colors.white),
-                      ),
-                      decoration: BoxDecoration(
-                          color:buttonColor,
-                          borderRadius: BorderRadius.circular(10)),
-                      margin: EdgeInsets.only(left: 15, right: 15, top: 20),
-                      width: MediaQuery.of(context).size.width,
-                      height: 60,
+                    SizedBox(height: Get.height*.01),
+                    CustomTextFormField(
+                      controller: email,
+                      onSaved: (val){
+                        myEmail = val!;
+                      },
+                      onChanged: () {},
+                      hint: '',
+                      scure: false,
+                      txt1: "البريد الألكتروني لا يمكن ان يكون اكبر من 100 حرف",
+                      txt2: "البريد الألكتروني لا يمكن ان يكون اقل من 4 احرف",
                     ),
-                  ),
-                  SizedBox(height: Get.height*.016),
+                    SizedBox(height: Get.height*.025),
 
-                  Row(
-                    mainAxisAlignment: MainAxisAlignment.center,
-                    children: [
-
-                      GestureDetector(
-                        onTap: (){
-                          Get.to(SignUpView());
-                        },
-                        child: CustomText(
-                          lineUnderText: true,
-                          text: ' انشاء حساب',
-                          size: 18,
-                          isBold: true,
-                          alignment: Alignment.topRight,
-                        ),
-                      ),
-                      CustomText(
-                        text: ' ليس لديك حساب ؟',
-                        size: 17,
+                    CustomText(
+                      text: ' كلمة السر',
+                      size: 18,
+                      isBold: false,
+                      alignment: Alignment.topRight,
+                    ),
+                    SizedBox(height: Get.height*.01),
+                    CustomTextFormField(
+                      isPassword: true,
+                      txt1:"كلمة السر لا يمكن ان تكون اكبر من 100 رقم",
+                      txt2: "كلمة السر لا يمكن ان تكون اصغر من 4 ارقام",
+                      controller: pass,
+                      onSaved: (val){
+                        myPassword = val!;
+                      },
+                      onChanged: () {},
+                      hint: '',
+                      scure: true,
+                    ),
+                    GestureDetector(
+                      onTap: (){
+                        Get.to(ResetPasswordView());
+                      },
+                      child: CustomText(
+                        text: ' هل نسيت كلمة السر؟',
+                        size: 18,
                         isBold: false,
                         alignment: Alignment.topRight,
                       ),
-                    ],
-                  ),
-                  // SizedBox(height: Get.height*.02),
-                  // Divider(
-                  //   height: 5,
-                  // ),
-                  // SizedBox(height: Get.height*.02),
-                  // CustomText(
-                  //   text: 'او',
-                  //   size: 17,
-                  //   isBold: false,
-                  //   alignment: Alignment.center,
-                  // ),
-                  // GestureDetector(
-                  //   onTap: () {
-                  //     Get.to(const PhoneSignIn());
-                  //   },
-                  //   child: Container(
-                  //     alignment: Alignment.center,
-                  //     child: Text(
-                  //       ' تسجيل الدخول برقم الهاتف',
-                  //       style: TextStyle(
-                  //           fontSize: 20,
-                  //           fontWeight: FontWeight.bold,
-                  //           color: buttonColor),
-                  //     ),
-                  //     decoration: BoxDecoration(
-                  //         color:Colors.white,
-                  //         borderRadius: BorderRadius.circular(10)),
-                  //     margin: EdgeInsets.only(left: 15, right: 15, top: 20),
-                  //     width: MediaQuery.of(context).size.width,
-                  //     height: 60,
-                  //   ),
-                  // ),
-                ],
+                    ),
+
+                    Padding(
+                      padding: const EdgeInsets.symmetric(horizontal: 5),
+                      child: GestureDetector(
+                        onTap: () async{
+                          var user =  await signIn();
+                          if(user != null && FirebaseAuth.instance.currentUser!.emailVerified){
+                           Get.offAll(const HomeView());
+                          }else{
+                            _isLoading = false;
+                            setState(() {
+                            });
+                          }
+                        },
+                        child: Container(
+                          alignment: Alignment.center,
+                          child: Text(
+                            ' تسجيل الدخول',
+                            style: TextStyle(
+                                fontSize: 20,
+                                fontWeight: FontWeight.bold,
+                                color: Colors.white),
+                          ),
+                          decoration: BoxDecoration(
+                              color:buttonColor,
+                              borderRadius: BorderRadius.circular(10)),
+                          margin: EdgeInsets.only( top: 20),
+                          width: MediaQuery.of(context).size.width,
+                          height: 60,
+                        ),
+                      ),
+                    ),
+                    SizedBox(height: Get.height*.016),
+
+                    Row(
+                      mainAxisAlignment: MainAxisAlignment.center,
+                      children: [
+
+                        GestureDetector(
+                          onTap: (){
+                            Get.to(SignUpView());
+                          },
+                          child: CustomText(
+                            color: buttonColor,
+                            lineUnderText: true,
+                            text: ' انشاء حساب',
+                            size: 18,
+                            isBold: true,
+                            alignment: Alignment.topRight,
+                          ),
+                        ),
+                        CustomText(
+                          text: ' ليس لديك حساب ؟',
+                          size: 17,
+                          isBold: false,
+                          alignment: Alignment.topRight,
+                        ),
+                      ],
+                    ),
+                    // SizedBox(height: Get.height*.02),
+                    // Divider(
+                    //   height: 5,
+                    // ),
+                    // SizedBox(height: Get.height*.02),
+                    // CustomText(
+                    //   text: 'او',
+                    //   size: 17,
+                    //   isBold: false,
+                    //   alignment: Alignment.center,
+                    // ),
+                    // GestureDetector(
+                    //   onTap: () {
+                    //     Get.to(const PhoneSignIn());
+                    //   },
+                    //   child: Container(
+                    //     alignment: Alignment.center,
+                    //     child: Text(
+                    //       ' تسجيل الدخول برقم الهاتف',
+                    //       style: TextStyle(
+                    //           fontSize: 20,
+                    //           fontWeight: FontWeight.bold,
+                    //           color: buttonColor),
+                    //     ),
+                    //     decoration: BoxDecoration(
+                    //         color:Colors.white,
+                    //         borderRadius: BorderRadius.circular(10)),
+                    //     margin: EdgeInsets.only(left: 15, right: 15, top: 20),
+                    //     width: MediaQuery.of(context).size.width,
+                    //     height: 60,
+                    //   ),
+                    // ),
+                  ],
+                ),
               ),
             ),
           ),
