@@ -24,31 +24,37 @@ class HomeView extends StatefulWidget {
 }
 
 class _HomeViewState extends State<HomeView> {
-  final _pageNo = [  const StartUp(), const Quran(),Azkar(),const Prayer()];
+  final List<Widget> _pageNo = [  const StartUp(), const Quran(),const Azkar(),const Prayer()];
   final PersistentTabController _controller = PersistentTabController(initialIndex: 0);
   List<PersistentBottomNavBarItem> _navBarsItems() {
     return [
       PersistentBottomNavBarItem(
-        // activeColorPrimary: buttonColor,
-        // inactiveColorPrimary: Colors.grey,
-        icon: Icon(Icons.home_outlined, color: Colors.blue[900],),
+        activeColorPrimary: buttonColor,
+        inactiveColorPrimary: Colors.grey,
+        icon: Icon(Icons.home_outlined,),
         contentPadding: 2,
         title: 'رئيسيه',
       ),
 
       PersistentBottomNavBarItem(
-        icon: Icon(FlutterIslamicIcons.quran2, color: Colors.blue[900],),
+        activeColorPrimary: buttonColor,
+        inactiveColorPrimary: Colors.grey,
+        icon: Icon(FlutterIslamicIcons.quran2),
         contentPadding: 2,
         title: 'القران',
       ),
       PersistentBottomNavBarItem(
-        icon: Icon(FlutterIslamicIcons.tasbih2, color: grayColor,),
+        activeColorPrimary: buttonColor,
+        inactiveColorPrimary: Colors.grey,
+        icon: const Icon(FlutterIslamicIcons.tasbih2,),
         contentPadding: 2,
         title: 'الأذكار',
 
       ),
       PersistentBottomNavBarItem(
-        icon: Icon(FlutterIslamicIcons.prayingPerson, color: Colors.blue[900],),
+        activeColorPrimary: buttonColor,
+        inactiveColorPrimary: Colors.grey,
+        icon: const Icon(FlutterIslamicIcons.prayingPerson,),
         contentPadding: 2,
         title: 'الصلاه',
       ),
@@ -59,19 +65,25 @@ class _HomeViewState extends State<HomeView> {
   Widget build(BuildContext context) {
     return Center(
       child: PersistentTabView(
-        padding: EdgeInsets.all(8),
         context,
+        controller: _controller,
         screens: _pageNo,
         items: _navBarsItems(),
-        controller: _controller,
-        backgroundColor: Colors.white,
         confineToSafeArea: true,
+
+        onItemSelected: (value) {
+
+        },
+        padding: EdgeInsets.all(5),
+// margin: EdgeInsets.all(5),
+        backgroundColor: Colors.white,
+
         handleAndroidBackButtonPress: true,
         resizeToAvoidBottomInset: true,
         decoration: NavBarDecoration(
           borderRadius: BorderRadius.circular(10.0),
         ),
-        navBarStyle: NavBarStyle.style6,
+        navBarStyle: NavBarStyle.style1,
       ),
 
     );
