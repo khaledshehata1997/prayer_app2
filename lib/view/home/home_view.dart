@@ -70,20 +70,26 @@ class _HomeViewState extends State<HomeView> {
         screens: _pageNo,
         items: _navBarsItems(),
         confineToSafeArea: true,
-
-        onItemSelected: (value) {
-
-        },
-        padding: EdgeInsets.all(5),
-// margin: EdgeInsets.all(5),
+        // padding: const EdgeInsets.all(5),
         backgroundColor: Colors.white,
+        // bottomScreenMargin: 20,
 
         handleAndroidBackButtonPress: true,
         resizeToAvoidBottomInset: true,
         decoration: NavBarDecoration(
-          borderRadius: BorderRadius.circular(10.0),
+          colorBehindNavBar: Colors.white.withOpacity(0.9),
+          boxShadow: [
+            BoxShadow(
+                color: Colors.black.withOpacity(0.1),
+                offset: const Offset(0, 0),
+                blurRadius: 4,
+                spreadRadius: 1
+            )
+          ],
+          borderRadius: BorderRadius.circular(20.0),
         ),
         navBarStyle: NavBarStyle.style1,
+        navBarHeight: 70,
       ),
 
     );
