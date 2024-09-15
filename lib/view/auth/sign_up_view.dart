@@ -106,280 +106,286 @@ class _SignUpViewState extends State<SignUpView> {
       body: SafeArea(
         child: Padding(
           padding: EdgeInsets.symmetric(horizontal: 5),
-          child: Form(
-            key: formState,
-            child: Container(
-              margin: EdgeInsets.only(bottom: 50),
-              width: MediaQuery.of(context).size.width,
-              child: SingleChildScrollView(
-                child: Column(
-                  children: [
-                    Container(
-                        margin: EdgeInsets.only(top: 40),
-                        width: Get.width * .25,
-                        height: Get.height * .1,
-                        alignment: Alignment.center,
-                        child: Image.asset('icons/Vector.png')),
-                    CustomText(
-                      text: 'مرحبا بك',
-                      size: 22,
-                      isBold: true,
-                      alignment: Alignment.topRight,
-                    ),
-                    SizedBox(height: Get.height*.01),
-                    CustomText(
-                      text: 'من فضلك قم بادخال البيانات التاليه',
-                      size: 18,
-                      isBold: true,color:grayColor,
-                      alignment: Alignment.topRight,
-                    ),
-                    CustomText(
-                      text: 'الاسم',
-                      size: 18,
-                      isBold: false,
-                      alignment: Alignment.topRight,
-                    ),
-                    SizedBox(height: Get.height*0.01,),
-                    CustomTextFormField(
-                      onSaved: (val){
-                        Name = val;
-                      },
-                      controller: name,
-                      txt1: "الاسم لا يمكن ان يكون اكبر من 100 حرف",
-                      txt2: "الاسم لا يمكن ان يكون اصغر من 4 احرف",
-                      onChanged: () {},
-                      hint: '',
-                      scure: false,
-                    ),
-                    SizedBox(height: Get.height*.016),
-                    CustomText(
-                      text: 'البريد الالكتروني',
-                      size: 18,
-                      isBold: false,
-                      alignment: Alignment.topRight,
-                    ),
-                    SizedBox(height: Get.height*0.01,),
-          
-                    CustomTextFormField(
-                      onSaved: (val){
-                        myemail = val;
-                      },
-                      txt1: "البريد الألكتروني لا يمكن ان يكون اكبر من 100 حرف",
-                      txt2: "البريد الألكتروني لا يمكن ان يكون اقل من 4 احرف",
-                      controller: email,
-                      onChanged: () {},
-                      hint: '',
-                      scure: false,
-                    ),
-                    SizedBox(height: Get.height*.016),
-          
-                    CustomText(
-                      text: 'رقم الهاتف',
-                      size: 18,
-                      isBold: false,
-                      alignment: Alignment.topRight,
-                    ),
-                    SizedBox(height: Get.height*0.01,),
-          
-                    CustomTextFormField(
-                      controller: phone,
-                      onSaved: (val){
-                        myphone = val;
-                      },
-                      txt1: "رقم الهاتف غير صحيح",
-                      txt2: "رقم الهاتف غير صحيح",
-                      onChanged: () {},
-                      hint: '',
-                      scure: false,
-                    ),
-                    SizedBox(height: Get.height*.016),
-          
-                    CustomText(
-                      text: 'النوع',
-                      size: 18,
-                      isBold: false,
-                      alignment: Alignment.topRight,
-                    ),
-                    SizedBox(height: Get.height*0.01,),
-          
-                    Row(
-                      mainAxisAlignment: MainAxisAlignment.spaceAround,
+          child: Stack(
+            children: [
+              Image.asset('images/back ground.jpeg',
+                fit: BoxFit.cover,),
+              Form(
+                key: formState,
+                child: Container(
+                  margin: EdgeInsets.only(bottom: 50),
+                  width: MediaQuery.of(context).size.width,
+                  child: SingleChildScrollView(
+                    child: Column(
                       children: [
-                        InkWell(
-                          onTap: (){
-                            boolNotifier.setMale(!boolNotifier.male);
-                            if(boolNotifier.male&&boolNotifier.female){
-                              boolNotifier.setFemale(false);
+                        Container(
+                            margin: EdgeInsets.only(top: 40),
+                            width: Get.width * .25,
+                            height: Get.height * .1,
+                            alignment: Alignment.center,
+                            child: Image.asset('icons/Vector.png')),
+                        CustomText(
+                          text: 'مرحبا بك',
+                          size: 22,
+                          isBold: true,
+                          alignment: Alignment.topRight,
+                        ),
+                        SizedBox(height: Get.height*.01),
+                        CustomText(
+                          text: 'من فضلك قم بادخال البيانات التاليه',
+                          size: 18,
+                          isBold: true,color:grayColor,
+                          alignment: Alignment.topRight,
+                        ),
+                        CustomText(
+                          text: 'الاسم',
+                          size: 18,
+                          isBold: false,
+                          alignment: Alignment.topRight,
+                        ),
+                        SizedBox(height: Get.height*0.01,),
+                        CustomTextFormField(
+                          onSaved: (val){
+                            Name = val;
+                          },
+                          controller: name,
+                          txt1: "الاسم لا يمكن ان يكون اكبر من 100 حرف",
+                          txt2: "الاسم لا يمكن ان يكون اصغر من 4 احرف",
+                          onChanged: () {},
+                          hint: '',
+                          scure: false,
+                        ),
+                        SizedBox(height: Get.height*.016),
+                        CustomText(
+                          text: 'البريد الالكتروني',
+                          size: 18,
+                          isBold: false,
+                          alignment: Alignment.topRight,
+                        ),
+                        SizedBox(height: Get.height*0.01,),
+
+                        CustomTextFormField(
+                          onSaved: (val){
+                            myemail = val;
+                          },
+                          txt1: "البريد الألكتروني لا يمكن ان يكون اكبر من 100 حرف",
+                          txt2: "البريد الألكتروني لا يمكن ان يكون اقل من 4 احرف",
+                          controller: email,
+                          onChanged: () {},
+                          hint: '',
+                          scure: false,
+                        ),
+                        SizedBox(height: Get.height*.016),
+
+                        CustomText(
+                          text: 'رقم الهاتف',
+                          size: 18,
+                          isBold: false,
+                          alignment: Alignment.topRight,
+                        ),
+                        SizedBox(height: Get.height*0.01,),
+
+                        CustomTextFormField(
+                          controller: phone,
+                          onSaved: (val){
+                            myphone = val;
+                          },
+                          txt1: "رقم الهاتف غير صحيح",
+                          txt2: "رقم الهاتف غير صحيح",
+                          onChanged: () {},
+                          hint: '',
+                          scure: false,
+                        ),
+                        SizedBox(height: Get.height*.016),
+
+                        CustomText(
+                          text: 'النوع',
+                          size: 18,
+                          isBold: false,
+                          alignment: Alignment.topRight,
+                        ),
+                        SizedBox(height: Get.height*0.01,),
+
+                        Row(
+                          mainAxisAlignment: MainAxisAlignment.spaceAround,
+                          children: [
+                            InkWell(
+                              onTap: (){
+                                boolNotifier.setMale(!boolNotifier.male);
+                                if(boolNotifier.male&&boolNotifier.female){
+                                  boolNotifier.setFemale(false);
+                                }
+                              },
+                              child: Container(
+                                alignment: Alignment.center,
+                                width: Get.width*.45,
+                                height: Get.height*.1,
+                                child: Container(
+                                  child: Image.asset('images/male.png'),
+                                  width: 100,
+                                  height: 80,
+                                ),
+                                decoration: BoxDecoration(
+                                    color: boolNotifier.male ? Colors.blue[900] :Colors.grey,
+                                    borderRadius: BorderRadius.circular(15)),
+                              ),
+                            ),
+                            InkWell(
+                              onTap: (){
+                                boolNotifier.setFemale(!boolNotifier.female);
+                                if(boolNotifier.female&&boolNotifier.male) {
+                                  boolNotifier.setMale(false);
+                                }
+                              },
+                              child: Container(
+                                alignment: Alignment.center,
+                                width: Get.width*.45,
+                                height: Get.height*.1,
+                                child: Container(
+                                  child: Image.asset('images/female.png'),
+                                  width: 100,
+                                  height: 80,
+                                ),
+                                decoration: BoxDecoration(
+                                    color: boolNotifier.female ? Colors.blue[900]  :Colors.grey,
+                                    borderRadius: BorderRadius.circular(15)),
+                              ),
+                            ),
+                          ],
+                        ),
+                        if (errorMessage != null)
+                          Padding(
+                            padding: const EdgeInsets.only(top: 10.0),
+                            child: Text(
+                              errorMessage,
+                              style: TextStyle(color: Colors.red),
+                            ),
+                          ),
+                        // Row(
+                        //   mainAxisAlignment: MainAxisAlignment.spaceAround,
+                        //   children: [
+                        //     Row(
+                        //       children: [
+                        //         Checkbox(
+                        //             activeColor: Colors.blue[900],
+                        //             value: boolNotifier.female,
+                        //             onChanged: (val){
+                        //               boolNotifier.setFemale(val!);
+                        //               if(val&&boolNotifier.male){
+                        //                 boolNotifier.setMale(false);
+                        //               }
+                        //             }),
+                        //         Text("انثي",textDirection: TextDirection.rtl,)
+                        //       ],
+                        //     ),
+                        //     Row(
+                        //       children: [
+                        //         Checkbox(
+                        //           activeColor: Colors.blue[900],
+                        //             value: boolNotifier.male,
+                        //             onChanged: (val){
+                        //               boolNotifier.setMale(val!);
+                        //               if(val&&boolNotifier.female){
+                        //                 boolNotifier.setFemale(false);
+                        //               }
+                        //             }),
+                        //         Text("ذكر",textDirection: TextDirection.rtl,)
+                        //       ],
+                        //     ),
+                        //   ],
+                        // ),
+                        SizedBox(height: Get.height*.016),
+
+                        CustomText(
+                          text: ' كلمة السر',
+                          size: 18,
+                          isBold: false,
+                          alignment: Alignment.topRight,
+                        ),
+                        SizedBox(height: Get.height*.01),
+
+                        CustomTextFormField(
+                          controller: pass,
+                          isPassword: true,
+                          onSaved: (val){
+                            password = val;
+                          },
+                          txt1: "كلمة السر لا يمكن ان تكون اكبر من 100 رقم",
+                          txt2: "كلمة السر لا يمكن ان تكون اقل من 4 ارقام",
+                          onChanged: () {},
+                          hint: '',
+                          scure: true,
+                        ),
+                        SizedBox(height: Get.height*.016),
+                        GestureDetector(
+                          onTap: ()async{
+                            errorMessage = boolNotifier.validateSelection();
+                            if (errorMessage == null) {
+                              storeUserData(name.text, email.text);
+                              UserCredential response = await signUp();
+                              setState(() {
+                                FirebaseAuth.instance.currentUser!.sendEmailVerification();
+                              });
+                              Get.to(const Activate());
+                            } else {
+                              ScaffoldMessenger.of(context).showSnackBar(
+                                SnackBar(content: Text(errorMessage!)),
+                              );
                             }
                           },
                           child: Container(
                             alignment: Alignment.center,
-                            width: Get.width*.45,
-                            height: Get.height*.1,
-                            child: Container(
-                              child: Image.asset('images/male.png'),
-                              width: 100,
-                              height: 80,
+                            child: Text(
+                              'إنشاء حساب',
+                              style: TextStyle(
+                                  fontSize: 20,
+                                  fontWeight: FontWeight.bold,
+                                  color: Colors.white),
                             ),
                             decoration: BoxDecoration(
-                                color: boolNotifier.male ? Colors.blue[900] :Colors.grey,
-                                borderRadius: BorderRadius.circular(15)),
+                                color: buttonColor,
+                                borderRadius: BorderRadius.circular(10)),
+                            margin: EdgeInsets.only(left: 5, right: 5, top: 20),
+                            width: MediaQuery.of(context).size.width,
+                            height: 60,
                           ),
                         ),
-                        InkWell(
-                          onTap: (){
-                            boolNotifier.setFemale(!boolNotifier.female);
-                                          if(boolNotifier.female&&boolNotifier.male) {
-                                            boolNotifier.setMale(false);
-                                          }
-                          },
-                          child: Container(
-                            alignment: Alignment.center,
-                            width: Get.width*.45,
-                            height: Get.height*.1,
-                            child: Container(
-                              child: Image.asset('images/female.png'),
-                              width: 100,
-                              height: 80,
+                        SizedBox(height: Get.height*.016),
+
+                        Row(
+                          mainAxisAlignment: MainAxisAlignment.center,
+                          children: [
+
+                            GestureDetector(
+                              onTap: (){
+                                Get.to(SignInView());
+                              },
+                              child: CustomText(
+                                lineUnderText: true,
+                                text: 'تسجيل الدخول',
+                                color: buttonColor,
+                                size: 18,
+                                isBold: true,
+                                alignment: Alignment.topRight,
+                              ),
                             ),
-                            decoration: BoxDecoration(
-                                color: boolNotifier.female ? Colors.blue[900]  :Colors.grey,
-                                borderRadius: BorderRadius.circular(15)),
-                          ),
+                            CustomText(
+                              text: 'لديك حساب بالفعل ؟',
+                              size: 17,
+                              isBold: false,
+                              alignment: Alignment.topRight,
+                            ),
+                          ],
                         ),
+                        SizedBox(height: Get.height*.016),
+
                       ],
                     ),
-                    if (errorMessage != null)
-                      Padding(
-                        padding: const EdgeInsets.only(top: 10.0),
-                        child: Text(
-                          errorMessage,
-                          style: TextStyle(color: Colors.red),
-                        ),
-                      ),
-                    // Row(
-                    //   mainAxisAlignment: MainAxisAlignment.spaceAround,
-                    //   children: [
-                    //     Row(
-                    //       children: [
-                    //         Checkbox(
-                    //             activeColor: Colors.blue[900],
-                    //             value: boolNotifier.female,
-                    //             onChanged: (val){
-                    //               boolNotifier.setFemale(val!);
-                    //               if(val&&boolNotifier.male){
-                    //                 boolNotifier.setMale(false);
-                    //               }
-                    //             }),
-                    //         Text("انثي",textDirection: TextDirection.rtl,)
-                    //       ],
-                    //     ),
-                    //     Row(
-                    //       children: [
-                    //         Checkbox(
-                    //           activeColor: Colors.blue[900],
-                    //             value: boolNotifier.male,
-                    //             onChanged: (val){
-                    //               boolNotifier.setMale(val!);
-                    //               if(val&&boolNotifier.female){
-                    //                 boolNotifier.setFemale(false);
-                    //               }
-                    //             }),
-                    //         Text("ذكر",textDirection: TextDirection.rtl,)
-                    //       ],
-                    //     ),
-                    //   ],
-                    // ),
-                    SizedBox(height: Get.height*.016),
-          
-                    CustomText(
-                      text: ' كلمة السر',
-                      size: 18,
-                      isBold: false,
-                      alignment: Alignment.topRight,
-                    ),
-                    SizedBox(height: Get.height*.01),
-          
-                    CustomTextFormField(
-                      controller: pass,
-                      isPassword: true,
-                      onSaved: (val){
-                        password = val;
-                      },
-                      txt1: "كلمة السر لا يمكن ان تكون اكبر من 100 رقم",
-                      txt2: "كلمة السر لا يمكن ان تكون اقل من 4 ارقام",
-                      onChanged: () {},
-                      hint: '',
-                      scure: true,
-                    ),
-                    SizedBox(height: Get.height*.016),
-                    GestureDetector(
-                      onTap: ()async{
-                        errorMessage = boolNotifier.validateSelection();
-                        if (errorMessage == null) {
-                          storeUserData(name.text, email.text);
-                          UserCredential response = await signUp();
-                          setState(() {
-                            FirebaseAuth.instance.currentUser!.sendEmailVerification();
-                          });
-                          Get.to(const Activate());
-                        } else {
-                          ScaffoldMessenger.of(context).showSnackBar(
-                            SnackBar(content: Text(errorMessage!)),
-                          );
-                        }
-                      },
-                      child: Container(
-                        alignment: Alignment.center,
-                        child: Text(
-                          'إنشاء حساب',
-                          style: TextStyle(
-                              fontSize: 20,
-                              fontWeight: FontWeight.bold,
-                              color: Colors.white),
-                        ),
-                        decoration: BoxDecoration(
-                            color: buttonColor,
-                            borderRadius: BorderRadius.circular(10)),
-                        margin: EdgeInsets.only(left: 5, right: 5, top: 20),
-                        width: MediaQuery.of(context).size.width,
-                        height: 60,
-                      ),
-                    ),
-                    SizedBox(height: Get.height*.016),
-          
-                    Row(
-                      mainAxisAlignment: MainAxisAlignment.center,
-                      children: [
-          
-                        GestureDetector(
-                          onTap: (){
-                            Get.to(SignInView());
-                          },
-                          child: CustomText(
-                            lineUnderText: true,
-                            text: 'تسجيل الدخول',
-                            color: buttonColor,
-                            size: 18,
-                            isBold: true,
-                            alignment: Alignment.topRight,
-                          ),
-                        ),
-                        CustomText(
-                          text: 'لديك حساب بالفعل ؟',
-                          size: 17,
-                          isBold: false,
-                          alignment: Alignment.topRight,
-                        ),
-                      ],
-                    ),
-                    SizedBox(height: Get.height*.016),
-          
-                  ],
+                  ),
                 ),
               ),
-            ),
-          ),
+            ],
+          )
         ),
       ),
     );
