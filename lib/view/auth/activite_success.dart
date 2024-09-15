@@ -36,7 +36,7 @@ class _ActivateSuccessState extends State<ActivateSuccess> {
                     width: Get.width * .25,
                     height: Get.height * .15,
                     alignment: Alignment.center,
-                    child: Image.asset('images/prayer.png')),
+                    child: Image.asset('icons/Vector.png')),
                 CustomText(
                   text: 'مرحبا بك',
                   size: 24,
@@ -51,7 +51,7 @@ class _ActivateSuccessState extends State<ActivateSuccess> {
                     alignment: Alignment.center,
                     child: Image.asset('images/Rectangle.png')),
                 SizedBox(height: Get.height*.04),
-                Text("تم تفعيل الحساب بنجاح!",
+                const Text("تم تفعيل الحساب بنجاح!",
                   textDirection: TextDirection.rtl,
                   style: TextStyle(fontWeight: FontWeight.bold,fontSize: 25),),
                 SizedBox(height: Get.height*.04),

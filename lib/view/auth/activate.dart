@@ -57,7 +57,7 @@ class _ActivateState extends State<Activate> {
                     width: Get.width * .25,
                     height: Get.height * .15,
                     alignment: Alignment.center,
-                    child: Image.asset('images/prayer.png')),
+                    child: Image.asset('icons/Vector.png')),
                 CustomText(
                   text: 'مرحبا بك',
                   size: 24,
