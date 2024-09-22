@@ -512,9 +512,9 @@ class _SabahState extends State<Sabah> {
                   ],
                 ),
               ),
-              SizedBox(
-                height: Get.height * 0.04,
-              ),
+              // SizedBox(
+              //   height: Get.height * 0.04,
+              // ),
               Stack(
                 alignment: Alignment.center,
                 children: [
