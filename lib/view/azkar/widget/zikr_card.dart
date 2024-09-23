@@ -2,6 +2,8 @@ import 'package:flutter/material.dart';
 import 'package:get/get.dart';
 import 'package:get/get_core/src/get_main.dart';
 
+import '../../../constants.dart';
+
 class ZikrCard extends StatefulWidget {
   final String zkr;
   final String text;
@@ -40,15 +42,22 @@ class _ZikrCardState extends State<ZikrCard> {
             ),
             textDirection: TextDirection.rtl,
           ),
+          const SizedBox(height: 8,),
           Row(
             mainAxisAlignment: MainAxisAlignment.spaceBetween,
             children: [
-              IconButton(onPressed: (){
-                setState(() {
-                  widget.counter = widget.count;
-                });
-              }, icon:  Icon(Icons.refresh,size: 40,
-                color: Colors.blue[900],)),
+              Container(
+                decoration:  BoxDecoration(
+                 border: Border.all(width: 1,color:buttonColor ),
+                  shape: BoxShape.circle
+                ),
+                child: IconButton(onPressed: (){
+                  setState(() {
+                    widget.counter = widget.count;
+                  });
+                }, icon:  Icon(Icons.refresh,size: 30,
+                  color: Colors.blue[900],)),
+              ),
               // SizedBox(
               //   height: Get.height * .08,
               // ),
@@ -68,7 +77,7 @@ class _ZikrCardState extends State<ZikrCard> {
                       }
 
                     });
-                  }, icon:  Icon(Icons.remove,size: 40,
+                  }, icon:  Icon(Icons.remove_circle,size: 50,
                 color: Colors.blue[900],))
 
             ],

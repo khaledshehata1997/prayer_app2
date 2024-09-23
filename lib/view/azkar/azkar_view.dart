@@ -104,292 +104,294 @@ class _AzkarState extends State<Azkar> {
             color: Colors.white,
           ),
         ),
-        body: Stack(
-          children: [
-            Container(
-              height: MediaQuery.of(context).size.height,
-              width: MediaQuery.of(context).size.width,
-              //  margin: EdgeInsets.only(left: 2, top: 5, bottom: 5, right: 2),
-              decoration: BoxDecoration(
-                image: DecorationImage(
-                    image: AssetImage('images/back ground.jpeg'),
-                    fit: BoxFit.cover),
-                borderRadius: BorderRadius.circular(1),
-                color: Colors.white,
+        body: SafeArea(
+          child: Stack(
+            children: [
+              Container(
+                height: MediaQuery.of(context).size.height,
+                width: MediaQuery.of(context).size.width,
+                //  margin: EdgeInsets.only(left: 2, top: 5, bottom: 5, right: 2),
+                decoration: BoxDecoration(
+                  image: DecorationImage(
+                      image: AssetImage('images/back ground.jpeg'),
+                      fit: BoxFit.cover),
+                  borderRadius: BorderRadius.circular(1),
+                  color: Colors.white,
+                ),
               ),
-            ),
-            ListView(
-              children: <Widget>[
-                Padding(
-                  padding: const EdgeInsets.only(left: 30,right: 30,top: 45),
-                  child: Row(
-                    mainAxisAlignment: MainAxisAlignment.spaceBetween,
-                    children: [
-                      Row(
-                        children: [
-                          GestureDetector(
-                            onTap: () async {
-                              final userData = await getUserData();
-                              if(FirebaseAuth.instance.currentUser == null){
-                                Get.snackbar("لا يمكن الدخول الي الصفحه الشخصيه", "للدخول الي الصفحه الشخصيه برجاء تسجيل الدخول",
-                                    colorText: Colors.white,snackPosition: SnackPosition.BOTTOM,
-                                    backgroundColor: Colors.blue[900]);
-                                Get.to(SignInView());
-                              }else{
+              ListView(
+                children: <Widget>[
+                  Padding(
+                    padding: const EdgeInsets.only(left: 30,right: 30,top: 15),
+                    child: Row(
+                      mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                      children: [
+                        Row(
+                          children: [
+                            GestureDetector(
+                              onTap: () async {
+                                final userData = await getUserData();
+                                if(FirebaseAuth.instance.currentUser == null){
+                                  Get.snackbar("لا يمكن الدخول الي الصفحه الشخصيه", "للدخول الي الصفحه الشخصيه برجاء تسجيل الدخول",
+                                      colorText: Colors.white,snackPosition: SnackPosition.BOTTOM,
+                                      backgroundColor: Colors.blue[900]);
+                                  Get.to(SignInView());
+                                }else{
+                                  PersistentNavBarNavigator.pushNewScreen(
+                                    context,
+                                    screen:  Profile(username: '${userData['username']}',
+                                      email: '${userData['email']}',),
+                                    withNavBar: true, // OPTIONAL VALUE. True by default.
+                                    pageTransitionAnimation: PageTransitionAnimation.cupertino,
+                                  );
+                                }
+                              },
+                              child: CircleAvatar(
+                                radius: 25,
+                                backgroundColor: Colors.grey.shade400,
+                                child: Image.asset(
+                                  'icons/img_1.png',
+                                  width: 20,
+                                  height: 20,
+                                ),
+                              ),
+                            ),
+                          ],
+                        ),
+                        Row(
+                          children: [
+                            SizedBox(
+                              width: 15,
+                            ),
+                            GestureDetector(
+                              onTap: () {
                                 PersistentNavBarNavigator.pushNewScreen(
                                   context,
-                                  screen:  Profile(username: '${userData['username']}',
-                                    email: '${userData['email']}',),
+                                  screen: const Settings(),
                                   withNavBar: true, // OPTIONAL VALUE. True by default.
                                   pageTransitionAnimation: PageTransitionAnimation.cupertino,
                                 );
-                              }
-                            },
-                            child: CircleAvatar(
-                              radius: 25,
-                              backgroundColor: Colors.grey.shade400,
-                              child: Image.asset(
-                                'icons/img_1.png',
-                                width: 20,
-                                height: 20,
-                              ),
-                            ),
-                          ),
-                        ],
-                      ),
-                      Row(
-                        children: [
-                          SizedBox(
-                            width: 15,
-                          ),
-                          GestureDetector(
-                            onTap: () {
-                              PersistentNavBarNavigator.pushNewScreen(
-                                context,
-                                screen: const Settings(),
-                                withNavBar: true, // OPTIONAL VALUE. True by default.
-                                pageTransitionAnimation: PageTransitionAnimation.cupertino,
-                              );
-                            },
-                            child: CircleAvatar(
-                              radius: 25,
-                              child: Image.asset(
-                                'icons/img.png',
-                                width: 20,
-                                height: 20,
-                              ),
-                              backgroundColor: Colors.grey.shade400,
-                            ),
-                          ),
-                        ],
-                      )
-                    ],
-                  ),
-                ),
-                SizedBox(
-                  height: Get.height * .04,
-                ),
-                Stack(
-                  alignment: Alignment.center,
-                  children: [
-                    Image.asset(
-                      'images/back ground2.jpeg',
-                    ),
-                    Padding(
-                      padding: const EdgeInsets.symmetric(horizontal: 15),
-                      child: Column(
-                        children: [
-                          Container(
-                            alignment: Alignment.center,
-                            child: Text(
-                              ': ذكر اليوم',
-                              style: TextStyle(
-                                  fontSize: 20,
-                                  fontWeight: FontWeight.bold,
-                                  color: Colors.white),
-                            ),
-                          ),
-                          Container(
-                            alignment: Alignment.center,
-                            child: Text(
-                              'لا اله الا انت سبحانك اني كنت من الظالمين',
-                              style: TextStyle(
-                                  fontSize: 17,
-                                  fontWeight: FontWeight.bold,
-                                  color: Colors.white),
-                              textDirection: TextDirection.rtl,
-                            ),
-                          )
-                        ],
-                      ),
-                    )
-                  ],
-                ),
-                Container(
-                    margin: EdgeInsets.all(15),
-                    width: MediaQuery.of(context).size.width * 0.95,
-                    height: Get.height * .8,
-                    child: Directionality(
-                      textDirection: TextDirection.rtl,
-                      child: GridView(
-                        gridDelegate: SliverGridDelegateWithFixedCrossAxisCount(
-                            mainAxisSpacing: 8,
-                            childAspectRatio: 1.25,
-                            crossAxisSpacing: 20,
-                            crossAxisCount: 2),
-                        children: <Widget>[
-                          Container(
-                            decoration: BoxDecoration(
-                                borderRadius: BorderRadius.circular(20)),
-                            margin: EdgeInsets.only(top: 10, bottom: 10),
-                            height: Get.height * .04,
-                            child: ElevatedButton(
-                              style: ElevatedButton.styleFrom(
-                                  elevation: 3,
-                                  shape: RoundedRectangleBorder(
-                                    borderRadius: BorderRadius.circular(10.0),
-                                  ),
-                                  backgroundColor: Colors.white),
-                              child: Text(
-                                'اذكار الصباح',
-                                style: TextStyle(
-                                    color: Colors.black,
-                                    fontSize: 20,
-                                    fontWeight: FontWeight.bold),
-                              ),
-                              onPressed: () {
-                                Get.to(Sabah());
                               },
+                              child: CircleAvatar(
+                                radius: 25,
+                                child: Image.asset(
+                                  'icons/img.png',
+                                  width: 20,
+                                  height: 20,
+                                ),
+                                backgroundColor: Colors.grey.shade400,
+                              ),
                             ),
-                          ),
-                          Container(
-                            decoration: BoxDecoration(
-                                borderRadius: BorderRadius.circular(20)),
-                            margin: EdgeInsets.only(top: 10, bottom: 10),
-                            height: Get.height * .04,
-                            child: ElevatedButton(
-                              style: ElevatedButton.styleFrom(
-                                  elevation: 3,
-                                  shape: RoundedRectangleBorder(
-                                    borderRadius: BorderRadius.circular(10.0),
-                                  ),
-                                  backgroundColor: Colors.white),
+                          ],
+                        )
+                      ],
+                    ),
+                  ),
+                  SizedBox(
+                    height: Get.height * .01,
+                  ),
+                  Stack(
+                    alignment: Alignment.center,
+                    children: [
+                      Image.asset(
+                        'images/back ground2.jpeg',
+                      ),
+                      Padding(
+                        padding: const EdgeInsets.symmetric(horizontal: 15),
+                        child: Column(
+                          children: [
+                            Container(
+                              alignment: Alignment.center,
                               child: Text(
-                                'اذكار المساء',
+                                ': ذكر اليوم',
                                 style: TextStyle(
                                     fontSize: 20,
                                     fontWeight: FontWeight.bold,
-                                    color: Colors.black),
+                                    color: Colors.white),
                               ),
-                              onPressed: () {
-                                Get.to(Masaa());
-                              },
                             ),
-                          ),
-                          Container(
-                            decoration: BoxDecoration(
-                                borderRadius: BorderRadius.circular(20)),
-                            margin: EdgeInsets.only(top: 10, bottom: 10),
-                            height: Get.height * .04,
-                            child: ElevatedButton(
-                              style: ElevatedButton.styleFrom(
-                                  elevation: 3,
-                                  shape: RoundedRectangleBorder(
-                                    borderRadius: BorderRadius.circular(10.0),
-                                  ),
-                                  backgroundColor: Colors.white),
+                            Container(
+                              alignment: Alignment.center,
                               child: Text(
-                                'اذكار المسجد',
+                                'لا اله الا انت سبحانك اني كنت من الظالمين',
                                 style: TextStyle(
-                                    color: Colors.black,
-                                    fontSize: 20,
-                                    fontWeight: FontWeight.bold),
+                                    fontSize: 17,
+                                    fontWeight: FontWeight.bold,
+                                    color: Colors.white),
+                                textDirection: TextDirection.rtl,
                               ),
-                              onPressed: () {
-                                Get.to(Masjed());
-                              },
-                            ),
-                          ),
-                          Container(
-                            decoration: BoxDecoration(
-                                borderRadius: BorderRadius.circular(20)),
-                            margin: EdgeInsets.only(top: 10, bottom: 10),
-                            height: Get.height * .04,
-                            child: ElevatedButton(
-                              style: ElevatedButton.styleFrom(
-                                  elevation: 3,
-                                  shape: RoundedRectangleBorder(
-                                    borderRadius: BorderRadius.circular(10.0),
-                                  ),
-                                  backgroundColor: Colors.white),
-                              child: Text(
-                                'اذكار الصلاه',
-                                style: TextStyle(
-                                    color: Colors.black,
-                                    fontSize: 20,
-                                    fontWeight: FontWeight.bold),
+                            )
+                          ],
+                        ),
+                      )
+                    ],
+                  ),
+                  Container(
+                      margin: EdgeInsets.all(15),
+                      width: MediaQuery.of(context).size.width * 0.95,
+                      height: Get.height * .8,
+                      child: Directionality(
+                        textDirection: TextDirection.rtl,
+                        child: GridView(
+                          gridDelegate: SliverGridDelegateWithFixedCrossAxisCount(
+                              mainAxisSpacing: 8,
+                              childAspectRatio: 1.25,
+                              crossAxisSpacing: 20,
+                              crossAxisCount: 2),
+                          children: <Widget>[
+                            Container(
+                              decoration: BoxDecoration(
+                                  borderRadius: BorderRadius.circular(20)),
+                              margin: EdgeInsets.only(top: 10, bottom: 10),
+                              height: Get.height * .04,
+                              child: ElevatedButton(
+                                style: ElevatedButton.styleFrom(
+                                    elevation: 3,
+                                    shape: RoundedRectangleBorder(
+                                      borderRadius: BorderRadius.circular(10.0),
+                                    ),
+                                    backgroundColor: Colors.white),
+                                child: Text(
+                                  'اذكار الصباح',
+                                  style: TextStyle(
+                                      color: Colors.black,
+                                      fontSize: 20,
+                                      fontWeight: FontWeight.bold),
+                                ),
+                                onPressed: () {
+                                  Get.to(Sabah());
+                                },
                               ),
-                              onPressed: () {
-                                Get.to(Alsalah());
-                              },
                             ),
-                          ),
-                          Container(
-                            decoration: BoxDecoration(
-                                borderRadius: BorderRadius.circular(20)),
-                            margin: EdgeInsets.only(top: 10, bottom: 10),
-                            height: Get.height * .04,
-                            child: ElevatedButton(
-                              style: ElevatedButton.styleFrom(
-                                  elevation: 3,
-                                  shape: RoundedRectangleBorder(
-                                    borderRadius: BorderRadius.circular(10.0),
-                                  ),
-                                  backgroundColor: Colors.white),
-                              child: Text(
-                                'اذكار النوم',
-                                style: TextStyle(
-                                    color: Colors.black,
-                                    fontSize: 20,
-                                    fontWeight: FontWeight.bold),
+                            Container(
+                              decoration: BoxDecoration(
+                                  borderRadius: BorderRadius.circular(20)),
+                              margin: EdgeInsets.only(top: 10, bottom: 10),
+                              height: Get.height * .04,
+                              child: ElevatedButton(
+                                style: ElevatedButton.styleFrom(
+                                    elevation: 3,
+                                    shape: RoundedRectangleBorder(
+                                      borderRadius: BorderRadius.circular(10.0),
+                                    ),
+                                    backgroundColor: Colors.white),
+                                child: Text(
+                                  'اذكار المساء',
+                                  style: TextStyle(
+                                      fontSize: 20,
+                                      fontWeight: FontWeight.bold,
+                                      color: Colors.black),
+                                ),
+                                onPressed: () {
+                                  Get.to(Masaa());
+                                },
                               ),
-                              onPressed: () {
-                                Get.to(Alnawm());
-                              },
                             ),
-                          ),
-                          Container(
-                            decoration: BoxDecoration(
-                                borderRadius: BorderRadius.circular(20)),
-                            margin: EdgeInsets.only(top: 10, bottom: 10),
-                            height: Get.height * .03,
-                            child: ElevatedButton(
-                              style: ElevatedButton.styleFrom(
-                                  elevation: 3,
-                                  shape: RoundedRectangleBorder(
-                                    borderRadius: BorderRadius.circular(10.0),
-                                  ),
-                                  backgroundColor: Colors.white),
-                              child: Text(
-                                'اذكاري ',
-                                style: TextStyle(
-                                    color: Colors.black,
-                                    fontSize: 20,
-                                    fontWeight: FontWeight.bold),
+                            Container(
+                              decoration: BoxDecoration(
+                                  borderRadius: BorderRadius.circular(20)),
+                              margin: EdgeInsets.only(top: 10, bottom: 10),
+                              height: Get.height * .04,
+                              child: ElevatedButton(
+                                style: ElevatedButton.styleFrom(
+                                    elevation: 3,
+                                    shape: RoundedRectangleBorder(
+                                      borderRadius: BorderRadius.circular(10.0),
+                                    ),
+                                    backgroundColor: Colors.white),
+                                child: Text(
+                                  'اذكار المسجد',
+                                  style: TextStyle(
+                                      color: Colors.black,
+                                      fontSize: 20,
+                                      fontWeight: FontWeight.bold),
+                                ),
+                                onPressed: () {
+                                  Get.to(Masjed());
+                                },
                               ),
-                              onPressed: () {
-                                Get.to(Azkary(
-                                  image: _image,
-                                ));
-                              },
                             ),
-                          ),
-                        ],
-                      ),
-                    ))
-              ],
-            ),
-          ],
+                            Container(
+                              decoration: BoxDecoration(
+                                  borderRadius: BorderRadius.circular(20)),
+                              margin: EdgeInsets.only(top: 10, bottom: 10),
+                              height: Get.height * .04,
+                              child: ElevatedButton(
+                                style: ElevatedButton.styleFrom(
+                                    elevation: 3,
+                                    shape: RoundedRectangleBorder(
+                                      borderRadius: BorderRadius.circular(10.0),
+                                    ),
+                                    backgroundColor: Colors.white),
+                                child: Text(
+                                  'اذكار الصلاه',
+                                  style: TextStyle(
+                                      color: Colors.black,
+                                      fontSize: 20,
+                                      fontWeight: FontWeight.bold),
+                                ),
+                                onPressed: () {
+                                  Get.to(Alsalah());
+                                },
+                              ),
+                            ),
+                            Container(
+                              decoration: BoxDecoration(
+                                  borderRadius: BorderRadius.circular(20)),
+                              margin: EdgeInsets.only(top: 10, bottom: 10),
+                              height: Get.height * .04,
+                              child: ElevatedButton(
+                                style: ElevatedButton.styleFrom(
+                                    elevation: 3,
+                                    shape: RoundedRectangleBorder(
+                                      borderRadius: BorderRadius.circular(10.0),
+                                    ),
+                                    backgroundColor: Colors.white),
+                                child: Text(
+                                  'اذكار النوم',
+                                  style: TextStyle(
+                                      color: Colors.black,
+                                      fontSize: 20,
+                                      fontWeight: FontWeight.bold),
+                                ),
+                                onPressed: () {
+                                  Get.to(Alnawm());
+                                },
+                              ),
+                            ),
+                            Container(
+                              decoration: BoxDecoration(
+                                  borderRadius: BorderRadius.circular(20)),
+                              margin: EdgeInsets.only(top: 10, bottom: 10),
+                              height: Get.height * .03,
+                              child: ElevatedButton(
+                                style: ElevatedButton.styleFrom(
+                                    elevation: 3,
+                                    shape: RoundedRectangleBorder(
+                                      borderRadius: BorderRadius.circular(10.0),
+                                    ),
+                                    backgroundColor: Colors.white),
+                                child: Text(
+                                  'اذكاري ',
+                                  style: TextStyle(
+                                      color: Colors.black,
+                                      fontSize: 20,
+                                      fontWeight: FontWeight.bold),
+                                ),
+                                onPressed: () {
+                                  Get.to(Azkary(
+                                    image: _image,
+                                  ));
+                                },
+                              ),
+                            ),
+                          ],
+                        ),
+                      ))
+                ],
+              ),
+            ],
+          ),
         ));
   }
 }
@@ -453,9 +455,9 @@ class _SabahState extends State<Sabah> {
           ),
           Column(
             children: [
-              SizedBox(
-                height: Get.height * 0.05,
-              ),
+              // SizedBox(
+              //   height: Get.height * 0.05,
+              // ),
               Padding(
                 padding: const EdgeInsets.all(15.0),
                 child: Row(
@@ -490,7 +492,7 @@ class _SabahState extends State<Sabah> {
                         //   backgroundColor: Colors.grey.shade400,
                         //   radius: 20,
                         // ),
-                        SizedBox(
+                        const SizedBox(
                           width: 15,
                         ),
                         GestureDetector(
@@ -499,12 +501,12 @@ class _SabahState extends State<Sabah> {
                           },
                           child: CircleAvatar(
                             radius: 20,
+                            backgroundColor: Colors.grey.shade400,
                             child: Image.asset(
                               'icons/img.png',
                               width: 20,
                               height: 20,
                             ),
-                            backgroundColor: Colors.grey.shade400,
                           ),
                         ),
                       ],
@@ -542,7 +544,7 @@ class _SabahState extends State<Sabah> {
                 ],
               ),
               SizedBox(
-                height: Get.height * 0.04,
+                height: Get.height * 0.02,
               ),
               Expanded(
                 child: ListView(
@@ -723,7 +725,7 @@ class _MasaaState extends State<Masaa> {
             width: MediaQuery.of(context).size.width,
             //  margin: EdgeInsets.only(left: 2, top: 5, bottom: 5, right: 2),
             decoration: BoxDecoration(
-              image: DecorationImage(
+              image: const DecorationImage(
                   image: AssetImage('images/back ground.jpeg'),
                   fit: BoxFit.cover),
               borderRadius: BorderRadius.circular(1),
@@ -732,9 +734,9 @@ class _MasaaState extends State<Masaa> {
           ),
           Column(
             children: [
-              SizedBox(
-                height: Get.height * 0.05,
-              ),
+              // SizedBox(
+              //   height: Get.height * 0.05,
+              // ),
               Padding(
                 padding: const EdgeInsets.all(15.0),
                 child: Row(
@@ -770,7 +772,7 @@ class _MasaaState extends State<Masaa> {
                         //   radius: 20,
                         // ),
                         SizedBox(
-                          width: 15,
+                          width: 8,
                         ),
                         GestureDetector(
                           onTap: () {
@@ -792,7 +794,7 @@ class _MasaaState extends State<Masaa> {
                 ),
               ),
               SizedBox(
-                height: Get.height * 0.04,
+                height: Get.height * 0.01,
               ),
               Stack(
                 alignment: Alignment.center,
@@ -821,7 +823,7 @@ class _MasaaState extends State<Masaa> {
                 ],
               ),
               SizedBox(
-                height: Get.height * 0.04,
+                height: Get.height * 0.01,
               ),
               Expanded(
                 child: ListView(
@@ -1014,9 +1016,9 @@ class _MasjedState extends State<Masjed> {
           ),
           Column(
             children: [
-              SizedBox(
-                height: Get.height * 0.05,
-              ),
+              // SizedBox(
+              //   height: Get.height * 0.05,
+              // ),
               Padding(
                 padding: const EdgeInsets.all(15.0),
                 child: Row(
@@ -1052,7 +1054,7 @@ class _MasjedState extends State<Masjed> {
                         //   radius: 20,
                         // ),
                         SizedBox(
-                          width: 15,
+                          width: 8,
                         ),
                         GestureDetector(
                           onTap: () {
@@ -1074,7 +1076,7 @@ class _MasjedState extends State<Masjed> {
                 ),
               ),
               SizedBox(
-                height: Get.height * 0.04,
+                height: Get.height * 0.01,
               ),
               Stack(
                 alignment: Alignment.center,
@@ -1103,7 +1105,7 @@ class _MasjedState extends State<Masjed> {
                 ],
               ),
               SizedBox(
-                height: Get.height * 0.04,
+                height: Get.height * 0.01,
               ),
               Expanded(
                 child: ListView(
@@ -1195,9 +1197,9 @@ class _AlsalahState extends State<Alsalah> {
           ),
           Column(
             children: [
-              SizedBox(
-                height: Get.height * 0.05,
-              ),
+              // SizedBox(
+              //   height: Get.height * 0.05,
+              // ),
               Padding(
                 padding: const EdgeInsets.all(15.0),
                 child: Row(
@@ -1233,7 +1235,7 @@ class _AlsalahState extends State<Alsalah> {
                         //   radius: 20,
                         // ),
                         SizedBox(
-                          width: 15,
+                          width: 8,
                         ),
                         GestureDetector(
                           onTap: () {
@@ -1255,7 +1257,7 @@ class _AlsalahState extends State<Alsalah> {
                 ),
               ),
               SizedBox(
-                height: Get.height * 0.04,
+                height: Get.height * 0.01,
               ),
               Stack(
                 alignment: Alignment.center,
@@ -1284,7 +1286,7 @@ class _AlsalahState extends State<Alsalah> {
                 ],
               ),
               SizedBox(
-                height: Get.height * 0.04,
+                height: Get.height * 0.01,
               ),
               Expanded(
                 child: ListView(
@@ -1413,9 +1415,9 @@ class _AlnawmState extends State<Alnawm> {
           ),
           Column(
             children: [
-              SizedBox(
-                height: Get.height * 0.05,
-              ),
+              // SizedBox(
+              //   height: Get.height * 0.05,
+              // ),
               Padding(
                 padding: const EdgeInsets.all(15.0),
                 child: Row(
@@ -1451,7 +1453,7 @@ class _AlnawmState extends State<Alnawm> {
                         //   radius: 20,
                         // ),
                         SizedBox(
-                          width: 15,
+                          width: 8,
                         ),
                         GestureDetector(
                           onTap: () {
@@ -1473,7 +1475,7 @@ class _AlnawmState extends State<Alnawm> {
                 ),
               ),
               SizedBox(
-                height: Get.height * 0.04,
+                height: Get.height * 0.01,
               ),
               Stack(
                 alignment: Alignment.center,
@@ -1502,7 +1504,7 @@ class _AlnawmState extends State<Alnawm> {
                 ],
               ),
               SizedBox(
-                height: Get.height * 0.04,
+                height: Get.height * 0.01,
               ),
               Expanded(
                 child: ListView(
