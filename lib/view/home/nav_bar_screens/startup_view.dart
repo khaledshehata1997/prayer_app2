@@ -24,6 +24,7 @@ import 'package:shared_preferences/shared_preferences.dart';
 import '../../../constants.dart';
 import '../../../provider/boolNotifier.dart';
 import '../../../provider/prayer_provider.dart';
+import '../../../services/notification.dart';
 import '../../roqua_view.dart';
 import '../../sibha/sibha_view.dart';
 
@@ -162,6 +163,8 @@ class _StartUpState extends State<StartUp> {
     } else {
       _setTimer(nextPrayerTime, now);
     }
+    // scheduleNotification(nextPrayerTime,_nextPrayer);
+
   }
 
   void _skipToNextPrayer(DateTime now) {

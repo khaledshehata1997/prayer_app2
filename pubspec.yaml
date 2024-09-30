@@ -78,6 +78,7 @@ dependencies:
   persistent_bottom_nav_bar: ^6.2.1
   prayers_times: ^0.0.6
   adhan: ^2.0.0+1
+  flutter_local_notifications: ^17.2.3
   change_app_package_name:
   win32:
 
