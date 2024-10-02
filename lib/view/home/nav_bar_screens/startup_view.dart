@@ -116,6 +116,7 @@ class _StartUpState extends State<StartUp> {
       calculation: 0,
     );
     setState(() {});
+
   }
 
   Future<void> _fetchPrayerTimes() async {
@@ -125,11 +126,58 @@ class _StartUpState extends State<StartUp> {
       final data = json.decode(response.body)['data']['timings'];
       setState(() {
         _prayerTimes = PrayerTimes.fromJson(data);
+        scheduledPrayersNotifications(_prayerTimes!);
         _startCountdown();
       });
     } else {
       throw Exception('Failed to load prayer times');
     }
+  }
+  scheduledPrayersNotifications(PrayerTimes prayerTimes){
+    debugPrint("Show notification");
+    NotificationService.scheduleNotification(1, 'وقت الفجر',
+        'ركعتي الفجر خير من الدنيا و ما فيها', prayerTimes.fajr);
+    NotificationService.scheduleNotification(
+      2, 'وقت الظهر',
+      'أحب الأعمال إلي الله الصلاة علي وقتها',prayerTimes.dhuhr
+    );
+    NotificationService.scheduleNotification(
+      3, 'وقت العصر',
+      'من صلي البردين دخل الجنه', prayerTimes.asr
+    );
+    NotificationService.scheduleNotification(
+        4, 'صلاة المغرب',
+        'من السنه تعجيل صلاة المغرب', prayerTimes.maghrib
+    );
+    NotificationService.scheduleNotification(
+        5, 'صلاة العشاء',
+        'من صلي العشاء في جماعه فكأنما قام نصف الليل', prayerTimes.isha
+    );
+    NotificationService.scheduleNotification(
+        6, 'الأذكار',
+        'لا تنس أذكار الصباح', prayerTimes.fajr.add(const Duration(minutes: 30))
+    );
+    NotificationService.scheduleNotification(
+        7, 'الأذكار',
+        'لا تنس أذكار المساء', prayerTimes.asr.add(const Duration(minutes: 30))
+    );
+    NotificationService.scheduleNotification(
+        8, 'وردك من القرآن',
+        'أفضل العبادة قراءة القرآن', prayerTimes.isha.add(const Duration(minutes: 35))
+    );
+
+    for (var i = 9; i<= 25; i ++){
+      NotificationService.scheduleNotification(
+          i, 'الصلاة علي النبي',
+          'يقول عليه الصلاة والسلام: "من صلى علي واحدة صلى الله عليه بها عشرًا"',
+          prayerTimes.fajr.add(Duration(hours: i-8))
+      );
+    }
+
+
+
+
+
   }
 
   void _startCountdown() {
@@ -168,6 +216,7 @@ class _StartUpState extends State<StartUp> {
   }
 
   void _skipToNextPrayer(DateTime now) {
+    debugPrint('Next Prayer ::: ');
     // Loop through prayers and find the first one that's in the future
     DateTime? nextPrayerTime;
 
@@ -187,6 +236,8 @@ class _StartUpState extends State<StartUp> {
       nextPrayerTime = _prayerTimes!.fajr.add(Duration(days: 1));
       _nextPrayer = "الفجر";
     }
+    NotificationService.scheduleNotification(0, 'وقت $_nextPrayer',
+        '${_nextPrayer} حان الآن وقت ', nextPrayerTime);
 
     _setTimer(nextPrayerTime, now);
   }
@@ -212,6 +263,7 @@ class _StartUpState extends State<StartUp> {
     super.initState();
     _getPrayerDataCurrent();
     _fetchPrayerTimes();
+
   }
   void _updateCalculation(BuildContext context) {
     final provider = Provider.of<PrayerProvider>(context, listen: false);

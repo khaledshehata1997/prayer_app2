@@ -8,6 +8,7 @@ import 'package:get/get.dart';
 import 'package:prayer_app/firebase_options.dart';
 import 'package:prayer_app/provider/boolNotifier.dart';
 import 'package:prayer_app/provider/prayer_provider.dart';
+import 'package:prayer_app/services/notification.dart';
 import 'package:prayer_app/view/auth/activate.dart';
 import 'package:prayer_app/view/auth/activite_success.dart';
 import 'package:prayer_app/view/auth/splash_view.dart';
@@ -27,6 +28,8 @@ import 'package:prayer_app/view/home/nav_bar_screens/quran/fehres/data/bloc/sura
 import 'package:prayer_app/view/home/nav_bar_screens/quran/observer.dart';
 import 'package:firebase_core/firebase_core.dart';
 import 'package:google_fonts/google_fonts.dart';
+// import 'package:timezone/timezone.dart' as tz;
+import 'package:timezone/data/latest.dart' as tz;
 
 bool isLogin = false;
 final FlutterLocalNotificationsPlugin flutterLocalNotificationsPlugin =
@@ -37,6 +40,9 @@ void main()async{
   await  Firebase.initializeApp(
     options: DefaultFirebaseOptions.currentPlatform
   );
+  await NotificationService.init();
+  tz.initializeTimeZones();
+
 
   // // notifications
   // const AndroidInitializationSettings initializationSettingsAndroid = AndroidInitializationSettings('app_icon');

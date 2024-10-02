@@ -12,6 +12,7 @@ import 'package:get/get.dart';
 import 'package:image_picker/image_picker.dart';
 import 'package:persistent_bottom_nav_bar/persistent_bottom_nav_bar.dart';
 import 'package:prayer_app/constants.dart';
+import 'package:prayer_app/services/notification.dart';
 import 'package:prayer_app/view/azkar/azkary_view.dart';
 import 'package:prayer_app/view/azkar/widget/zikr_card.dart';
 import 'package:prayer_app/view/home/nav_bar_screens/prayer_model/prayerModelCurrent.dart';
