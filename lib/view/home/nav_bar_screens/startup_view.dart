@@ -169,7 +169,8 @@ class _StartUpState extends State<StartUp> {
     for (var i = 9; i<= 25; i ++){
       NotificationService.scheduleNotification(
           i, 'الصلاة علي النبي',
-          'يقول عليه الصلاة والسلام: "من صلى علي واحدة صلى الله عليه بها عشرًا"',
+          'يقول عليه الصلاة والسلام: "من صلى علي واحدة صلى الله عليه \n'
+              'بها عشرًا"',
           prayerTimes.fajr.add(Duration(hours: i-8))
       );
     }
