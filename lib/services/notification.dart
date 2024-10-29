@@ -1,4 +1,5 @@
 
+import 'package:flutter/cupertino.dart';
 import 'package:flutter_local_notifications/flutter_local_notifications.dart';
 import 'package:timezone/timezone.dart' as tz;
 
@@ -54,19 +55,37 @@ class NotificationService {
       title,
       body,
       tz.TZDateTime.from(scheduledTime, tz.local),
+        // _nextInstanceOfTime(scheduledTime.hour,scheduledTime.minute),
       const NotificationDetails(
         iOS: DarwinNotificationDetails(),
         android: AndroidNotificationDetails(
           'reminder_channel',
           'Reminder Channel',
-          importance: Importance.high,
+          importance: Importance.max,
           priority: Priority.high,
         ),
       ),
-      uiLocalNotificationDateInterpretation: UILocalNotificationDateInterpretation.absoluteTime,
+
+      uiLocalNotificationDateInterpretation: UILocalNotificationDateInterpretation.wallClockTime,
       matchDateTimeComponents: DateTimeComponents.dateAndTime,
     );
+    debugPrint('--------------------------------${_nextInstanceOfTime(scheduledTime.hour, scheduledTime.minute)}');
+
+
   }
+
+  static tz.TZDateTime _nextInstanceOfTime(int hour, int minute) {
+    final tz.TZDateTime now = tz.TZDateTime.now(tz.local);
+    tz.TZDateTime scheduledDate =
+    tz.TZDateTime(tz.local, now.year, now.month, now.day, hour, minute);
+
+    if (scheduledDate.isBefore(now)) {
+      scheduledDate = scheduledDate.add(const Duration(seconds: 2));
+    }
+
+    return scheduledDate;
+  }
+
 }
 
 

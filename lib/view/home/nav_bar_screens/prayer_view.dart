@@ -86,17 +86,22 @@ class _PrayerState extends State<Prayer> with TickerProviderStateMixin {
   String _nextPrayer = "";
   PrayerTimes? _prayerTimes;
   Future<void> _fetchPrayerTimes() async {
-    final response = await http.get(Uri.parse('https://api.aladhan.com/v1/timingsByCity?city=Cairo&country=Egypt&method=5'));
+    try{
+      final response = await http.get(Uri.parse('https://api.aladhan.com/v1/timingsByCity?city=Cairo&country=Egypt&method=5'));
 
-    if (response.statusCode == 200) {
-      final data = json.decode(response.body)['data']['timings'];
-      setState(() {
-        _prayerTimes = PrayerTimes.fromJson(data);
-        _startCountdown();
-      });
-    } else {
-      throw Exception('Failed to load prayer times');
+      if (response.statusCode == 200) {
+        final data = json.decode(response.body)['data']['timings'];
+        setState(() {
+          _prayerTimes = PrayerTimes.fromJson(data);
+          _startCountdown();
+        });
+      } else {
+        throw Exception('Failed to load prayer times');
+      }
+    }catch(e){
+      debugPrint('Exception $e');
     }
+
   }
 
   void _startCountdown() {
@@ -271,6 +276,7 @@ class _PrayerState extends State<Prayer> with TickerProviderStateMixin {
     return Scaffold(
         body: Consumer<PrayerProvider>(
           builder: (context, provider, child) {
+            // provider.getAllLastPrayers();
             final prayer = provider.prayerCurrentData!;
             return Stack(
               alignment: Alignment.topCenter,
@@ -449,11 +455,11 @@ class _PrayerState extends State<Prayer> with TickerProviderStateMixin {
                                     mainAxisAlignment: MainAxisAlignment
                                         .spaceEvenly,
                                     children: [
-                                      customCard("4", "عشاء"),
-                                      customCard("3", "مغرب"),
-                                      customCard("4", "عصر"),
-                                      customCard("4", "ضهر"),
-                                      customCard("2", "فجر"),
+                                      customCard("${provider.ishaMissed}", "عشاء"),
+                                      customCard("${provider.maghribMissed}", "مغرب"),
+                                      customCard("${provider.asrMissed}", "عصر"),
+                                      customCard("${provider.dhuhrMissed}", "ضهر"),
+                                      customCard("${provider.fajrMissed}", "فجر"),
                                     ],
                                   ),
                                 ),

@@ -35,17 +35,23 @@ class PrayerTimes {
   final DateTime maghrib;
   final DateTime isha;
 
-  PrayerTimes({required this.fajr, required this.dhuhr, required this.asr, required this.maghrib, required this.isha});
+  PrayerTimes(
+      {required this.fajr,
+      required this.dhuhr,
+      required this.asr,
+      required this.maghrib,
+      required this.isha});
 
   factory PrayerTimes.fromJson(Map<String, dynamic> json) {
     // Assuming the date is for the current day
     DateTime now = DateTime.now();
-    String currentDate = "${now.year}-${now.month.toString().padLeft(2, '0')}-${now.day.toString().padLeft(2, '0')}";
+    String currentDate =
+        "${now.year}-${now.month.toString().padLeft(2, '0')}-${now.day.toString().padLeft(2, '0')}";
     DateTime parseTime(String time) {
       // Assuming the API returns time in HH:mm format without timezone info
       // Parse it and then adjust to the local time zone
       DateTime dateTime = DateTime.parse("$currentDate $time:00");
-      return dateTime.toLocal();  // Convert to local time if needed
+      return dateTime.toLocal(); // Convert to local time if needed
     }
 
     return PrayerTimes(
@@ -56,7 +62,6 @@ class PrayerTimes {
       isha: parseTime(json['Isha']),
     );
   }
-
 }
 
 class StartUp extends StatefulWidget {
@@ -77,6 +82,7 @@ class _StartUpState extends State<StartUp> {
       'email': email,
     };
   }
+
   // PrayerTimes getPrayerTime() {
   //   final myCoordinates = Coordinates(30.033333, 31.233334);
   //   final params = CalculationMethod.egyptian.getParameters();
@@ -87,6 +93,7 @@ class _StartUpState extends State<StartUp> {
   String _formatTime(DateTime dateTime) {
     return DateFormat('hh:mm a').format(dateTime);
   }
+
   final DatabaseHelper dbHelper = DatabaseHelper();
   PrayerCurrent? prayerCurrent;
   Timer? _timer;
@@ -98,6 +105,7 @@ class _StartUpState extends State<StartUp> {
   String _formatDate(DateTime date) {
     return "${date.year}-${date.month.toString().padLeft(2, '0')}-${date.day.toString().padLeft(2, '0')}";
   }
+
   void _getPrayerDataCurrent() async {
     prayerCurrent = await dbHelper.getPrayerCurrent(_formatDate(selectedDate));
     prayerCurrent ??= PrayerCurrent(
@@ -116,69 +124,67 @@ class _StartUpState extends State<StartUp> {
       calculation: 0,
     );
     setState(() {});
-
   }
 
   Future<void> _fetchPrayerTimes() async {
-    final response = await http.get(Uri.parse('https://api.aladhan.com/v1/timingsByCity?city=Cairo&country=Egypt&method=5'));
+    try{
+      final response = await http.get(Uri.parse(
+          'https://api.aladhan.com/v1/timingsByCity?city=Cairo&country=Egypt&method=5'));
 
-    if (response.statusCode == 200) {
-      final data = json.decode(response.body)['data']['timings'];
-      setState(() {
-        _prayerTimes = PrayerTimes.fromJson(data);
-        scheduledPrayersNotifications(_prayerTimes!);
-        _startCountdown();
-      });
-    } else {
-      throw Exception('Failed to load prayer times');
+      if (response.statusCode == 200) {
+        final data = json.decode(response.body)['data']['timings'];
+        setState(() {
+          _prayerTimes = PrayerTimes.fromJson(data);
+          scheduledPrayersNotifications(_prayerTimes!);
+          _startCountdown();
+        });
+      } else {
+        throw Exception('Failed to load prayer times');
+      }
+    }catch(e){
+      debugPrint('Failed to fetch prayer times: $e');
     }
+
   }
-  scheduledPrayersNotifications(PrayerTimes prayerTimes){
+
+  scheduledPrayersNotifications(PrayerTimes prayerTimes) {
     debugPrint("Show notification");
+    // NotificationService.scheduleNotification(50, 'Hello',
+    //     'ركعتي الفجر خير من الدنيا و ما فيها', DateTime.now().add(Duration(seconds: 2)));
     NotificationService.scheduleNotification(1, 'وقت الفجر',
         'ركعتي الفجر خير من الدنيا و ما فيها', prayerTimes.fajr);
+    NotificationService.scheduleNotification(2, 'وقت الظهر',
+        'أحب الأعمال إلي الله الصلاة علي وقتها', prayerTimes.dhuhr);
     NotificationService.scheduleNotification(
-      2, 'وقت الظهر',
-      'أحب الأعمال إلي الله الصلاة علي وقتها',prayerTimes.dhuhr
-    );
+        3, 'وقت العصر', 'من صلي البردين دخل الجنه', prayerTimes.asr);
     NotificationService.scheduleNotification(
-      3, 'وقت العصر',
-      'من صلي البردين دخل الجنه', prayerTimes.asr
-    );
+        4, 'صلاة المغرب', 'من السنه تعجيل صلاة المغرب', prayerTimes.maghrib);
+    NotificationService.scheduleNotification(5, 'صلاة العشاء',
+        'من صلي العشاء في جماعه فكأنما قام نصف الليل', prayerTimes.isha);
     NotificationService.scheduleNotification(
-        4, 'صلاة المغرب',
-        'من السنه تعجيل صلاة المغرب', prayerTimes.maghrib
-    );
+        6,
+        'الأذكار',
+        'لا تنس أذكار الصباح',
+        prayerTimes.fajr.add(const Duration(minutes: 30)));
     NotificationService.scheduleNotification(
-        5, 'صلاة العشاء',
-        'من صلي العشاء في جماعه فكأنما قام نصف الليل', prayerTimes.isha
-    );
+        7,
+        'الأذكار',
+        'لا تنس أذكار المساء',
+        prayerTimes.asr.add(const Duration(minutes: 30)));
     NotificationService.scheduleNotification(
-        6, 'الأذكار',
-        'لا تنس أذكار الصباح', prayerTimes.fajr.add(const Duration(minutes: 30))
-    );
-    NotificationService.scheduleNotification(
-        7, 'الأذكار',
-        'لا تنس أذكار المساء', prayerTimes.asr.add(const Duration(minutes: 30))
-    );
-    NotificationService.scheduleNotification(
-        8, 'وردك من القرآن',
-        'أفضل العبادة قراءة القرآن', prayerTimes.isha.add(const Duration(minutes: 35))
-    );
+        8,
+        'وردك من القرآن',
+        'أفضل العبادة قراءة القرآن',
+        prayerTimes.isha.add(const Duration(minutes: 35)));
 
-    for (var i = 9; i<= 25; i ++){
+    for (var i = 9; i <= 25; i++) {
       NotificationService.scheduleNotification(
-          i, 'الصلاة علي النبي',
+          i,
+          'الصلاة علي النبي',
           'يقول عليه الصلاة والسلام: "من صلى علي واحدة صلى الله عليه \n'
               'بها عشرًا"',
-          prayerTimes.fajr.add(Duration(hours: i-8))
-      );
+          prayerTimes.fajr.add(Duration(hours: i - 8)));
     }
-
-
-
-
-
   }
 
   void _startCountdown() {
@@ -213,7 +219,6 @@ class _StartUpState extends State<StartUp> {
       _setTimer(nextPrayerTime, now);
     }
     // scheduleNotification(nextPrayerTime,_nextPrayer);
-
   }
 
   void _skipToNextPrayer(DateTime now) {
@@ -237,8 +242,8 @@ class _StartUpState extends State<StartUp> {
       nextPrayerTime = _prayerTimes!.fajr.add(Duration(days: 1));
       _nextPrayer = "الفجر";
     }
-    NotificationService.scheduleNotification(0, 'وقت $_nextPrayer',
-        '${_nextPrayer} حان الآن وقت ', nextPrayerTime);
+    // NotificationService.scheduleNotification(0, 'وقت $_nextPrayer',
+    //     '${_nextPrayer} حان الآن وقت ', nextPrayerTime);
 
     _setTimer(nextPrayerTime, now);
   }
@@ -263,9 +268,10 @@ class _StartUpState extends State<StartUp> {
   void initState() {
     super.initState();
     _getPrayerDataCurrent();
-    _fetchPrayerTimes();
+      _fetchPrayerTimes();
 
   }
+
   void _updateCalculation(BuildContext context) {
     final provider = Provider.of<PrayerProvider>(context, listen: false);
     final prayer = provider.prayerCurrentData!;
@@ -293,7 +299,6 @@ class _StartUpState extends State<StartUp> {
 
   @override
   Widget build(BuildContext context) {
-
     final bool value = context.watch<BoolNotifier>().value1;
     return Scaffold(
       appBar: PreferredSize(
@@ -331,18 +336,17 @@ class _StartUpState extends State<StartUp> {
                               onTap: () async {
                                 final userData = await getUserData();
 
-                                  PersistentNavBarNavigator.pushNewScreen(
-                                    context,
-                                    screen: Profile(
-                                      username: '${userData['username']}',
-                                      email: '${userData['email']}',
-                                    ),
-                                    withNavBar:
-                                        true, // OPTIONAL VALUE. True by default.
-                                    pageTransitionAnimation:
-                                        PageTransitionAnimation.cupertino,
-                                  );
-
+                                PersistentNavBarNavigator.pushNewScreen(
+                                  context,
+                                  screen: Profile(
+                                    username: '${userData['username']}',
+                                    email: '${userData['email']}',
+                                  ),
+                                  withNavBar:
+                                      true, // OPTIONAL VALUE. True by default.
+                                  pageTransitionAnimation:
+                                      PageTransitionAnimation.cupertino,
+                                );
                               },
                               child: CircleAvatar(
                                 radius: 20,
@@ -385,27 +389,31 @@ class _StartUpState extends State<StartUp> {
                     SizedBox(
                       height: 5,
                     ),
-                    _prayerTimes == null ? const Expanded(child:CircularProgressIndicator()) :Expanded(
-                      child: Container(
-                        alignment: Alignment.center,
-                        child:  Text(
-                        'الأذان القادم صلاه $_nextPrayer',
-                          style: TextStyle(
-                              fontSize: 20,
-                              fontWeight: FontWeight.w800,
-                              color: Colors.white),
-                        ),
-                      ),
-                    ),
-                    _prayerTimes == null ? const Expanded(child:CircularProgressIndicator()) :Expanded(
-                      child: Text(
-                        '${_timeRemaining.inHours.remainder(24).toString().padLeft(2, '0')}:${_timeRemaining.inMinutes.remainder(60).toString().padLeft(2, '0')}:${_timeRemaining.inSeconds.remainder(60).toString().padLeft(2, '0')}',
-                        style: TextStyle(
-                            fontSize: 23,
-                            color: Colors.white,
-                            fontWeight: FontWeight.bold),
-                      ),
-                    )
+                    _prayerTimes == null
+                        ? const Expanded(child: CircularProgressIndicator())
+                        : Expanded(
+                            child: Container(
+                              alignment: Alignment.center,
+                              child: Text(
+                                'الأذان القادم صلاه $_nextPrayer',
+                                style: TextStyle(
+                                    fontSize: 20,
+                                    fontWeight: FontWeight.w800,
+                                    color: Colors.white),
+                              ),
+                            ),
+                          ),
+                    _prayerTimes == null
+                        ? const Expanded(child: CircularProgressIndicator())
+                        : Expanded(
+                            child: Text(
+                              '${_timeRemaining.inHours.remainder(24).toString().padLeft(2, '0')}:${_timeRemaining.inMinutes.remainder(60).toString().padLeft(2, '0')}:${_timeRemaining.inSeconds.remainder(60).toString().padLeft(2, '0')}',
+                              style: TextStyle(
+                                  fontSize: 23,
+                                  color: Colors.white,
+                                  fontWeight: FontWeight.bold),
+                            ),
+                          )
                   ],
                 ),
               ),
@@ -446,7 +454,7 @@ class _StartUpState extends State<StartUp> {
               child: Column(
                 children: [
                   Container(
-                    margin: EdgeInsets.symmetric(horizontal: 10,vertical:10),
+                    margin: EdgeInsets.symmetric(horizontal: 10, vertical: 10),
                     alignment: Alignment.topRight,
                     child: Text(
                       'الصلوات اليومية',
@@ -459,7 +467,6 @@ class _StartUpState extends State<StartUp> {
                   ),
                   value == true
                       ? Container(
-
                           child: Row(
                             mainAxisAlignment: MainAxisAlignment.spaceAround,
                             children: [
@@ -526,8 +533,10 @@ class _StartUpState extends State<StartUp> {
                           children: [
                             SlahBox(
                               'الفجر',
-                              _prayerTimes == null ? "" :
-                              _formatTime(_prayerTimes!.fajr).replaceAll('AM', "ص"),
+                              _prayerTimes == null
+                                  ? ""
+                                  : _formatTime(_prayerTimes!.fajr)
+                                      .replaceAll('AM', "ص"),
                               "images/Illustrator.png",
                               Transform.scale(
                                 scale: 1.3,
@@ -536,162 +545,173 @@ class _StartUpState extends State<StartUp> {
                                       borderRadius: BorderRadius.circular(2.0),
                                     ),
                                     side: MaterialStateBorderSide.resolveWith(
-                                          (states) => BorderSide(width: 1.0, color:buttonColor),
+                                      (states) => BorderSide(
+                                          width: 1.0, color: buttonColor),
                                     ),
                                     activeColor: buttonColor,
                                     checkColor: Colors.white,
                                     value: prayer.prayer2,
                                     onChanged: (value) {
-
-                                        prayer.prayer2 = value!;
-                                        _updateCalculation(context);
+                                      debugPrint('prayer::::: ${prayer.toMap()}');
+                                      prayer.prayer2 = value!;
+                                      _updateCalculation(context);
                                     }),
                               ),
                             ),
                             SlahBox(
                               'الظهر',
-                              _prayerTimes == null ? "" :
-                              _formatTime(_prayerTimes!.dhuhr).replaceAll('PM', "م"),
+                              _prayerTimes == null
+                                  ? ""
+                                  : _formatTime(_prayerTimes!.dhuhr)
+                                      .replaceAll('PM', "م"),
                               "images/1.png",
-        Transform.scale(
-        scale: 1.3,
-        child:Checkbox(
-            shape: RoundedRectangleBorder(
-              borderRadius: BorderRadius.circular(2.0),
-            ),
-            side: MaterialStateBorderSide.resolveWith(
-                  (states) => BorderSide(width: 1.0, color:buttonColor),
-            ),
-                                  activeColor: buttonColor,
-                                  checkColor: Colors.white,
-                                  value: prayer.prayer5,
-                                  onChanged: (value) {
-
+                              Transform.scale(
+                                scale: 1.3,
+                                child: Checkbox(
+                                    shape: RoundedRectangleBorder(
+                                      borderRadius: BorderRadius.circular(2.0),
+                                    ),
+                                    side: MaterialStateBorderSide.resolveWith(
+                                      (states) => BorderSide(
+                                          width: 1.0, color: buttonColor),
+                                    ),
+                                    activeColor: buttonColor,
+                                    checkColor: Colors.white,
+                                    value: prayer.prayer5,
+                                    onChanged: (value) {
                                       prayer.prayer5 = value!;
                                       _updateCalculation(context);
-
-                                  }),
-                            ),
+                                    }),
+                              ),
                             ),
                             SlahBox(
                               'العصر',
-                              _prayerTimes == null ? "" :
-                              _formatTime(_prayerTimes!.asr).replaceAll('PM', "م"),
+                              _prayerTimes == null
+                                  ? ""
+                                  : _formatTime(_prayerTimes!.asr)
+                                      .replaceAll('PM', "م"),
                               "images/Illustrator (1).png",
-        Transform.scale(
-        scale: 1.3,
-        child:  Checkbox(
-            shape: RoundedRectangleBorder(
-              borderRadius: BorderRadius.circular(2.0),
-            ),
-            side: MaterialStateBorderSide.resolveWith(
-                  (states) => BorderSide(width: 1.0, color:buttonColor),
-            ),
-                                  activeColor: buttonColor,
-                                  checkColor: Colors.white,
-                                  value: prayer.prayer6,
-                                  onChanged: (value) {
-
-                                      prayer.prayer6 = value!;
-                                      _updateCalculation(context);
-
-                                  }),
-                            ),),
-                            SlahBox(
-                                'المغرب',
-                                _prayerTimes == null ? "" :
-                                _formatTime(_prayerTimes!.maghrib).replaceAll('PM', "م"),
-                                "icons/Illustrator.png",
-        Transform.scale(
-        scale: 1.3,
-        child: Checkbox(
-            shape: RoundedRectangleBorder(
-              borderRadius: BorderRadius.circular(2.0),
-            ),
-            side: MaterialStateBorderSide.resolveWith(
-                  (states) => BorderSide(width: 1.0, color:buttonColor),
-            ),        activeColor: buttonColor,
-                                    checkColor: Colors.white,
-                                    value: prayer.prayer8,
-                                    onChanged: (value) {
-                                      // if (FirebaseAuth.instance.currentUser ==
-                                      //     null) {
-                                      //   Get.defaultDialog(
-                                      //       content: GestureDetector(
-                                      //         onTap: () {
-                                      //           Get.to(SignInView());
-                                      //         },
-                                      //         child: Container(
-                                      //           alignment: Alignment.center,
-                                      //           width: 200,
-                                      //           height: 50,
-                                      //           color: buttonColor,
-                                      //           child: Text(
-                                      //             'تسجيل الدخول',
-                                      //             style: TextStyle(
-                                      //                 color: Colors.white,
-                                      //                 fontSize: 18),
-                                      //           ),
-                                      //         ),
-                                      //       ),
-                                      //       title:
-                                      //       '"لا يمكن حفظ المعلومات", "لحفظ المعلومات برجاء تسجيل الدخول"',
-                                      //       backgroundColor: Colors.white);
-                                      // }else {
-                                        prayer.prayer8 = value!;
-                                        _updateCalculation(context);
-
-                                    })),
-                            ),
-                            SlahBox(
-                                'العشاء',
-                                _prayerTimes == null ? "":
-                                _formatTime(_prayerTimes!.isha).replaceAll('PM', "م"),
-                                "images/Illustrator (2).png",
-        Transform.scale(
-        scale: 1.3,
-        child: Checkbox(
-            shape: RoundedRectangleBorder(
-              borderRadius: BorderRadius.circular(2.0),
-            ),
-            side: MaterialStateBorderSide.resolveWith(
-                  (states) => BorderSide(width: 1.0, color:buttonColor),
-            ),
+                              Transform.scale(
+                                scale: 1.3,
+                                child: Checkbox(
+                                    shape: RoundedRectangleBorder(
+                                      borderRadius: BorderRadius.circular(2.0),
+                                    ),
+                                    side: MaterialStateBorderSide.resolveWith(
+                                      (states) => BorderSide(
+                                          width: 1.0, color: buttonColor),
+                                    ),
                                     activeColor: buttonColor,
                                     checkColor: Colors.white,
-                                    value: prayer.prayer10,
+                                    value: prayer.prayer6,
                                     onChanged: (value) {
-                                      // if (FirebaseAuth.instance.currentUser ==
-                                      //     null) {
-                                      //   Get.defaultDialog(
-                                      //       content: GestureDetector(
-                                      //         onTap: () {
-                                      //           Get.to(SignInView());
-                                      //         },
-                                      //         child: Container(
-                                      //           alignment: Alignment.center,
-                                      //           width: 200,
-                                      //           height: 50,
-                                      //           color: buttonColor,
-                                      //           child: Text(
-                                      //             'تسجيل الدخول',
-                                      //             style: TextStyle(
-                                      //                 color: Colors.white,
-                                      //                 fontSize: 18),
-                                      //           ),
-                                      //         ),
-                                      //       ),
-                                      //       title:
-                                      //       '"لا يمكن حفظ المعلومات", "لحفظ المعلومات برجاء تسجيل الدخول"',
-                                      //       backgroundColor: Colors.white);
-                                      // }else {
+                                      prayer.prayer6 = value!;
+                                      _updateCalculation(context);
+                                    }),
+                              ),
+                            ),
+                            SlahBox(
+                              'المغرب',
+                              _prayerTimes == null
+                                  ? ""
+                                  : _formatTime(_prayerTimes!.maghrib)
+                                      .replaceAll('PM', "م"),
+                              "icons/Illustrator.png",
+                              Transform.scale(
+                                  scale: 1.3,
+                                  child: Checkbox(
+                                      shape: RoundedRectangleBorder(
+                                        borderRadius:
+                                            BorderRadius.circular(2.0),
+                                      ),
+                                      side: MaterialStateBorderSide.resolveWith(
+                                        (states) => BorderSide(
+                                            width: 1.0, color: buttonColor),
+                                      ),
+                                      activeColor: buttonColor,
+                                      checkColor: Colors.white,
+                                      value: prayer.prayer8,
+                                      onChanged: (value) {
+                                        // if (FirebaseAuth.instance.currentUser ==
+                                        //     null) {
+                                        //   Get.defaultDialog(
+                                        //       content: GestureDetector(
+                                        //         onTap: () {
+                                        //           Get.to(SignInView());
+                                        //         },
+                                        //         child: Container(
+                                        //           alignment: Alignment.center,
+                                        //           width: 200,
+                                        //           height: 50,
+                                        //           color: buttonColor,
+                                        //           child: Text(
+                                        //             'تسجيل الدخول',
+                                        //             style: TextStyle(
+                                        //                 color: Colors.white,
+                                        //                 fontSize: 18),
+                                        //           ),
+                                        //         ),
+                                        //       ),
+                                        //       title:
+                                        //       '"لا يمكن حفظ المعلومات", "لحفظ المعلومات برجاء تسجيل الدخول"',
+                                        //       backgroundColor: Colors.white);
+                                        // }else {
+                                        prayer.prayer8 = value!;
+                                        _updateCalculation(context);
+                                      })),
+                            ),
+                            SlahBox(
+                              'العشاء',
+                              _prayerTimes == null
+                                  ? ""
+                                  : _formatTime(_prayerTimes!.isha)
+                                      .replaceAll('PM', "م"),
+                              "images/Illustrator (2).png",
+                              Transform.scale(
+                                  scale: 1.3,
+                                  child: Checkbox(
+                                      shape: RoundedRectangleBorder(
+                                        borderRadius:
+                                            BorderRadius.circular(2.0),
+                                      ),
+                                      side: MaterialStateBorderSide.resolveWith(
+                                        (states) => BorderSide(
+                                            width: 1.0, color: buttonColor),
+                                      ),
+                                      activeColor: buttonColor,
+                                      checkColor: Colors.white,
+                                      value: prayer.prayer10,
+                                      onChanged: (value) {
+                                        // if (FirebaseAuth.instance.currentUser ==
+                                        //     null) {
+                                        //   Get.defaultDialog(
+                                        //       content: GestureDetector(
+                                        //         onTap: () {
+                                        //           Get.to(SignInView());
+                                        //         },
+                                        //         child: Container(
+                                        //           alignment: Alignment.center,
+                                        //           width: 200,
+                                        //           height: 50,
+                                        //           color: buttonColor,
+                                        //           child: Text(
+                                        //             'تسجيل الدخول',
+                                        //             style: TextStyle(
+                                        //                 color: Colors.white,
+                                        //                 fontSize: 18),
+                                        //           ),
+                                        //         ),
+                                        //       ),
+                                        //       title:
+                                        //       '"لا يمكن حفظ المعلومات", "لحفظ المعلومات برجاء تسجيل الدخول"',
+                                        //       backgroundColor: Colors.white);
+                                        // }else {
                                         prayer.prayer10 = value!;
                                         _updateCalculation(context);
-
-                                    })),)
+                                      })),
+                            )
                           ],
                         ),
-
                   TextButton(
                     onPressed: () {},
                     child: TextButton(
@@ -720,32 +740,27 @@ class _StartUpState extends State<StartUp> {
                         //       '"لا يمكن عرض الاهداف", "لحفظ المعلومات برجاء تسجيل الدخول"',
                         //       backgroundColor: Colors.white);
                         // } else {
-                          PersistentNavBarNavigator.pushNewScreen(
-                            context,
-                            screen: const DailyGoals(),
-                            withNavBar:
-                                true, // OPTIONAL VALUE. True by default.
-                            pageTransitionAnimation:
-                                PageTransitionAnimation.cupertino,
-                          );
-
+                        PersistentNavBarNavigator.pushNewScreen(
+                          context,
+                          screen: const DailyGoals(),
+                          withNavBar: true, // OPTIONAL VALUE. True by default.
+                          pageTransitionAnimation:
+                              PageTransitionAnimation.cupertino,
+                        );
                       },
                       child: Text(
-
-                        textDirection: TextDirection.rtl,
-                        'عرض باقي اهداف اليوم',
-                        style: GoogleFonts.almarai(
-                          decoration: TextDecoration.underline,
-                          fontWeight: FontWeight.bold,
-                          fontSize: 24,
-                          color: buttonColor,
-
-                        )
-                      ),
+                          textDirection: TextDirection.rtl,
+                          'عرض باقي اهداف اليوم',
+                          style: GoogleFonts.almarai(
+                            decoration: TextDecoration.underline,
+                            fontWeight: FontWeight.bold,
+                            fontSize: 24,
+                            color: buttonColor,
+                          )),
                     ),
                   ),
                   Container(
-                    margin: EdgeInsets.only(left: 10,right: 10,bottom: 10),
+                    margin: EdgeInsets.only(left: 10, right: 10, bottom: 10),
                     alignment: Alignment.topRight,
                     child: Text(
                       textDirection: TextDirection.rtl,

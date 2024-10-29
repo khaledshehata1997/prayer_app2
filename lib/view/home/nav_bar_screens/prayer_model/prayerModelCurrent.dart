@@ -4,6 +4,7 @@ class PrayerCurrent {
   bool prayer2;
   bool prayer3;
   bool prayer4;
+
   bool prayer5;
   bool prayer6;
   bool prayer7;
